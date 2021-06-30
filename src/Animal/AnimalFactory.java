@@ -13,12 +13,12 @@ public class AnimalFactory {
                 switch (type){
                     case Poison:
                         animal = new Animal("Poison Doggo", 100, 50, 15);
-                        animal.addBiteBehavior(new PoisonBite());
+                        animal.addAttack(new PoisonBite());
                         break;
                     //Here other types
                     default:
                         animal = new Animal("Doggo", 100, 55, 15);
-                        animal.addBiteBehavior(new SimpleBite());
+                        animal.addAttack(new SimpleBite());
                 }
                 break;
 
