@@ -1,5 +1,7 @@
 
-M
-src/Action/Abstract/ICry.java,a\6\a6cba30ca09ac23c8284b5a0feccd923ce806d67
-N
-src/Damage/IInflictStatus.java,8\a\8afb9f44ee96bc6240c94f6e7dac4c55e3f2fa97
+G
+src/Damage/IStatus.java,0\f\0f5b58c6024f5cd99eb296fc2551d9e5f07d28dc
+D
+src/Animal/Stat.java,1\1\111ed78425076d980e4e5a4c71d7b3bc14cc023d
+H
+src/Damage/StatusID.java,1\8\18a413f5a7e0c179dcc3ba065550e42cceeff5e7

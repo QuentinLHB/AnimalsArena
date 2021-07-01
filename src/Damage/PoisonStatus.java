@@ -5,29 +5,28 @@ import Animal.IAnimal;
 
 import java.util.ArrayList;
 
-public class PoisonStatus implements IStatus{
+public class PoisonStatus extends Status_Base implements IStatus{
 
-    StatusID statusID = StatusID.POISON;
-    private IAnimal animal;
+    //Constants
+    private final int NB_OF_TURNS = 3;
     private final int FRACTION_OF_MAX_HEALTH = 10;
-    private int nbOfTurns = 2;
-    private int turnsLeft;
 
     public PoisonStatus(IAnimal animal){
-        this.animal = animal;
-        this.turnsLeft = nbOfTurns;
+        super(animal);
+        super.turnsLeft = nbOfTurns;
+        super.nbOfTurns = NB_OF_TURNS;
     }
 
     @Override
     public StatusID getStatusID() {
-        return statusID;
+        return StatusID.POISON;
     }
 
     /**Consumes the effect : Hurt the animal by a fraction of its HP.*/
     @Override
     public void consumeEffect() {
         animal.hurt(animal.getMaxHealth()/8);
-        System.out.println("The animal lost "+ animal.getMaxHealth()/8 + "HP");
+        System.out.println(String.format("%s lost %d HP due to poison.", animal.getName(), animal.getMaxHealth()/8));
         nbOfTurns--;
         if(nbOfTurns <=0){
             disappear();
@@ -48,8 +47,7 @@ public class PoisonStatus implements IStatus{
     /**Removes the status from the animal.*/
     @Override
     public void disappear() {
-        ArrayList<IStatus> statuses = animal.getStatuses();
-        statuses.remove(this);
+        super.disappear(this);
         System.out.println("The poison fades out.");
     }
 

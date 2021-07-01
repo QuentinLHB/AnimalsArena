@@ -1,30 +1,37 @@
 package Action.Concrete;
 
-import Action.Abstract.IBite;
 import Animal.IAnimal;
 import Damage.*;
 
-import java.util.ArrayList;
+public class PoisonBite implements IAttack, IInflictStatus {
 
-public class PoisonBite implements IDoDamage, IInflictStatus {
-
-
+    private int damageBase= 10;
     @Override
-    public void doDamage(IAnimal target, int damage) {
-        target.hurt(damage);
-        System.out.println("The animal performs Poison Bite !");
-        IStatus poisonStatus = new PoisonStatus(target);
-        inflictStatus(target, poisonStatus, poisonStatus.getTurns());
+    public void performAttack(IAnimal target, int damage) {
+        target.attacked(damage+damageBase);
 
+        inflictStatus(target);
     }
 
     @Override
-    public void inflictStatus(IAnimal target, IStatus status, int numberOfTurns) {
-        ArrayList<IStatus> statuses = target.getStatuses();
-        boolean exists = false;
-        for (IStatus existingStatus:statuses) {
-            if(existingStatus.getStatusID().equals(StatusID.POISON))exists = true;
+    public String getAttackName() {
+        return "Poison Bite";
+    }
+
+    @Override
+    public int getDamageBase() {
+        return damageBase;
+    }
+
+    @Override
+    public String getDescription() {
+        return String.format("%d dmg | Inflicts poison.", damageBase);
+    }
+
+    @Override
+    public void inflictStatus(IAnimal target) {
+        if(!Status_Base.doesStatusAlreadyExist(target, StatusID.POISON)){
+            target.addStatus(new PoisonStatus(target));
         }
-        if(!exists) target.addStatus(status);
     }
 }

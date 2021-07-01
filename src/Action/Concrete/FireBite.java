@@ -3,9 +3,9 @@ package Action.Concrete;
 import Animal.IAnimal;
 import Damage.IAttack;
 
-public class SimpleBite implements IAttack {
+public class FireBite implements IAttack {
 
-    private int damageBase = 20;
+    private int damageBase = 15;
 
     @Override
     public void performAttack(IAnimal target, int damage) {
@@ -14,7 +14,7 @@ public class SimpleBite implements IAttack {
 
     @Override
     public String getAttackName() {
-        return "Bite";
+        return "Fire Bite";
     }
 
     @Override
@@ -24,6 +24,6 @@ public class SimpleBite implements IAttack {
 
     @Override
     public String getDescription() {
-        return String.format("%d dmg | Powerful bite%n", damageBase);
+        return String.format("%d dmg", damageBase);
     }
 }
