@@ -18,7 +18,7 @@ public class Animal implements IAnimal {
     }
 
     //Stats
-    private Map<Stat, Integer> Stats = new HashMap<Stat, Integer>();
+    private Map<StatID, Integer> stats = new HashMap<StatID, Integer>();
 
     //Statuses (poison...)
     private ArrayList<IStatus> statuses = new ArrayList<>();
@@ -77,8 +77,8 @@ public class Animal implements IAnimal {
         this.name = "Unamed Animal";
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        Stats.put(Stat.ATTACK, attackStat);
-        Stats.put(Stat.DEFENSE, defenseStat);
+        stats.put(StatID.ATTACK, attackStat);
+        stats.put(StatID.DEFENSE, defenseStat);
         this.alive = true;
     }
 
@@ -98,7 +98,7 @@ public class Animal implements IAnimal {
             currentMode = mode.ATTACK_MODE;
             if(target.isAlive()){
                 System.out.printf("%s performs %s%n", this.name, attack.getAttackName());
-                attack.performAttack(target, Stats.get(Stat.ATTACK));
+                attack.performAttack(target, stats.get(StatID.ATTACK));
             }
         }
     }
@@ -126,7 +126,7 @@ public class Animal implements IAnimal {
      */
     @Override
     public void attacked(int damage) {
-        damage-=Stats.get(Stat.DEFENSE);
+        damage-= stats.get(StatID.DEFENSE);
         if(currentMode.equals(mode.DEFENSE_MODE)){
             damage *= ON_DEFENSE_REDUCTION;
         }
@@ -181,6 +181,16 @@ public class Animal implements IAnimal {
     }
 
     /**
+     * Alter a stat. Ex: Stat.ATTACK, 0.5 will lower the attack stat by a half, 2 will retablish it.
+     * @param statID Stat to alter
+     * @param amount Floating number by which the stat must be multiplied.
+     */
+    @Override
+    public void alterStat(StatID statID, float amount) {
+        stats.put(statID, Math.round(stats.get(statID)*amount));
+    }
+
+    /**
      * Do what needs to be done after the end of a turn :
      * Consumes the effects of the inflicted statuses.
      */
@@ -194,8 +204,8 @@ public class Animal implements IAnimal {
         System.out.printf("%s's stats :%nHealth : %d/%d%nAttack : %d%nDefense : %d%n%n",
                 name,
                 health,maxHealth,
-                Stats.get(Stat.ATTACK),
-                Stats.get(Stat.DEFENSE));
+                stats.get(StatID.ATTACK),
+                stats.get(StatID.DEFENSE));
     }
 
 }

@@ -2,6 +2,7 @@ package Animal.Abstract;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Status.Abstract.IStatus;
+import Animal.Concrete.StatID;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,8 @@ public interface IAnimal {
      * @param status Status to remove
      */
     void removeStatus(IStatus status);
+
+    void alterStat(StatID statID, float amount);
 
     /**
      * Get the max health stat of the animal.

@@ -1,6 +1,6 @@
 package Animal.Concrete;
 
-public enum Stat {
+public enum StatID {
     ATTACK,
     DEFENSE
 }

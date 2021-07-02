@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public abstract class Status_Base {
 
-    protected int nbOfTurns;
+    protected int duration;
     protected int turnsLeft;
     protected IAnimal animal;
 

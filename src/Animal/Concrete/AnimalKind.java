@@ -2,7 +2,10 @@ package Animal.Concrete;
 
 public enum AnimalKind{
     DOG(100, 10, 5),
-    SNAKE(60, 30,4);
+    CAT(90, 15, 10),
+    SNAKE(70, 30,4),
+    UNICORN(130, 8, 15),
+    ;
 
     private AnimalKind(final int maxHealth, final int attackStat, final int defenseStat){
         this.maxHealth = maxHealth;

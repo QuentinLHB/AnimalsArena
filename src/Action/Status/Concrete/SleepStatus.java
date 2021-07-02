@@ -5,13 +5,20 @@ import Animal.Abstract.IAnimal;
 
 public class SleepStatus extends Status_Base implements IStatus {
 
-    private final int NB_OF_TURNS = 2;
+    private final int DEFAULT_DURATION = 2;
 
     public SleepStatus(IAnimal animal){
         super(animal);
-        super.turnsLeft = NB_OF_TURNS;
-        super.nbOfTurns = NB_OF_TURNS;
-        System.out.println(String.format("%s falls asleep. zZzZ", animal.getName()));
+        super.turnsLeft = DEFAULT_DURATION;
+        super.duration = DEFAULT_DURATION;
+        printStatusApplication();
+    }
+
+    public SleepStatus(IAnimal animal, int duration){
+        super(animal);
+        super.turnsLeft = duration;
+        super.duration = duration;
+        printStatusApplication();
     }
 
     @Override
@@ -21,7 +28,7 @@ public class SleepStatus extends Status_Base implements IStatus {
 
     @Override
     public String getStatusName() {
-        return "sleep";
+        return StatusID.SLEEP.lowerCaseName();
     }
 
     @Override
@@ -49,5 +56,9 @@ public class SleepStatus extends Status_Base implements IStatus {
     @Override
     public int getTurns() {
         return 0;
+    }
+
+    private void printStatusApplication(){
+        System.out.println(String.format("%s falls asleep. zZzZ", animal.getName()));
     }
 }

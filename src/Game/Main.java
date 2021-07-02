@@ -1,5 +1,7 @@
 package Game;
 import Action.Attack.Abstract.IAttack;
+import Action.Attack.Concrete.Attack;
+import Action.Attack.Concrete.AttackFactory;
 import Animal.Concrete.Animal;
 import Animal.Concrete.AnimalFactory;
 import Animal.Concrete.AnimalKind;
@@ -14,7 +16,15 @@ public class Main {
     public static List<Animal> theAnimals = new ArrayList<Animal>();
     public static void main(String[] args) {
 
+//        theAnimals.add(AnimalFactory.CreateRandomAnimal());
+//        theAnimals.add(AnimalFactory.CreateRandomAnimal());
 
+        StartPVP();
+
+
+    }
+
+    public static void StartPVP(){
         System.out.println("Player 1:\n");
         createAnimal();
         theAnimals.get(0).printStats();
@@ -28,57 +38,30 @@ public class Main {
         separator();
 
         battle();
-
     }
 
     public static void createAnimal(){
         Scanner scanner = new Scanner(System.in);
         AnimalKind animalKind;
         ElementType elementType;
+
+        // Choose animal
         System.out.println("Please choose one of the following animals :");
-        System.out.println("Dog.......1");
-        System.out.println("Snake.....2");
-        //Autres animaux
+        for (int i = 0; i < AnimalKind.values().length; i++) {
+            System.out.printf("%d: %s%n", i+1, AnimalKind.values()[i]);
+        }
         System.out.println("I'll take : ");
-        String choice = scanner.nextLine();
+        animalKind = AnimalKind.values()[scanner.nextInt()-1];
 
-        switch (choice){
-            case "1":
-                animalKind = AnimalKind.DOG;
-                break;
-            case "2":
-                animalKind = AnimalKind.SNAKE;
-                break;
-            default:
-                animalKind = AnimalKind.DOG;
-                break;
-        }
-
+        // Choose type
         System.out.println("Good ! Now choose its type.");
-        System.out.println("Normal....1");
-        System.out.println("Fire......2");
-        System.out.println("Poison....3");
-
-        //Autres types
-        System.out.println("It's going to be : ");
-        choice = scanner.nextLine();
-        switch (choice){
-            case "1":
-                elementType = ElementType.NORMAL;
-                break;
-            case "2":
-                elementType = ElementType.FIRE;
-                break;
-
-            case "3":
-                elementType = ElementType.POISON;
-                break;
-
-            default:
-                elementType = ElementType.NORMAL;
-                break;
+        for (int i = 0; i < ElementType.values().length; i++) {
+            System.out.printf("%d: %s%n", i+1, ElementType.values()[i]);
         }
+        elementType = ElementType.values()[scanner.nextInt()-1];
+        scanner.nextLine();
 
+        // Choose nickname
         String nickname;
         System.out.printf("Nice, you created a %s %s. Would you like to rename it ?%n", elementType.name(), animalKind.name());
         System.out.println("Enter a name or press 0 : ");
@@ -171,4 +154,12 @@ public class Main {
     public static void separator(){
         System.out.println("---------------");
     }
+
+    public static void printAllAttacks() {
+        ArrayList<Attack> allAttacks = AttackFactory.getAllAttacks();
+        for (Attack attack : allAttacks) {
+            System.out.printf("%s [%s]%n", attack.getAttackName(), attack.getDescription());
+        }
+    }
 }
+

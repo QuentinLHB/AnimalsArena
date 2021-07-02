@@ -2,6 +2,9 @@ package Animal.Concrete;
 
 import Action.Attack.Concrete.*;
 
+import javax.lang.model.type.TypeKind;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class AnimalFactory {
 
     private AnimalFactory(){}
@@ -12,7 +15,7 @@ public class AnimalFactory {
         var animal = new Animal(
                 name,
                 (int)Math.round(animalKind.getMaxHealth()* elementType.getHealthVariation()) ,
-                (int)Math.round(animalKind.getAttack()* elementType.getDefenseVariation()),
+                (int)Math.round(animalKind.getAttack()* elementType.getAttackVariation()),
                 (int)Math.round(animalKind.getDefense()* elementType.getDefenseVariation())
                 );
 
@@ -22,12 +25,21 @@ public class AnimalFactory {
                 addElementalBite(animal, elementType);
                 break;
 
-            // here other animals
             case SNAKE:
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.HYPNOSIS));
                 addElementalBite(animal, elementType);
+                break;
+            case CAT:
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
+                animal.addAttack((AttackFactory.createAttack(AttackEnum.GROWL)));
+                addElementalBite(animal, elementType);
 
+                break;
+
+            case UNICORN:
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.TORNADO));
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.FLAMETHROWER));
                 break;
 
             default:
@@ -40,6 +52,15 @@ public class AnimalFactory {
         Animal animal = CreateAnimal(animalKind, elementType);
         animal.setName(name);
         return animal;
+    }
+
+    public static Animal CreateRandomAnimal(){
+        int rngAnimal = getRNG(AnimalKind.values().length);
+        int rngType = getRNG(ElementType.values().length);
+
+        CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
+
+        return null;
     }
 
     private static void addElementalBite(Animal animal, ElementType elementType){
@@ -55,5 +76,9 @@ public class AnimalFactory {
             default:
                 break;
         }
+    }
+
+    private static int getRNG(int max){
+        return ThreadLocalRandom.current().nextInt(0, max + 1);
     }
 }

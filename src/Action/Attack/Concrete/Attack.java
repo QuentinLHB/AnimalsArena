@@ -10,19 +10,24 @@ public class Attack implements IAttack {
     private final String name;
     private int damageBase;
     private String description;
-    IInflictStatus status;
+    IInflictStatus inflictStatus;
 
 
     /**
      * Constructor of any attack
      * @param name Name of the attack.
      * @param damageBase Damage base of the attack.
-     * @param status Concrete InflictStatus from the IInflictStatus interface (if none, use InflictNoStatus class)
+     * @param InflictStatus Concrete InflictStatus from the IInflictStatus interface (if none, use InflictNoStatus class)
      */
-    public Attack(String name, int damageBase, IInflictStatus status){
+    public Attack(String name, int damageBase, IInflictStatus InflictStatus){
+        this(name, damageBase);
+        this.inflictStatus = InflictStatus;
+    }
+
+    public Attack(String name, int damageBase){
         this.name = name;
         this.damageBase = damageBase;
-        this.status = status;
+        this.inflictStatus = new InflictNoStatus();
     }
 
     @Override
@@ -30,7 +35,7 @@ public class Attack implements IAttack {
         if(damageBase > 0){
             target.attacked(damageBase+attackStat);
         }
-        status.inflictStatus(target);
+        inflictStatus.inflictStatus(target);
     }
 
     @Override
@@ -50,11 +55,11 @@ public class Attack implements IAttack {
             description += String.format("%d dmg", damageBase);
         }
 
-        if(!(status instanceof InflictNoStatus)){
+        if(!(inflictStatus instanceof InflictNoStatus)){
             if(!(description.equals(""))){
                 description +=" | ";
             }
-            description += String.format("Applies %s", status.getStatusName());
+            description += String.format("Applies %s", inflictStatus.getStatusName());
 
         }
 

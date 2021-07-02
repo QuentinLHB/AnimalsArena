@@ -5,7 +5,8 @@ import java.util.Locale;
 public enum StatusID {
     POISON,
     PARALYSIS,
-    SLEEP;
+    SLEEP,
+    FEAR;
 
     public String lowerCaseName(){
         return name().toLowerCase(Locale.ROOT);
