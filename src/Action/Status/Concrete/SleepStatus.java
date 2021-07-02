@@ -1,9 +1,9 @@
-package Damage;
+package Action.Status.Concrete;
 
-import Animal.IAnimal;
-import Animal.Stat;
+import Action.Status.Abstract.IStatus;
+import Animal.Abstract.IAnimal;
 
-public class SleepStatus extends Status_Base implements IStatus{
+public class SleepStatus extends Status_Base implements IStatus {
 
     private final int NB_OF_TURNS = 2;
 
@@ -20,8 +20,18 @@ public class SleepStatus extends Status_Base implements IStatus{
     }
 
     @Override
+    public String getStatusName() {
+        return "sleep";
+    }
+
+    @Override
     public void consumeEffect() {
-        animal.allowActions(false);
+        if(turnsLeft >0){
+            animal.canAct(false);
+            turnsLeft--;
+        }
+        else disappear();
+
     }
 
     @Override
@@ -32,7 +42,8 @@ public class SleepStatus extends Status_Base implements IStatus{
     @Override
     public void disappear() {
         super.disappear(this);
-        System.out.println(String.format("%n wakes up !", animal.getName()));
+        animal.canAct(true);
+        System.out.println(String.format("%s wakes up !%n", animal.getName()));
     }
 
     @Override

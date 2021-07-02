@@ -1,13 +1,14 @@
-package Animal;
+package Animal.Concrete;
 
-import Damage.IAttack;
-import Damage.IStatus;
+import Action.Attack.Abstract.IAttack;
+import Action.Status.Abstract.IStatus;
+import Animal.Abstract.IAnimal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Animal implements IAnimal{
+public class Animal implements IAnimal {
 
     //Attacks (bite...)
     private ArrayList<IAttack> attacks = new ArrayList<>();
@@ -35,16 +36,22 @@ public class Animal implements IAnimal{
         return name;
     }
 
-    @Override
-    public void allowActions(boolean allow) {
-        canAct = allow;
-    }
+
 
     private String name;
     private int health;
     private int maxHealth;
     private boolean alive;
     private boolean canAct = true;
+    public boolean canAct(){
+        return canAct;
+    }
+    @Override
+    public void canAct(boolean allow) {
+        canAct = allow;
+    }
+
+
     private mode currentMode = mode.ATTACK_MODE;
     public int getHealth() {
         return health;
@@ -87,7 +94,7 @@ public class Animal implements IAnimal{
      */
     @Override
     public void attack(IAnimal target, IAttack attack) {
-        if(this.alive){
+        if(canAct){
             currentMode = mode.ATTACK_MODE;
             if(target.isAlive()){
                 System.out.printf("%s performs %s%n", this.name, attack.getAttackName());
@@ -124,6 +131,7 @@ public class Animal implements IAnimal{
             damage *= ON_DEFENSE_REDUCTION;
         }
         hurt(damage);
+        System.out.printf("%s lost %d damage.%n%n", name, damage);
     }
 
     private void checkIfDead(){
@@ -138,7 +146,7 @@ public class Animal implements IAnimal{
      */
     public void hurt(int damage){
         health -= damage;
-        System.out.printf("%s lost %d damage.%n", name, damage);
+
         checkIfDead();
     }
 
@@ -149,6 +157,7 @@ public class Animal implements IAnimal{
             removeStatus(statuses.get(i));
         }
         alive = false;
+        canAct = false;
         System.out.printf("%s is dead.%n", this.name);
 
     }

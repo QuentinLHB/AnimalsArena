@@ -1,10 +1,12 @@
-package Damage;
+package Action.Status.Concrete;
 
-import Animal.IAnimal;
+import Action.Status.Abstract.IStatus;
+import Animal.Abstract.IAnimal;
 
 import java.util.ArrayList;
 
 public abstract class Status_Base {
+
     protected int nbOfTurns;
     protected int turnsLeft;
     protected IAnimal animal;

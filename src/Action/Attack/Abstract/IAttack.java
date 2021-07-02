@@ -1,7 +1,6 @@
-package Damage;
+package Action.Attack.Abstract;
 
-import Action.Abstract.IAction;
-import Animal.IAnimal;
+import Animal.Abstract.IAnimal;
 
 public interface IAttack {
     void performAttack(IAnimal target, int damage);

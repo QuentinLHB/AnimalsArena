@@ -1,4 +1,4 @@
-package Animal;
+package Animal.Concrete;
 
 public enum ElementType {
     NORMAL(1, 1, 1),

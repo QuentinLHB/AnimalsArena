@@ -1,7 +1,7 @@
-package Animal;
+package Animal.Abstract;
 
-import Damage.IAttack;
-import Damage.IStatus;
+import Action.Attack.Abstract.IAttack;
+import Action.Status.Abstract.IStatus;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public interface IAnimal {
 
     String getName();
 
-    void allowActions(boolean allow);
+    void canAct(boolean allow);
 
     /**
      * Performs an attack.

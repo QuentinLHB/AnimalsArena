@@ -1,4 +1,4 @@
-package Animal;
+package Animal.Concrete;
 
 public enum AnimalKind{
     DOG(100, 10, 5),

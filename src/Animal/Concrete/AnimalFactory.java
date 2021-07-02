@@ -1,9 +1,6 @@
-package Animal;
+package Animal.Concrete;
 
-import Action.Concrete.FireBite;
-import Action.Concrete.Hypnosis;
-import Action.Concrete.PoisonBite;
-import Action.Concrete.SimpleBite;
+import Action.Attack.Concrete.*;
 
 public class AnimalFactory {
 
@@ -21,14 +18,14 @@ public class AnimalFactory {
 
         switch (animalKind){
             case DOG:
-                animal.addAttack(new SimpleBite());
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
                 addElementalBite(animal, elementType);
                 break;
 
             // here other animals
             case SNAKE:
-                animal.addAttack(new SimpleBite());
-                animal.addAttack(new Hypnosis());
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.HYPNOSIS));
                 addElementalBite(animal, elementType);
 
                 break;
@@ -48,11 +45,11 @@ public class AnimalFactory {
     private static void addElementalBite(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:
-                animal.addAttack(new FireBite());
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.FIRE_BITE));
                 break;
 
             case POISON:
-                animal.addAttack(new PoisonBite());
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.POISON_BITE));
                 break;
 
             default:

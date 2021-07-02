@@ -1,6 +1,9 @@
 package Game;
-import Animal.*;
-import Damage.IAttack;
+import Action.Attack.Abstract.IAttack;
+import Animal.Concrete.Animal;
+import Animal.Concrete.AnimalFactory;
+import Animal.Concrete.AnimalKind;
+import Animal.Concrete.ElementType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,13 @@ public class Main {
         createAnimal();
         theAnimals.get(0).printStats();
 
+        separator();
+
         System.out.println("Player 2:\n");
         createAnimal();
         theAnimals.get(1).printStats();
+
+        separator();
 
         battle();
 
@@ -94,10 +101,10 @@ public class Main {
         }while (animalA.isAlive() && animalB.isAlive());
 
         if(animalA.isAlive()){
-            System.out.printf("%s wins ! ", animalA);
+            System.out.printf("%s wins ! ", animalA.getName());
         }
         else{
-            System.out.printf("%s wins ! ", animalB);
+            System.out.printf("%s wins ! ", animalB.getName());
         }
     }
 
@@ -112,16 +119,24 @@ public class Main {
         var animalA = theAnimals.get(0);
         var animalB = theAnimals.get(1);
 
-        peformsAction(animalA, animalB);
-        peformsAction(animalB, animalA);
+        if(animalA.canAct()){
+            peformsAction(animalA, animalB);
+        }
+        else System.out.printf("%s can't act.%n%n", animalA.getName());
+
+        if(animalB.canAct()){
+            peformsAction(animalB, animalA);
+        }
+        else System.out.printf("%s can't act.%n%n", animalB.getName());
 
         for (Animal animal:theAnimals) {
-
             animal.endOfTurn();
         }
 
         printLives(animalA);
         printLives(animalB);
+        separator();
+        separator();
         System.out.println("");
 
         nbTour++;
@@ -131,10 +146,11 @@ public class Main {
         ArrayList<IAttack> attacks = animal.getAttacks();
         var scanner = new Scanner(System.in);
         int choix;
+        System.out.printf("%s's actions :%n", animal.getName());
         System.out.println("Defend [1/2 dmg]: 0");
         for (var i = 0; i < attacks.size(); i++) {
             IAttack attaque = attacks.get(i);
-            System.out.printf("%s : %d%n-->%s%n", attaque.getAttackName(), i+1,  attaque.getDescription());
+            System.out.printf("%s [%s] : %d%n", attaque.getAttackName(), attaque.getDescription(), i+1);
         }
 
         do {
@@ -148,5 +164,11 @@ public class Main {
         else{
             animal.attack(target, animal.chooseAttack(choix));
         }
+
+        separator();
+    }
+
+    public static void separator(){
+        System.out.println("---------------");
     }
 }
