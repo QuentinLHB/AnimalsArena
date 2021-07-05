@@ -5,6 +5,8 @@ import Action.InflictStatus.Concrete.InflictNoStatus;
 import Animal.Abstract.IAnimal;
 import Action.Attack.Abstract.IAttack;
 
+import java.util.Objects;
+
 public class Attack implements IAttack {
 
     private final String name;
@@ -64,5 +66,18 @@ public class Attack implements IAttack {
         }
 
         return description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Attack attack = (Attack) o;
+        return name.equals(attack.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

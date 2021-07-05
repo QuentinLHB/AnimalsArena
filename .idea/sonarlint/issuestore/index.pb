@@ -7,10 +7,6 @@ f
 6src/Action/InflictStatus/Concrete/InflictNoStatus.java,0\a\0a2183a9e3bf3723adb4bbba9a2a5c92903a2498
 W
 'src/Action/Status/Abstract/IStatus.java,3\9\39c7b014caab35023a0765e005ba0c6ceecd6bf7
-T
-$src/Animal/Concrete/ElementType.java,4\1\41605a10231e376f3f9efe50d37f4ebdc190e2f1
-P
- src/Animal/Abstract/IAnimal.java,9\6\9648be5d64d2bc9c7a8b178af4179e5cb8b91d46
 X
 (src/Action/Status/Concrete/NoStatus.java,2\0\2017a2a7fb46c29f9044173baae8c6f82ba85b2b
 [
@@ -19,14 +15,8 @@ X
 +src/Action/Status/Concrete/Status_Base.java,2\0\2071c0257de91b7961aa79ffbcee779e351cdd0e
 X
 (src/Action/Status/Concrete/StatusID.java,4\4\4458b167f142797374a78e32f05b9e25671fb0ee
-]
--src/Action/Attack/Concrete/AttackFactory.java,f\6\f6fa54c2a8366f710bf12003dbf76fd24922db39
 Z
 *src/Action/Attack/Concrete/AttackEnum.java,a\5\a5a6bb62118013fda24f53f1067340e8538b18ca
-V
-&src/Action/Attack/Concrete/Attack.java,a\9\a926df1deca4732b976794d376e38e5cfc4a8a86
-d
-4src/Action/InflictStatus/Concrete/InflictStatus.java,d\4\d4b441b331f362409ec0a1e67a13fd1e1f3360b9
 \
 ,src/Action/Status/Concrete/PoisonStatus.java,0\0\00392c6343fb97db6b427b5628b95149ac46dd80
 S

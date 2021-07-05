@@ -17,7 +17,14 @@ public class Main {
 //        theAnimals.add(AnimalFactory.CreateRandomAnimal());
 //        theAnimals.add(AnimalFactory.CreateRandomAnimal());
 
-        printAllAnimals();
+        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.DOG, ElementType.UNDEAD, ElementType.FIRE));
+        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.SNAKE, ElementType.NORMAL, ElementType.UNDEAD));
+        for(Animal animal: theAnimals){
+            animal.printStats();
+        }
+        battle();
+
+        //printAllAnimals();
 
 
     }
@@ -128,7 +135,7 @@ public class Main {
         var scanner = new Scanner(System.in);
         int choix;
         System.out.printf("%s's actions :%n", animal.getName());
-        System.out.println("Defend [1/2 dmg]: 0");
+        System.out.println("0: Defend [1/2 dmg]");
         printAttacks(animal);
 
         do {

@@ -3,6 +3,11 @@ package Animal.Concrete;
 import Action.Attack.Abstract.IAttack;
 import Action.Status.Abstract.IStatus;
 import Animal.Abstract.IAnimal;
+import Animal.Behaviors.DieBehavior.Abstract.IDieBehavior;
+import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
+import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
+import Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
+import Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,28 +15,59 @@ import java.util.Map;
 
 public class Animal implements IAnimal {
 
-    //Attacks (bite...)
+    // Behaviors
+    IPerformAttackBehavior attackBehavior;
+    public void setAttackBehavior(IPerformAttackBehavior attackBehavior){
+        if(this.attackBehavior == null ||
+        (this.attackBehavior.getClass() == SimpleAttackBehavior.class && (attackBehavior.getClass() != SimpleAttackBehavior.class))){
+            this.attackBehavior = attackBehavior;
+            System.out.printf("Une nouvelle attack behavior a été ajoutée à %s%n", this.getName()); //todo à retirer
+        }
+
+    }
+    IDieBehavior dieBehavior;
+    public void setDieBehavior(IDieBehavior dieBehavior) {
+        if(this.dieBehavior == null ||
+                (this.dieBehavior.getClass() == SimpleDieBehavior.class && (dieBehavior.getClass() != SimpleDieBehavior.class))) {
+            this.dieBehavior = dieBehavior;
+            System.out.printf("Une nouvelle die behavior a été ajoutée à %s%n", this.getName()); //todo à retirer
+        }
+    }
+
+    //Attacks
     private ArrayList<IAttack> attacks = new ArrayList<>();
-    public void addAttack(IAttack attack){attacks.add(attack);}
+    public void addAttack(IAttack attack){
+        if(!attacks.contains(attack)){
+            attacks.add(attack);
+        }
+
+    }
     public ArrayList<IAttack> getAttacks(){
         return (ArrayList<IAttack>) attacks.clone();
     }
 
     //Stats and states.
     private int health;
+    @Override
     public int getHealth() {
         return health;
     }
+    @Override
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     private int maxHealth;
     public int getMaxHealth() {
         return maxHealth;
     }
-    private boolean alive;
+    //private boolean alive;
     @Override
     public boolean isAlive() {
-        return alive;
+        return dieBehavior.isAlive();
     }
     private boolean canAct = true;
+    @Override
     public boolean canAct(){
         return canAct;
     }
@@ -52,7 +88,7 @@ public class Animal implements IAnimal {
         return clonedStats;
     }
     private Map<StatID, Float> statAlterations = new HashMap<>();
-    private mode currentMode = mode.ATTACK_MODE;
+    private ActMode currentMode = ActMode.ATTACK;
 
     //Statuses (poison...)
     private ArrayList<IStatus> statuses = new ArrayList<>();
@@ -65,6 +101,29 @@ public class Animal implements IAnimal {
     public String getName() {
         return name;
     }
+
+    /**
+     * Set the act mode.
+     * @param actMode ActMode enumerator.
+     */
+    @Override
+    public void setActMode(ActMode actMode) {
+        currentMode = actMode;
+    }
+
+    /**
+     * Get the current act mode.
+     * @return current act mode.
+     */
+    @Override
+    public ActMode getActMode() {
+        return currentMode;
+    }
+
+    /**
+     * Modify the name.
+     * @param name
+     */
     @Override
     public void setName(String name) {
         this.name = name;
@@ -72,10 +131,7 @@ public class Animal implements IAnimal {
 
     //Constants
     private final double ON_DEFENSE_REDUCTION = 0.5; //todo à tej
-    public enum mode{
-        ATTACK_MODE,
-        DEFENSE_MODE
-    }
+
 
     //Constructor
 
@@ -93,7 +149,7 @@ public class Animal implements IAnimal {
         stats.put(StatID.DEFENSE, defenseStat);
         statAlterations.put(StatID.ATTACK, 1f);
         statAlterations.put(StatID.DEFENSE, 1f);
-        this.alive = true;
+        //this.alive = true; -> Géré dans le dieBehavior
     }
 
     /**
@@ -125,13 +181,7 @@ public class Animal implements IAnimal {
      */
     @Override
     public void attack(IAnimal target, IAttack attack) {
-        if(canAct){
-            currentMode = mode.ATTACK_MODE;
-            if(target.isAlive()){
-                System.out.printf("%s performs %s%n", this.name, attack.getAttackName());
-                attack.performAttack(target, stats.get(StatID.ATTACK));
-            }
-        }
+        attackBehavior.attack(target, attack, stats.get(StatID.ATTACK));
     }
 
     /**
@@ -139,7 +189,7 @@ public class Animal implements IAnimal {
      */
     @Override
     public void defend() {
-        currentMode = mode.DEFENSE_MODE;
+        currentMode = ActMode.DEFENSE;
     }
 
 
@@ -151,7 +201,7 @@ public class Animal implements IAnimal {
     @Override
     public void attacked(int damage) {
         damage-= (stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE));
-        if(currentMode.equals(mode.DEFENSE_MODE)){
+        if(currentMode.equals(ActMode.DEFENSE)){
             damage *= ON_DEFENSE_REDUCTION;
         }
         hurt(damage);
@@ -168,18 +218,18 @@ public class Animal implements IAnimal {
         checkIfDead();
     }
 
-    /**
-     * The animal is dead : Statuses are removed and the animal can't act.
-     */
-    private void die() {
-        health = 0;
-        for(var i=0; i < statuses.size(); i++){
-            removeStatus(statuses.get(i));
-        }
-        alive = false;
-        canAct = false;
-        System.out.printf("%s is dead.%n", this.name);
-    }
+//    /**
+//     * The animal is dead : Statuses are removed and the animal can't act.
+//     */
+//    private void die() {
+//        health = 0;
+//        for(var i=0; i < statuses.size(); i++){
+//            removeStatus(statuses.get(i));
+//        }
+//        alive = false;
+//        canAct = false;
+//        System.out.printf("%s is dead.%n", this.name);
+//    }
 
     /**
      * Adds a status to the animal.
@@ -211,7 +261,7 @@ public class Animal implements IAnimal {
 
     private void checkIfDead(){
         if(health <=0){
-            die();
+            dieBehavior.die();
         }
     }
 

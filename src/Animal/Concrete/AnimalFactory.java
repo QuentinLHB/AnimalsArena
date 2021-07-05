@@ -1,6 +1,11 @@
 package Animal.Concrete;
 
 import Action.Attack.Concrete.*;
+import Animal.Abstract.IAnimal;
+import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
+import Animal.Behaviors.DieBehavior.Concrete.UndeadDieBehavior;
+import Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
+import Animal.Behaviors.PeformAttackBehavior.Concrete.UndeadAttackBehavior;
 
 import javax.lang.model.type.TypeKind;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,16 +14,54 @@ public class AnimalFactory {
 
     private AnimalFactory(){}
 
-    public static Animal CreateAnimal(AnimalKind animalKind, ElementType elementType){
-        String name = elementType.name() + " " + animalKind.name();
+    public static Animal CreateAnimal(AnimalKind animalKind, ElementType... elementTypes){
+        var maxHealthVariation = 1f;
+        var attackVariation = 1f;
+        var defenseVariation = 1f;
+        var name = "";
+
+        for (ElementType elementType: elementTypes) {
+            maxHealthVariation += (1-elementType.getHealthVariation());
+            attackVariation += (1-elementType.getAttackVariation());
+            defenseVariation += (1-elementType.getDefenseVariation());
+            name += elementType.name() + " ";
+        }
+        name += animalKind.name();
 
         var animal = new Animal(
                 name,
-                (int)Math.round(animalKind.getMaxHealth()* elementType.getHealthVariation()) ,
-                (int)Math.round(animalKind.getAttack()* elementType.getAttackVariation()),
-                (int)Math.round(animalKind.getDefense()* elementType.getDefenseVariation())
+                (int)Math.round(animalKind.getMaxHealth()* maxHealthVariation) ,
+                (int)Math.round(animalKind.getAttack()* attackVariation),
+                (int)Math.round(animalKind.getDefense()* defenseVariation)
                 );
 
+        for(ElementType elementType: elementTypes){
+            setBehaviors(animal, animalKind, elementType);
+        }
+
+        for (ElementType elementType: elementTypes){
+            addAttacks(animal, animalKind, elementType);
+        }
+
+        return animal;
+    }
+
+    public static Animal CreateAnimal(AnimalKind animalKind, ElementType elementType, String name){
+        var animal = CreateAnimal(animalKind, elementType);
+        animal.setName(name);
+        return animal;
+    }
+
+    public static Animal CreateRandomAnimal(){
+        int rngAnimal = getRNG(AnimalKind.values().length);
+        int rngType = getRNG(ElementType.values().length);
+
+        CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
+
+        return null;
+    }
+
+    private static void addAttacks(Animal animal, AnimalKind animalKind, ElementType elementType){
         switch (animalKind){
             case DOG:
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
@@ -45,24 +88,18 @@ public class AnimalFactory {
             default:
                 break;
         }
-        return animal;
     }
 
-    public static Animal CreateAnimal(AnimalKind animalKind, ElementType elementType, String name){
-        Animal animal = CreateAnimal(animalKind, elementType);
-        animal.setName(name);
-        return animal;
+    private static void setBehaviors(Animal animal, AnimalKind animalKind, ElementType elementType){
+        if(elementType.equals(ElementType.UNDEAD)){
+            animal.setAttackBehavior(new UndeadAttackBehavior(animal));
+            animal.setDieBehavior(new UndeadDieBehavior(animal));
+        }
+        else{
+            animal.setAttackBehavior(new SimpleAttackBehavior(animal));
+            animal.setDieBehavior(new SimpleDieBehavior(animal));
+        }
     }
-
-    public static Animal CreateRandomAnimal(){
-        int rngAnimal = getRNG(AnimalKind.values().length);
-        int rngType = getRNG(ElementType.values().length);
-
-        CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
-
-        return null;
-    }
-
     private static void addElementalBite(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:

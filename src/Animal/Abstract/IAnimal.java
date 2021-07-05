@@ -2,6 +2,7 @@ package Animal.Abstract;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Status.Abstract.IStatus;
+import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Concrete.StatID;
 
 import java.util.ArrayList;
@@ -9,10 +10,16 @@ import java.util.ArrayList;
 public interface IAnimal {
 
     void setName(String name);
-
     String getName();
 
+    void setActMode(ActMode actMode);
+    ActMode getActMode();
+
+    int getHealth();
+    void setHealth(int health);
+
     void canAct(boolean allow);
+    boolean canAct();
 
     /**
      * Performs an attack.
