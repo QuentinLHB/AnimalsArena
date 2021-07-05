@@ -1,7 +1,7 @@
 package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 public class NoStatus extends Status_Base implements IStatus {
 

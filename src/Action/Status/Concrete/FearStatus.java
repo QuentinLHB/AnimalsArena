@@ -1,8 +1,8 @@
 package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
-import Animal.Concrete.StatID;
+import Animal.Creation.Abstract.IAnimal;
+import Animal.Creation.Concrete.StatID;
 
 public class FearStatus extends Status_Base implements IStatus {
 
@@ -30,6 +30,7 @@ public class FearStatus extends Status_Base implements IStatus {
         this(animal, duration);
         this.onAttackEffect = onAttackEffect;
         this.onDefenseEffect = onDefenseEffect;
+        //todo permettre d'enlever la possibilité de se défendre à l'ennemi
     }
 
     @Override

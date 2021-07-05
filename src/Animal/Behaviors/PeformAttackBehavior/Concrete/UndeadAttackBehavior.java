@@ -1,26 +1,22 @@
 package Animal.Behaviors.PeformAttackBehavior.Concrete;
 
 import Action.Attack.Abstract.IAttack;
-import Animal.Abstract.IAnimal;
-import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
+import Animal.Creation.Abstract.IAnimal;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
 
+/**
+ * Classe décrivant le comportement d'attaque des Undeads : S'infligent des dégats égaux à la moitié de leur stat d'attaque.
+ */
 public class UndeadAttackBehavior extends SimpleAttackBehavior implements IPerformAttackBehavior {
 
 
     public UndeadAttackBehavior(IAnimal attackingAnimal){
         super(attackingAnimal);
-        behaviorID = "UndeadAttackBehavior";
     }
 
     @Override
     public void attack(IAnimal target, IAttack attack, int attackStat) {
         super.attack(target, attack, attackStat);
-        // todo rajouter un comportement particulier à l'undead.
+        attackingAnimal.hurt(attackStat/2);
     }
-//
-//    @Override
-//    public void canAct(boolean allow) {
-//
-//    }
 }

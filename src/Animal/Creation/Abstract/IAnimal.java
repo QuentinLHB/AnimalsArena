@@ -1,11 +1,12 @@
-package Animal.Abstract;
+package Animal.Creation.Abstract;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Status.Abstract.IStatus;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
-import Animal.Concrete.StatID;
+import Animal.Creation.Concrete.StatID;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface IAnimal {
 
@@ -37,7 +38,7 @@ public interface IAnimal {
      * Reacts upon an attack.
      * @param damage Damage inflicted by the foe's attack.
      */
-    void attacked(int damage);
+    void attacked(IAttack attack, int damage);
 
     /**
      * Reacts upon being hurt by attack or status effect.
@@ -63,7 +64,9 @@ public interface IAnimal {
      */
     void removeStatus(IStatus status);
 
+    Map<StatID, Integer> getStats();
     void alterStat(StatID statID, float amount);
+    Map<StatID, Float> getStatAlterations();
 
     /**
      * Get the max health stat of the animal.

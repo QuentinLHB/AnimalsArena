@@ -1,7 +1,7 @@
 package Action.InflictStatus.Concrete;
 
 import Action.InflictStatus.Abstract.IInflictStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 public class InflictNoStatus implements IInflictStatus {
     @Override

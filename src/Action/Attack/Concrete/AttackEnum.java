@@ -9,6 +9,10 @@ public enum AttackEnum {
     HYPNOSIS,
     GROWL,
 
+    // Stat altering moves
+    PURR,
+    RAGE,
+
     //Fire attacks
     FIRE_BITE,
     FLAMETHROWER,
@@ -16,6 +20,10 @@ public enum AttackEnum {
     //Poison attacks
     POISON_BITE,
     PEWK,
+
+    // Water attacks
+    SPIT,
+    TSUNAMI,
 
 
 }

@@ -1,23 +1,17 @@
 
 W
-'src/Action/Attack/Abstract/IAttack.java,1\3\13bcbfee8715a57403d60a331f9b71971af62522
-e
-5src/Action/InflictStatus/Abstract/IInflictStatus.java,5\4\54eeca0623ca8441ac72db0e87df56ab09d4ac35
-f
-6src/Action/InflictStatus/Concrete/InflictNoStatus.java,0\a\0a2183a9e3bf3723adb4bbba9a2a5c92903a2498
-W
 'src/Action/Status/Abstract/IStatus.java,3\9\39c7b014caab35023a0765e005ba0c6ceecd6bf7
 X
-(src/Action/Status/Concrete/NoStatus.java,2\0\2017a2a7fb46c29f9044173baae8c6f82ba85b2b
-[
-+src/Action/Status/Concrete/SleepStatus.java,1\9\19e20a4c1d5d0d5921846346ead02922206044a5
-[
-+src/Action/Status/Concrete/Status_Base.java,2\0\2071c0257de91b7961aa79ffbcee779e351cdd0e
-X
 (src/Action/Status/Concrete/StatusID.java,4\4\4458b167f142797374a78e32f05b9e25671fb0ee
-Z
-*src/Action/Attack/Concrete/AttackEnum.java,a\5\a5a6bb62118013fda24f53f1067340e8538b18ca
-\
-,src/Action/Status/Concrete/PoisonStatus.java,0\0\00392c6343fb97db6b427b5628b95149ac46dd80
 S
 #src/Animal/Concrete/AnimalKind.java,5\7\57477adc2d3996e36a7146b88da927cc64e28557
+O
+src/Animal/Concrete/StatID.java,4\3\43599cef744ef373b8ff1b38efbd9627dc25cbcb
+o
+?src/Animal/Behaviors/PeformAttackBehavior/Abstract/ActMode.java,9\0\90dbfb525f56fad09d9d5b09e9a63c05d4d1e805
+T
+$src/Animal/Concrete/ElementType.java,4\1\41605a10231e376f3f9efe50d37f4ebdc190e2f1
+P
+ src/Animal/Abstract/IAnimal.java,9\6\9648be5d64d2bc9c7a8b178af4179e5cb8b91d46
+k
+;src/Animal/Behaviors/DieBehavior/Abstract/IDieBehavior.java,2\2\2215b60cb92217eee0c4f55baf05a7c2270e4997

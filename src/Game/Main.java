@@ -2,7 +2,7 @@ package Game;
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
 import Action.Attack.Concrete.AttackFactory;
-import Animal.Concrete.*;
+import Animal.Creation.Concrete.*;
 
 import java.util.ArrayList;
 import java.util.List;

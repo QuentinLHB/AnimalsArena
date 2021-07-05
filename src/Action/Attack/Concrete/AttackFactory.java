@@ -2,8 +2,9 @@ package Action.Attack.Concrete;
 
 import Action.InflictStatus.Concrete.InflictStatus;
 import Action.Status.Concrete.StatusID;
+import Animal.Creation.Concrete.StatID;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class AttackFactory {
 
@@ -21,12 +22,19 @@ public class AttackFactory {
             case PEWK -> attack = new Attack("Pewk", 5, new InflictStatus(StatusID.POISON));
             case TORNADO -> attack = new Attack("Tornado", 10, new InflictStatus(StatusID.FEAR));
             case FLAMETHROWER -> attack = new Attack("Flamethrower", 20);
+            case SPIT -> attack = new Attack("Spit", 10, new InflictStatus(StatusID.FEAR));
+            case TSUNAMI -> attack = new Attack("Tsunami", 15);
+//            case RAGE -> attack =new AlterStats("Rage", );
+//            case PURR -> ;
             //add here
             default -> attack = new Attack ("Cry", 0);
         }
         return attack;
 
     }
+
+
+
     public static ArrayList<Attack> getAllAttacks(){
         ArrayList<Attack> allAttacks = new ArrayList<>();
         for (AttackEnum attack:AttackEnum.values()) {

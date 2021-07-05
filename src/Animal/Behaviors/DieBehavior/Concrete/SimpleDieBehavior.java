@@ -1,10 +1,9 @@
 package Animal.Behaviors.DieBehavior.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 import Animal.Behaviors.DieBehavior.Abstract.IDieBehavior;
 
-import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 
 public class SimpleDieBehavior implements IDieBehavior {

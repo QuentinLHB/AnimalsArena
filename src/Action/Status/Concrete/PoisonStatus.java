@@ -1,18 +1,16 @@
 package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 public class PoisonStatus extends Status_Base implements IStatus {
 
     //Constants
-    private final int DEFAULT_DURATION = 3;
-    private final int FRACTION_OF_MAX_HEALTH = 10;
+    private static final int DEFAULT_DURATION = 3;
+    private static final int FRACTION_OF_MAX_HEALTH = 10;
 
     public PoisonStatus(IAnimal animal){
-        super(animal);
-        super.turnsLeft = DEFAULT_DURATION;
-        super.duration = DEFAULT_DURATION;
+        this(animal, DEFAULT_DURATION);
     }
 
     public PoisonStatus(IAnimal animal, int duration){

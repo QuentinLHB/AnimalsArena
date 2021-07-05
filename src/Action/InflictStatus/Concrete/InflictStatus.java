@@ -2,7 +2,7 @@ package Action.InflictStatus.Concrete;
 
 import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.Status.Concrete.*;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 public class InflictStatus implements IInflictStatus {
 

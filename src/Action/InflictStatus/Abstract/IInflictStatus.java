@@ -1,6 +1,6 @@
 package Action.InflictStatus.Abstract;
 
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 public interface IInflictStatus {
 

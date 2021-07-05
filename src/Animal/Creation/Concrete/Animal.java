@@ -1,8 +1,10 @@
-package Animal.Concrete;
+package Animal.Creation.Concrete;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
+import Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
+import Animal.Behaviors.DefendBehavior.Concrete.SimpleDefendBehavior;
 import Animal.Behaviors.DieBehavior.Abstract.IDieBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
@@ -15,26 +17,42 @@ import java.util.Map;
 
 public class Animal implements IAnimal {
 
-    // Behaviors
+    // ** Behaviors **
     IPerformAttackBehavior attackBehavior;
-    public void setAttackBehavior(IPerformAttackBehavior attackBehavior){
+
+    /**
+     * Set the attack behavior, prioritizing any behavior that is not the standard one.
+     * @param newAttackBehavior AttackBehavior to add.
+     */
+    public void setAttackBehavior(IPerformAttackBehavior newAttackBehavior){
         if(this.attackBehavior == null ||
-        (this.attackBehavior.getClass() == SimpleAttackBehavior.class && (attackBehavior.getClass() != SimpleAttackBehavior.class))){
-            this.attackBehavior = attackBehavior;
-            System.out.printf("Une nouvelle attack behavior a été ajoutée à %s%n", this.getName()); //todo à retirer
+        (this.attackBehavior.getClass() == SimpleAttackBehavior.class && (newAttackBehavior.getClass() != SimpleAttackBehavior.class))){
+            this.attackBehavior = newAttackBehavior;
         }
 
     }
     IDieBehavior dieBehavior;
-    public void setDieBehavior(IDieBehavior dieBehavior) {
+
+    /**
+     * Set the die behavior, prioritizing any behavior that is not the standard one.
+     * @param newDieBehavior DieBehavior to add.
+     */
+    public void setDieBehavior(IDieBehavior newDieBehavior) {
         if(this.dieBehavior == null ||
-                (this.dieBehavior.getClass() == SimpleDieBehavior.class && (dieBehavior.getClass() != SimpleDieBehavior.class))) {
-            this.dieBehavior = dieBehavior;
-            System.out.printf("Une nouvelle die behavior a été ajoutée à %s%n", this.getName()); //todo à retirer
+                (this.dieBehavior.getClass() == SimpleDieBehavior.class && (newDieBehavior.getClass() != SimpleDieBehavior.class))) {
+            this.dieBehavior = newDieBehavior;
         }
     }
 
-    //Attacks
+    IDefendBehavior defendBehavior;
+    public void setDefendBehavior(IDefendBehavior newDefendBehavior){
+        if(this.defendBehavior == null ||
+                (this.defendBehavior.getClass() == SimpleDefendBehavior.class && (newDefendBehavior.getClass() != SimpleDefendBehavior.class))) {
+            this.defendBehavior = newDefendBehavior;
+        }
+    }
+
+    //** Attacks **
     private ArrayList<IAttack> attacks = new ArrayList<>();
     public void addAttack(IAttack attack){
         if(!attacks.contains(attack)){
@@ -61,7 +79,6 @@ public class Animal implements IAnimal {
     public int getMaxHealth() {
         return maxHealth;
     }
-    //private boolean alive;
     @Override
     public boolean isAlive() {
         return dieBehavior.isAlive();
@@ -80,14 +97,29 @@ public class Animal implements IAnimal {
      * Return a clone of the stats values.
      * @return clone of the stats values.
      */
+    @Override
     public  Map<StatID, Integer> getStats(){
         Map<StatID, Integer> clonedStats = new HashMap<StatID, Integer>();
-        for (int i = 0; i < StatID.values().length; i++) {
+        for (var i = 0; i < StatID.values().length; i++) {
             clonedStats.put(StatID.values()[i], this.stats.get(StatID.values()[i]));
         }
         return clonedStats;
     }
+
     private Map<StatID, Float> statAlterations = new HashMap<>();
+    /**
+     * Return a clone of the stat alterations dictionnary.
+     * @return clone of the stat alterations dictionnary.
+     */
+    @Override
+    public  Map<StatID, Float> getStatAlterations(){
+        Map<StatID, Float> clonedStatAlt = new HashMap<StatID, Float>();
+        for (var i = 0; i < StatID.values().length; i++) {
+            clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
+        }
+        return clonedStatAlt;
+    }
+
     private ActMode currentMode = ActMode.ATTACK;
 
     //Statuses (poison...)
@@ -128,9 +160,6 @@ public class Animal implements IAnimal {
     public void setName(String name) {
         this.name = name;
     }
-
-    //Constants
-    private final double ON_DEFENSE_REDUCTION = 0.5; //todo à tej
 
 
     //Constructor
@@ -195,41 +224,25 @@ public class Animal implements IAnimal {
 
     // Reaction
     /**
-     * Reacts upon an attack : Loses HP.
-     * @param damage Damage inflicted by the foe's attack.
+     * Reacts upon an attack depending on the defend behavior.
+     * @param damage Damage the foe is trying to inflict.
      */
     @Override
-    public void attacked(int damage) {
-        damage-= (stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE));
-        if(currentMode.equals(ActMode.DEFENSE)){
-            damage *= ON_DEFENSE_REDUCTION;
-        }
-        hurt(damage);
-        System.out.printf("%s lost %d damage.%n%n", name, damage);
+    public void attacked(IAttack attack, int damage) {
+        defendBehavior.defend(attack, damage);
     }
 
     /**
      * Loses HP due to an attack or a status.
      * @param damage damage taken.
      */
+    @Override
     public void hurt(int damage){
+        if(damage > health) damage = health;
         health -= damage;
 
         checkIfDead();
     }
-
-//    /**
-//     * The animal is dead : Statuses are removed and the animal can't act.
-//     */
-//    private void die() {
-//        health = 0;
-//        for(var i=0; i < statuses.size(); i++){
-//            removeStatus(statuses.get(i));
-//        }
-//        alive = false;
-//        canAct = false;
-//        System.out.printf("%s is dead.%n", this.name);
-//    }
 
     /**
      * Adds a status to the animal.
