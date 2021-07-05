@@ -59,8 +59,8 @@ public class FearStatus extends Status_Base implements IStatus {
     @Override
     public void disappear() {
         super.disappear(this);
-        animal.alterStat(StatID.ATTACK, 1/onAttackEffect);
-        animal.alterStat(StatID.DEFENSE, 1/onDefenseEffect);
+        animal.alterStat(StatID.ATTACK, 1);
+        animal.alterStat(StatID.DEFENSE, 1);
         System.out.printf("%s is no longer frightened%n", animal.getName());
     }
 

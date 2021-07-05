@@ -17,31 +17,20 @@ public class Animal implements IAnimal {
         return (ArrayList<IAttack>) attacks.clone();
     }
 
-    //Stats
-    private Map<StatID, Integer> stats = new HashMap<StatID, Integer>();
-
-    //Statuses (poison...)
-    private ArrayList<IStatus> statuses = new ArrayList<>();
-    public ArrayList<IStatus> getStatuses() {
-        return statuses;
-    }
-
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-
-    private String name;
+    //Stats and states.
     private int health;
+    public int getHealth() {
+        return health;
+    }
     private int maxHealth;
+    public int getMaxHealth() {
+        return maxHealth;
+    }
     private boolean alive;
+    @Override
+    public boolean isAlive() {
+        return alive;
+    }
     private boolean canAct = true;
     public boolean canAct(){
         return canAct;
@@ -50,41 +39,83 @@ public class Animal implements IAnimal {
     public void canAct(boolean allow) {
         canAct = allow;
     }
-
-
+    private Map<StatID, Integer> stats = new HashMap<StatID, Integer>();
+    /**
+     * Return a clone of the stats values.
+     * @return clone of the stats values.
+     */
+    public  Map<StatID, Integer> getStats(){
+        Map<StatID, Integer> clonedStats = new HashMap<StatID, Integer>();
+        for (int i = 0; i < StatID.values().length; i++) {
+            clonedStats.put(StatID.values()[i], this.stats.get(StatID.values()[i]));
+        }
+        return clonedStats;
+    }
+    private Map<StatID, Float> statAlterations = new HashMap<>();
     private mode currentMode = mode.ATTACK_MODE;
-    public int getHealth() {
-        return health;
+
+    //Statuses (poison...)
+    private ArrayList<IStatus> statuses = new ArrayList<>();
+    public ArrayList<IStatus> getStatuses() {
+        return statuses;
     }
 
-    public int getMaxHealth() {
-        return maxHealth;
+    //Other infos
+    private String name;
+    public String getName() {
+        return name;
     }
-
     @Override
-    public boolean isAlive() {
-        return alive;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    //Constants
     private final double ON_DEFENSE_REDUCTION = 0.5; //todo à tej
-
     public enum mode{
         ATTACK_MODE,
         DEFENSE_MODE
     }
 
+    //Constructor
+
+    /**
+     * Constructor of the animal, without a name.
+     * @param maxHealth Maximum health of the animal.
+     * @param attackStat Base attack of the animal.
+     * @param defenseStat Base defense of the animal.
+     */
     public Animal(int maxHealth, int attackStat, int defenseStat) { //todo ajouter l'élément en propriété
         this.name = "Unamed Animal";
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         stats.put(StatID.ATTACK, attackStat);
         stats.put(StatID.DEFENSE, defenseStat);
+        statAlterations.put(StatID.ATTACK, 1f);
+        statAlterations.put(StatID.DEFENSE, 1f);
         this.alive = true;
     }
 
+    /**
+     * Full constructor of the animal.
+     * @param name Name of the animal.
+     * @param maxHealth Maximum health of the animal.
+     * @param attackStat Base attack of the animal.
+     * @param defenseStat Base defense of the animal.
+     */
     public Animal(String name, int maxHealth, int attackStat, int defenseStat){
         this(maxHealth, attackStat, defenseStat);
         this.name = name;
+    }
+
+    //Action methods
+    /**
+     * Choose an attack.
+     * @param index index between 1 and 4
+     * @return The attack.
+     */
+    public IAttack chooseAttack(int index){
+        return attacks.get(index-1);
     }
 
     /**
@@ -104,15 +135,6 @@ public class Animal implements IAnimal {
     }
 
     /**
-     * Choose an attack.
-      * @param index index between 1 and 4
-     * @return The attack.
-     */
-    public IAttack chooseAttack(int index){
-        return attacks.get(index-1);
-    }
-
-    /**
      * Performs a defense move : Change its mode to defense.
      */
     @Override
@@ -120,24 +142,20 @@ public class Animal implements IAnimal {
         currentMode = mode.DEFENSE_MODE;
     }
 
+
+    // Reaction
     /**
      * Reacts upon an attack : Loses HP.
      * @param damage Damage inflicted by the foe's attack.
      */
     @Override
     public void attacked(int damage) {
-        damage-= stats.get(StatID.DEFENSE);
+        damage-= (stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE));
         if(currentMode.equals(mode.DEFENSE_MODE)){
             damage *= ON_DEFENSE_REDUCTION;
         }
         hurt(damage);
         System.out.printf("%s lost %d damage.%n%n", name, damage);
-    }
-
-    private void checkIfDead(){
-        if(health <=0){
-            die();
-        }
     }
 
     /**
@@ -150,7 +168,9 @@ public class Animal implements IAnimal {
         checkIfDead();
     }
 
-
+    /**
+     * The animal is dead : Statuses are removed and the animal can't act.
+     */
     private void die() {
         health = 0;
         for(var i=0; i < statuses.size(); i++){
@@ -159,7 +179,6 @@ public class Animal implements IAnimal {
         alive = false;
         canAct = false;
         System.out.printf("%s is dead.%n", this.name);
-
     }
 
     /**
@@ -187,8 +206,18 @@ public class Animal implements IAnimal {
      */
     @Override
     public void alterStat(StatID statID, float amount) {
-        stats.put(statID, Math.round(stats.get(statID)*amount));
+        statAlterations.put(statID, amount);
     }
+
+    private void checkIfDead(){
+        if(health <=0){
+            die();
+        }
+    }
+
+
+
+
 
     /**
      * Do what needs to be done after the end of a turn :

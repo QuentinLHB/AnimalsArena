@@ -2,13 +2,11 @@ package Game;
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
 import Action.Attack.Concrete.AttackFactory;
-import Animal.Concrete.Animal;
-import Animal.Concrete.AnimalFactory;
-import Animal.Concrete.AnimalKind;
-import Animal.Concrete.ElementType;
+import Animal.Concrete.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -19,7 +17,7 @@ public class Main {
 //        theAnimals.add(AnimalFactory.CreateRandomAnimal());
 //        theAnimals.add(AnimalFactory.CreateRandomAnimal());
 
-        StartPVP();
+        printAllAnimals();
 
 
     }
@@ -131,10 +129,7 @@ public class Main {
         int choix;
         System.out.printf("%s's actions :%n", animal.getName());
         System.out.println("Defend [1/2 dmg]: 0");
-        for (var i = 0; i < attacks.size(); i++) {
-            IAttack attaque = attacks.get(i);
-            System.out.printf("%s [%s] : %d%n", attaque.getAttackName(), attaque.getDescription(), i+1);
-        }
+        printAttacks(animal);
 
         do {
             System.out.println("Chosen attack : ");
@@ -151,6 +146,14 @@ public class Main {
         separator();
     }
 
+    public static void printAttacks(Animal animal){
+        ArrayList<IAttack> attacks = animal.getAttacks();
+        for (var i = 0; i < attacks.size(); i++) {
+            IAttack attaque = attacks.get(i);
+            System.out.printf("%d: %s [%s]%n", i+1, attaque.getAttackName(), attaque.getDescription());
+        }
+    }
+
     public static void separator(){
         System.out.println("---------------");
     }
@@ -159,6 +162,27 @@ public class Main {
         ArrayList<Attack> allAttacks = AttackFactory.getAllAttacks();
         for (Attack attack : allAttacks) {
             System.out.printf("%s [%s]%n", attack.getAttackName(), attack.getDescription());
+        }
+    }
+
+    public static void printAllAnimals(){
+        var allAnimals = new ArrayList<Animal>();
+        for (AnimalKind animalKind:AnimalKind.values()) {
+            for(ElementType elementType:ElementType.values()){
+                allAnimals.add(AnimalFactory.CreateAnimal(animalKind, elementType));
+            }
+        }
+
+        for(Animal animal : allAnimals){
+            Map<StatID, Integer> stats = animal.getStats();
+            String infos = String.format("** %s **%nStats :%n", animal.getName());
+            for (int i = 0; i < StatID.values().length; i++) {
+                infos += String.format(" %s: %d%n", StatID.values()[i], stats.get(StatID.values()[i]));
+            }
+            infos += "Attacks :";
+            System.out.println(infos);
+            printAttacks(animal);
+            System.out.println();
         }
     }
 }

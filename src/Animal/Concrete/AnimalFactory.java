@@ -39,7 +39,7 @@ public class AnimalFactory {
 
             case UNICORN:
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.TORNADO));
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.FLAMETHROWER));
+                addElementalGenericAttack(animal, elementType);
                 break;
 
             default:
@@ -71,6 +71,21 @@ public class AnimalFactory {
 
             case POISON:
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.POISON_BITE));
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private static void addElementalGenericAttack(Animal animal, ElementType elementType){
+        switch (elementType){
+            case FIRE:
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.FLAMETHROWER));
+                break;
+
+            case POISON:
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.PEWK));
                 break;
 
             default:
