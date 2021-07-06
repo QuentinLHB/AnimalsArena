@@ -42,20 +42,10 @@ public class SleepStatus extends Status_Base implements IStatus {
     }
 
     @Override
-    public int getTurnsLeft() {
-        return turnsLeft;
-    }
-
-    @Override
     public void disappear() {
         super.disappear(this);
         animal.canAct(true);
         System.out.println(String.format("%s wakes up !%n", animal.getName()));
-    }
-
-    @Override
-    public int getTurns() {
-        return 0;
     }
 
     private void printStatusApplication(){

@@ -8,5 +8,6 @@ public interface IAttack {
     void performAttack(IAnimal target, int damage);
     String getAttackName();
     int getDamageBase();
+    float getAccuracy();
     String getDescription();
 }

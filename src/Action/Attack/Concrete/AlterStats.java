@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class AlterStats extends Attack implements IAttack {
 
-    Animal attackOwner;
     /**
      * Dictionnary :
      * StatID : Stats to alter.
@@ -18,21 +17,35 @@ public class AlterStats extends Attack implements IAttack {
      */
     Map<StatID, Float> statsToAlter;
 
-    public AlterStats(Animal attackOwner, String name, Map<StatID, Float> statsToAlter) {
-        super(attackOwner, name, 0, new InflictNoStatus());
+    /**
+     * Full constructor of a stat-altering move. (ex: A move that lowers attack and defense stats permanently)
+     * @param attackOwner Owner of the attack.
+     * @param name Name of the attack.
+     * @param accuracy Accuracy of the attack (float between 0 and 1).
+     * @param statsToAlter Dictionnary (Map) : StatID, Float,
+     */
+    public AlterStats(Animal attackOwner, String name, float accuracy, Map<StatID, Float> statsToAlter) {
+        super(attackOwner, name, 0, accuracy, new InflictNoStatus());
         this.statsToAlter = statsToAlter;
     }
 
-    public AlterStats(String name, Map<StatID, Float> statsToAlter) {
-        super(name, 0, new InflictNoStatus());
+    public AlterStats(String name, float accuracy, Map<StatID, Float> statsToAlter) {
+        super(name, 0, accuracy, new InflictNoStatus());
         this.statsToAlter = statsToAlter;
+    }
+
+    public AlterStats(String name, Map<StatID, Float> statsToAlter){
+        this(name, 1f, statsToAlter);
     }
 
     @Override
     public void performAttack(IAnimal target, int damage) {
-        for(StatID statToAlter: statsToAlter.keySet()){
-            target.alterStat(statToAlter, statsToAlter.get(statToAlter));
+        if(accuracyTest()){
+            for(StatID statToAlter: statsToAlter.keySet()){
+                target.alterStat(statToAlter, statsToAlter.get(statToAlter));
+            }
         }
+
     }
 
 

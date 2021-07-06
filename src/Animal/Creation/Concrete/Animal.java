@@ -74,10 +74,10 @@ public class Animal implements IAnimal {
     public void setHealth(int health) {
         this.health = health;
     }
-
-    private int maxHealth;
+//
+//    private int maxHealth;
     public int getMaxHealth() {
-        return maxHealth;
+        return stats.get(StatID.MAX_HEALTH);
     }
     @Override
     public boolean isAlive() {
@@ -172,12 +172,17 @@ public class Animal implements IAnimal {
      */
     public Animal(int maxHealth, int attackStat, int defenseStat) { //todo ajouter l'élément en propriété
         this.name = "Unamed Animal";
-        this.maxHealth = maxHealth;
+
         this.health = maxHealth;
+        stats.put(StatID.MAX_HEALTH, maxHealth);
         stats.put(StatID.ATTACK, attackStat);
         stats.put(StatID.DEFENSE, defenseStat);
+        stats.put(StatID.ACCURACY, 100);
+        statAlterations.put(StatID.MAX_HEALTH, 1f);
         statAlterations.put(StatID.ATTACK, 1f);
         statAlterations.put(StatID.DEFENSE, 1f);
+        statAlterations.put(StatID.ACCURACY, 1f);
+
         //this.alive = true; -> Géré dans le dieBehavior
     }
 
@@ -210,7 +215,7 @@ public class Animal implements IAnimal {
      */
     @Override
     public void attack(IAnimal target, IAttack attack) {
-        attackBehavior.attack(target, attack, stats.get(StatID.ATTACK));
+        attackBehavior.attack(target, attack, Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)));
     }
 
     /**
@@ -263,13 +268,19 @@ public class Animal implements IAnimal {
     }
 
     /**
-     * Alter a stat. Ex: Stat.ATTACK, 0.5 will lower the attack stat by a half, 2 will retablish it.
+     * Alter a stat. Ex: Stat.ATTACK, 0.5 will lower the attack stat by a half.
+     * To retablish the stat, enter 1.
      * @param statID Stat to alter
-     * @param amount Floating number by which the stat must be multiplied.
+     * @param amount Floating number by which the stat must be multiplied, or 1 to retablish it.
      */
     @Override
     public void alterStat(StatID statID, float amount) {
-        statAlterations.put(statID, amount);
+        if(amount == 1){
+            statAlterations.put(statID, amount);
+        }
+        else{
+            statAlterations.put(statID, statAlterations.get(statID)*amount);
+        }
     }
 
     private void checkIfDead(){
@@ -277,10 +288,6 @@ public class Animal implements IAnimal {
             dieBehavior.die();
         }
     }
-
-
-
-
 
     /**
      * Do what needs to be done after the end of a turn :
@@ -293,11 +300,14 @@ public class Animal implements IAnimal {
     }
 
     public void printStats(){
-        System.out.printf("%s's stats :%nHealth : %d/%d%nAttack : %d%nDefense : %d%n%n",
+        System.out.printf("%s's stats :%nHealth : %d/%d%nAttack : %d (alt: %f)%nDefense : %d (alt: %f)%n%n",
                 name,
-                health,maxHealth,
+                health,getMaxHealth(),
                 stats.get(StatID.ATTACK),
-                stats.get(StatID.DEFENSE));
+                statAlterations.get(StatID.ATTACK),
+                stats.get(StatID.DEFENSE),
+                statAlterations.get(StatID.DEFENSE)
+        );
     }
 
 }

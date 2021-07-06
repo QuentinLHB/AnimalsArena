@@ -1,5 +1,6 @@
 package Action.InflictStatus.Concrete;
 
+import Action.Attack.Abstract.IAttack;
 import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.Status.Concrete.*;
 import Animal.Creation.Abstract.IAnimal;
@@ -21,12 +22,23 @@ public class InflictStatus implements IInflictStatus {
     public void inflictStatus(IAnimal target) {
         if (!Status_Base.doesStatusAlreadyExist(target, statusID)) {
             switch (statusID){
-                case FEAR -> target.addStatus(new FearStatus(target));
-                case SLEEP -> target.addStatus(new SleepStatus(target));
+                case FEAR -> {
+                    target.addStatus(new FearStatus(target));
+                    instantConsume(target);
+                }
+                case SLEEP -> {
+                    target.addStatus(new SleepStatus(target));
+                    instantConsume(target);
+                }
                 case POISON -> target.addStatus(new PoisonStatus(target));
                 //case PARALYSIS -> target.addStatus(new ParalysisStatus(target));
                 default -> target.addStatus(new NoStatus(target));
             }
         }
-        }
+    }
+
+    private void instantConsume(IAnimal target){
+        target.getStatuses().get(target.getStatuses().size()-1).consumeEffect();
+
+    }
 }

@@ -5,7 +5,7 @@ import Animal.Creation.Abstract.IAnimal;
 
 import java.util.ArrayList;
 
-public abstract class Status_Base {
+public abstract class Status_Base implements IStatus {
 
     protected int duration;
     protected int turnsLeft;
@@ -32,5 +32,15 @@ public abstract class Status_Base {
             if(existingStatus.getStatusID().equals(statusID)) return true;
         }
         return false;
+    }
+
+    @Override
+    public int getDuration(){
+        return duration;
+    }
+
+    @Override
+    public int getTurnsLeft() {
+        return turnsLeft;
     }
 }

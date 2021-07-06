@@ -8,7 +8,7 @@ import Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
 public class MirorDefenseAbility extends Defend_Base implements IDefendBehavior {
 
     private static final String MIROR_MOVE_NAME = "MirorDefense";
-    private int fractionOfDamageMirored;
+    private final int fractionOfDamageMirored;
 
     public MirorDefenseAbility(IAnimal animal, int fractionOfDamageMirored){
         super(animal);
@@ -18,6 +18,8 @@ public class MirorDefenseAbility extends Defend_Base implements IDefendBehavior 
     @Override
     public void defend(IAttack attack, int damage) {
         super.defend(attack, damage);
-        animal.attack(attack.getAttackOwner(), new Attack(MIROR_MOVE_NAME, attack.getDamageBase()/fractionOfDamageMirored));
+        if(!attack.getAttackName().equals(MIROR_MOVE_NAME)){
+            animal.attack(attack.getAttackOwner(), new Attack(MIROR_MOVE_NAME, attack.getDamageBase()/fractionOfDamageMirored));
+        }
     }
 }

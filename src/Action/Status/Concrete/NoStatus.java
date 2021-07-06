@@ -26,17 +26,8 @@ public class NoStatus extends Status_Base implements IStatus {
     }
 
     @Override
-    public int getTurnsLeft() {
-        return 0;
-    }
-
-    @Override
     public void disappear() {
         super.disappear(this);
     }
 
-    @Override
-    public int getTurns() {
-        return 0;
-    }
 }

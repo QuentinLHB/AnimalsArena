@@ -14,17 +14,7 @@ public class Main {
     public static List<Animal> theAnimals = new ArrayList<Animal>();
     public static void main(String[] args) {
 
-//        theAnimals.add(AnimalFactory.CreateRandomAnimal());
-//        theAnimals.add(AnimalFactory.CreateRandomAnimal());
-
-        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.DOG, ElementType.UNDEAD, ElementType.FIRE));
-        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.SNAKE, ElementType.NORMAL, ElementType.UNDEAD));
-        for(Animal animal: theAnimals){
-            animal.printStats();
-        }
-        battle();
-
-        //printAllAnimals();
+        StartPVP();
 
 
     }

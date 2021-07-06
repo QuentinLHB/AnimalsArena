@@ -40,17 +40,6 @@ public class PoisonStatus extends Status_Base implements IStatus {
         else disappear();
 
     }
-    /** Returns the total amount of turns of poison.*/
-    @Override
-    public int getTurns() {
-        return duration;
-    }
-
-    /**Returns the amount of turns left before the poison fades out.*/
-    @Override
-    public int getTurnsLeft() {
-        return turnsLeft;
-    }
 
     /**Removes the status from the animal.*/
     @Override

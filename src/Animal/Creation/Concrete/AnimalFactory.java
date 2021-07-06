@@ -9,8 +9,7 @@ import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.UndeadDieBehavior;
 import Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
 import Animal.Behaviors.PeformAttackBehavior.Concrete.UndeadAttackBehavior;
-
-import java.util.concurrent.ThreadLocalRandom;
+import Util.RNG;
 
 public class AnimalFactory {
 
@@ -55,18 +54,17 @@ public class AnimalFactory {
     }
 
     public static Animal CreateRandomAnimal(){
-        int rngAnimal = getRNG(AnimalKind.values().length);
-        int rngType = getRNG(ElementType.values().length);
+        int rngAnimal = RNG.GenerateNumber(0, AnimalKind.values().length);
+        int rngType = RNG.GenerateNumber(0, ElementType.values().length);
 
-        CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
-
-        return null;
+        return CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
     }
 
     private static void addAttacks(Animal animal, AnimalKind animalKind, ElementType elementType){
         switch (animalKind){
             case DOG:
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
+                animal.addAttack(AttackFactory.createAttack(AttackEnum.GROWL));
                 addElementalBite(animal, elementType);
                 break;
 
@@ -77,7 +75,8 @@ public class AnimalFactory {
                 break;
             case CAT:
                 animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
-                animal.addAttack((AttackFactory.createAttack(AttackEnum.GROWL)));
+                animal.addAttack((AttackFactory.createAttack(AttackEnum.PURR)));
+
                 addElementalBite(animal, elementType);
 
                 break;
@@ -166,9 +165,5 @@ public class AnimalFactory {
             default:
                 break;
         }
-    }
-
-    private static int getRNG(int max){
-        return ThreadLocalRandom.current().nextInt(0, max + 1);
     }
 }
