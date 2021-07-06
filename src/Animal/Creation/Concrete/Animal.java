@@ -13,6 +13,7 @@ import Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Animal implements IAnimal {
@@ -64,21 +65,21 @@ public class Animal implements IAnimal {
         return (ArrayList<IAttack>) attacks.clone();
     }
 
-    //Stats and states.
-    private int health;
+    // ***** Stats and states *****
+    private float health;
     @Override
     public int getHealth() {
-        return health;
+        return Math.round(health);
     }
     @Override
-    public void setHealth(int health) {
+    public void setHealth(float health) {
         this.health = health;
     }
-//
-//    private int maxHealth;
+
     public int getMaxHealth() {
-        return stats.get(StatID.MAX_HEALTH);
+        return Math.round(stats.get(StatID.MAX_HEALTH));
     }
+
     @Override
     public boolean isAlive() {
         return dieBehavior.isAlive();
@@ -92,14 +93,14 @@ public class Animal implements IAnimal {
     public void canAct(boolean allow) {
         canAct = allow;
     }
-    private Map<StatID, Integer> stats = new HashMap<StatID, Integer>();
+    private Map<StatID, Float> stats = new HashMap<>();
     /**
      * Return a clone of the stats values.
      * @return clone of the stats values.
      */
     @Override
-    public  Map<StatID, Integer> getStats(){
-        Map<StatID, Integer> clonedStats = new HashMap<StatID, Integer>();
+    public  Map<StatID, Float> getStats(){
+        Map<StatID, Float> clonedStats = new HashMap<>();
         for (var i = 0; i < StatID.values().length; i++) {
             clonedStats.put(StatID.values()[i], this.stats.get(StatID.values()[i]));
         }
@@ -162,7 +163,7 @@ public class Animal implements IAnimal {
     }
 
 
-    //Constructor
+    // ****** Constructors ******
 
     /**
      * Constructor of the animal, without a name.
@@ -170,20 +171,8 @@ public class Animal implements IAnimal {
      * @param attackStat Base attack of the animal.
      * @param defenseStat Base defense of the animal.
      */
-    public Animal(int maxHealth, int attackStat, int defenseStat) { //todo ajouter l'élément en propriété
-        this.name = "Unamed Animal";
-
-        this.health = maxHealth;
-        stats.put(StatID.MAX_HEALTH, maxHealth);
-        stats.put(StatID.ATTACK, attackStat);
-        stats.put(StatID.DEFENSE, defenseStat);
-        stats.put(StatID.ACCURACY, 100);
-        statAlterations.put(StatID.MAX_HEALTH, 1f);
-        statAlterations.put(StatID.ATTACK, 1f);
-        statAlterations.put(StatID.DEFENSE, 1f);
-        statAlterations.put(StatID.ACCURACY, 1f);
-
-        //this.alive = true; -> Géré dans le dieBehavior
+    public Animal(int maxHealth, float attackStat, float defenseStat) {
+        this("Unamed Animal", maxHealth, attackStat, defenseStat);
     }
 
     /**
@@ -193,8 +182,16 @@ public class Animal implements IAnimal {
      * @param attackStat Base attack of the animal.
      * @param defenseStat Base defense of the animal.
      */
-    public Animal(String name, int maxHealth, int attackStat, int defenseStat){
-        this(maxHealth, attackStat, defenseStat);
+    public Animal(String name, float maxHealth, float attackStat, float defenseStat){
+        this.health = maxHealth;
+        stats.put(StatID.MAX_HEALTH, maxHealth);
+        stats.put(StatID.ATTACK, attackStat);
+        stats.put(StatID.DEFENSE, defenseStat);
+        stats.put(StatID.ACCURACY, 100f);
+        statAlterations.put(StatID.MAX_HEALTH, 1f);
+        statAlterations.put(StatID.ATTACK, 1f);
+        statAlterations.put(StatID.DEFENSE, 1f);
+        statAlterations.put(StatID.ACCURACY, 1f);
         this.name = name;
     }
 
@@ -209,13 +206,13 @@ public class Animal implements IAnimal {
     }
 
     /**
-     * Try to perform an attack. Misses if one of the animal is dead.
+     * Execute the attack behavior.
      * @param target Target of the attack.
      * @param attack Attack to peform.
      */
     @Override
     public void attack(IAnimal target, IAttack attack) {
-        attackBehavior.attack(target, attack, Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)));
+        attackBehavior.attack(target, attack, stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK));
     }
 
     /**
@@ -243,9 +240,8 @@ public class Animal implements IAnimal {
      */
     @Override
     public void hurt(int damage){
-        if(damage > health) damage = health;
+        if(damage > health) damage = Math.round(health);
         health -= damage;
-
         checkIfDead();
     }
 
@@ -277,9 +273,11 @@ public class Animal implements IAnimal {
     public void alterStat(StatID statID, float amount) {
         if(amount == 1){
             statAlterations.put(statID, amount);
+            System.out.printf("%s's %s was restored.%n", name, statID.name().toLowerCase(Locale.ROOT));
         }
         else{
             statAlterations.put(statID, statAlterations.get(statID)*amount);
+            System.out.printf("%s's %s was lowered%n", name, statID.name().toLowerCase(Locale.ROOT));
         }
     }
 
@@ -300,13 +298,14 @@ public class Animal implements IAnimal {
     }
 
     public void printStats(){
-        System.out.printf("%s's stats :%nHealth : %d/%d%nAttack : %d (alt: %f)%nDefense : %d (alt: %f)%n%n",
+        System.out.printf("%s's stats :%n" +
+                        "Health : %d/%d%n" +
+                        "Attack : %d%n" +
+                        "Defense : %d%n%n",
                 name,
-                health,getMaxHealth(),
-                stats.get(StatID.ATTACK),
-                statAlterations.get(StatID.ATTACK),
-                stats.get(StatID.DEFENSE),
-                statAlterations.get(StatID.DEFENSE)
+                Math.round(health),getMaxHealth(),
+                Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)*100),
+                Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100)
         );
     }
 

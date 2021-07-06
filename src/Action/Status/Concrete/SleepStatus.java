@@ -5,19 +5,17 @@ import Animal.Creation.Abstract.IAnimal;
 
 public class SleepStatus extends Status_Base implements IStatus {
 
-    private final int DEFAULT_DURATION = 2;
+    private static final int DEFAULT_DURATION = 2;
 
     public SleepStatus(IAnimal animal){
-        super(animal);
-        super.turnsLeft = DEFAULT_DURATION;
-        super.duration = DEFAULT_DURATION;
-        printStatusApplication();
+        this(animal, DEFAULT_DURATION);
     }
 
     public SleepStatus(IAnimal animal, int duration){
         super(animal);
         super.turnsLeft = duration;
         super.duration = duration;
+        disableAct();
         printStatusApplication();
     }
 
@@ -34,11 +32,14 @@ public class SleepStatus extends Status_Base implements IStatus {
     @Override
     public void consumeEffect() {
         if(turnsLeft >0){
-            animal.canAct(false);
+            disableAct();
             turnsLeft--;
         }
         else disappear();
+    }
 
+    private void disableAct(){
+        animal.canAct(false);
     }
 
     @Override

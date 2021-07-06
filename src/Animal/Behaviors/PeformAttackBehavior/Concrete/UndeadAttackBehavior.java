@@ -15,7 +15,7 @@ public class UndeadAttackBehavior extends SimpleAttackBehavior implements IPerfo
     }
 
     @Override
-    public void attack(IAnimal target, IAttack attack, int attackStat) {
+    public void attack(IAnimal target, IAttack attack, float attackStat) {
         super.attack(target, attack, attackStat);
         attackingAnimal.hurt(attack.getDamageBase()/2);
     }

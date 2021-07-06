@@ -31,9 +31,9 @@ public class AnimalFactory {
 
         var animal = new Animal(
                 name,
-                (int)Math.round(animalKind.getMaxHealth()* maxHealthVariation) ,
-                (int)Math.round(animalKind.getAttack()* attackVariation),
-                (int)Math.round(animalKind.getDefense()* defenseVariation)
+                Math.round(animalKind.getMaxHealth()* maxHealthVariation) ,
+                animalKind.getAttack()* attackVariation,
+                animalKind.getDefense()* defenseVariation
                 );
 
         for(ElementType elementType: elementTypes){

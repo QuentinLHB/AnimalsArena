@@ -17,7 +17,7 @@ public interface IAnimal {
     ActMode getActMode();
 
     int getHealth();
-    void setHealth(int health);
+    void setHealth(float health);
 
     void canAct(boolean allow);
     boolean canAct();
@@ -64,7 +64,7 @@ public interface IAnimal {
      */
     void removeStatus(IStatus status);
 
-    Map<StatID, Integer> getStats();
+    Map<StatID, Float> getStats();
     void alterStat(StatID statID, float amount);
     Map<StatID, Float> getStatAlterations();
 

@@ -13,8 +13,4 @@ public class SimpleDefendBehavior extends Defend_Base implements IDefendBehavior
         super(animal);
     }
 
-    @Override
-    public void defend(IAttack attack, int damage) {
-
-    }
 }

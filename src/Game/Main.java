@@ -14,7 +14,10 @@ public class Main {
     public static List<Animal> theAnimals = new ArrayList<Animal>();
     public static void main(String[] args) {
 
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.NORMAL));
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CAT, ElementType.POISON));
         StartPVP();
+        battle();
 
 
     }
@@ -98,12 +101,12 @@ public class Main {
         var animalB = theAnimals.get(1);
 
         if(animalA.canAct()){
-            peformsAction(animalA, animalB);
+            performAction(animalA, animalB);
         }
         else System.out.printf("%s can't act.%n%n", animalA.getName());
 
         if(animalB.canAct()){
-            peformsAction(animalB, animalA);
+            performAction(animalB, animalA);
         }
         else System.out.printf("%s can't act.%n%n", animalB.getName());
 
@@ -120,17 +123,27 @@ public class Main {
         nbTour++;
     }
 
-    public static void peformsAction(Animal animal, Animal target){
+    public static void performAction(Animal animal, Animal target){
         ArrayList<IAttack> attacks = animal.getAttacks();
         var scanner = new Scanner(System.in);
         int choix;
-        System.out.printf("%s's actions :%n", animal.getName());
-        System.out.println("0: Defend [1/2 dmg]");
-        printAttacks(animal);
 
         do {
-            System.out.println("Chosen attack : ");
-            choix = scanner.nextInt();
+            System.out.printf("%s's actions :%n", animal.getName());
+            System.out.println("0: Defend");
+            printAttacks(animal);
+            System.out.println("(i: Display stats)");
+            System.out.println(">> ");
+
+            try{
+                choix = scanner.nextInt();
+            }catch (Exception e){
+                choix = -1;
+                if(scanner.nextLine().equals("i") || scanner.nextLine().equals("I")){
+                    showStats(animal, target);
+                }
+            }
+
         }while (choix < 0 || choix > attacks.size());
 
         if(choix == 0) {
@@ -141,6 +154,13 @@ public class Main {
         }
 
         separator();
+    }
+
+    private static void showStats(Animal animal, Animal target) {
+        animal.printStats();
+        target.printStats();
+        System.out.println("press any key to go back...");
+        new Scanner(System.in).nextLine();
     }
 
     public static void printAttacks(Animal animal){
@@ -171,10 +191,10 @@ public class Main {
         }
 
         for(Animal animal : allAnimals){
-            Map<StatID, Integer> stats = animal.getStats();
+            Map<StatID, Float> stats = animal.getStats();
             String infos = String.format("** %s **%nStats :%n", animal.getName());
             for (int i = 0; i < StatID.values().length; i++) {
-                infos += String.format(" %s: %d%n", StatID.values()[i], stats.get(StatID.values()[i]));
+                infos += String.format(" %s: %d%n", StatID.values()[i], Math.round(100*stats.get(StatID.values()[i])));
             }
             infos += "Attacks :";
             System.out.println(infos);

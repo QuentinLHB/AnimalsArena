@@ -16,27 +16,25 @@ public class FearStatus extends Status_Base implements IStatus {
      */
     public float onDefenseEffect;
     public static final float DEFAULT_DEFENSEEFFECT  = 0.5f;
-
     private static final int DEFAULT_DURATION = 3;
 
     public FearStatus(IAnimal animal) {
-        super(animal);
-        animal.alterStat(StatID.ATTACK, onAttackEffect);
-        animal.alterStat(StatID.DEFENSE, onDefenseEffect);
-
+        this(animal, DEFAULT_DURATION);
     }
 
     public FearStatus(IAnimal animal, int duration){
         this(animal, duration, DEFAULT_ATTACKEFFECT, DEFAULT_DEFENSEEFFECT);
-        super.duration = duration;
     }
 
-    public FearStatus(IAnimal animal, int duration, float onAttackEffect, float onDefenseEffect){ //Todo permettre l'accès via une factory
+    public FearStatus(IAnimal animal, int duration, float onAttackEffect, float onDefenseEffect){
         super(animal);
-        this.duration = duration;
+        super.duration = duration;
+        super.turnsLeft = duration;
         this.onAttackEffect = onAttackEffect;
         this.onDefenseEffect = onDefenseEffect;
-        //todo permettre d'enlever la possibilité de se défendre à l'ennemi
+        printEffect();
+        animal.alterStat(StatID.ATTACK, onAttackEffect);
+        animal.alterStat(StatID.DEFENSE, onDefenseEffect);
     }
 
     @Override
@@ -68,5 +66,9 @@ public class FearStatus extends Status_Base implements IStatus {
         animal.alterStat(StatID.ATTACK, 1);
         animal.alterStat(StatID.DEFENSE, 1);
         System.out.printf("%s is no longer frightened%n", animal.getName());
+    }
+
+    private void printEffect(){
+        System.out.printf("%s was frightened%n", animal.getName());
     }
 }

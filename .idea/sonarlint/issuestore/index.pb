@@ -1,15 +1,21 @@
 
 X
 (src/Action/Status/Concrete/StatusID.java,4\4\4458b167f142797374a78e32f05b9e25671fb0ee
-o
-?src/Animal/Behaviors/PeformAttackBehavior/Abstract/ActMode.java,9\0\90dbfb525f56fad09d9d5b09e9a63c05d4d1e805
 k
 ;src/Animal/Behaviors/DieBehavior/Abstract/IDieBehavior.java,2\2\2215b60cb92217eee0c4f55baf05a7c2270e4997
-]
--src/Animal/Creation/Concrete/ElementType.java,d\3\d370dae1685e040df2a001e252ae186385cb0e61
 e
 5src/Action/InflictStatus/Abstract/IInflictStatus.java,5\4\54eeca0623ca8441ac72db0e87df56ab09d4ac35
-~
-Nsrc/Animal/Behaviors/PeformAttackBehavior/Abstract/IPerformAttackBehavior.java,2\1\21da31679adf4be9d2c53b11559f85176b3abcbd
 F
 src/Game/PlayerAI.java,b\d\bd2cc7434f94dba3ab7c47ab289baf667dc892f7
+q
+Asrc/Animal/Behaviors/DefendBehavior/Abstract/IDefendBehavior.java,3\a\3a468abe620a56b1444515cd736a5d8581ad2c81
+Z
+*src/Action/Attack/Concrete/AttackEnum.java,a\5\a5a6bb62118013fda24f53f1067340e8538b18ca
+p
+@src/Animal/Behaviors/DieBehavior/Concrete/SimpleDieBehavior.java,d\a\da9fc02d3192f5d8a492df15fb2dc7a471b7cebd
+f
+6src/Action/InflictStatus/Concrete/InflictNoStatus.java,0\a\0a2183a9e3bf3723adb4bbba9a2a5c92903a2498
+]
+-src/Action/Attack/Concrete/AttackFactory.java,f\6\f6fa54c2a8366f710bf12003dbf76fd24922db39
+X
+(src/Animal/Creation/Concrete/StatID.java,7\0\703d9c00ee2e6da3132aaef2b7a1eaa94dde9f3e

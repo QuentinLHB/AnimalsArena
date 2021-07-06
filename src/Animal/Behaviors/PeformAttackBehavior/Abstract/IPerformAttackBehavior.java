@@ -4,5 +4,5 @@ import Action.Attack.Abstract.IAttack;
 import Animal.Creation.Abstract.IAnimal;
 
 public interface IPerformAttackBehavior {
-    void attack(IAnimal target, IAttack attack, int attackStat);
+    void attack(IAnimal target, IAttack attack, float attackStat);
 }

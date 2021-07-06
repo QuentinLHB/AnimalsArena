@@ -13,8 +13,14 @@ public class SimpleAttackBehavior implements IPerformAttackBehavior {
         this.attackingAnimal = attackingAnimal;
     }
 
+    /**
+     * Peforms the attack if possible.
+     * @param target Target of the attack.
+     * @param attack Attack used on the target.
+     * @param attackStat attack stat of the attacking animal (attack variation applied)
+     */
     @Override
-    public void attack(IAnimal target, IAttack attack, int attackStat) {
+    public void attack(IAnimal target, IAttack attack, float attackStat) {
         if(attackingAnimal.canAct()){
             attackingAnimal.setActMode(ActMode.ATTACK);
             if(target.isAlive()){

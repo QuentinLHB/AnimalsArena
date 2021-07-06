@@ -39,7 +39,7 @@ public class AlterStats extends Attack implements IAttack {
     }
 
     @Override
-    public void performAttack(IAnimal target, int damage) {
+    public void performAttack(IAnimal target, float attackStat) {
         if(accuracyTest()){
             for(StatID statToAlter: statsToAlter.keySet()){
                 target.alterStat(statToAlter, statsToAlter.get(statToAlter));

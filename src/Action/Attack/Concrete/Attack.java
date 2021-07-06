@@ -103,10 +103,10 @@ public class Attack implements IAttack {
     }
 
     @Override
-    public void performAttack(IAnimal target, int attackStat) {
+    public void performAttack(IAnimal target, float attackStat) {
         if(accuracyTest()){
             if(damageBase > 0){
-                target.attacked(this,damageBase+attackStat);
+                target.attacked(this,Math.round(damageBase*attackStat));
             }
             inflictStatus.inflictStatus(target);
         }
