@@ -22,6 +22,9 @@ public interface IAnimal {
     void canAct(boolean allow);
     boolean canAct();
 
+    void canDefend(boolean allow);
+    boolean canDefend();
+
     /**
      * Performs an attack.
      * @param target Target of the attack.

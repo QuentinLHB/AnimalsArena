@@ -142,10 +142,11 @@ public class Attack implements IAttack {
             description +=" | ";
         }
 
-        description +=  String.format("accuracy: %d | ", (int)(accuracy*100));
+        description +=  String.format("accuracy: %d", (int)(accuracy*100));
 
         if(inflictStatus.getClass() != InflictNoStatus.class){
-            description += String.format("Applies %s", inflictStatus.getStatusName());
+
+            description += String.format(" | Applies %s", inflictStatus.getStatusName());
         }
         return description;
     }

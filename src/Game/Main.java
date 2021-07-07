@@ -19,6 +19,8 @@ public class Main {
         StartPVP();
         battle();
 
+        printAllAttacks();
+
 
     }
 
@@ -27,13 +29,13 @@ public class Main {
         createAnimal();
         theAnimals.get(0).printStats();
 
-        separator();
+        clearConsole();
 
         System.out.println("Player 2:\n");
         createAnimal();
         theAnimals.get(1).printStats();
 
-        separator();
+        clearConsole();
 
         battle();
     }
@@ -46,7 +48,7 @@ public class Main {
         // Choose animal
         System.out.println("Please choose one of the following animals :");
         for (int i = 0; i < AnimalKind.values().length; i++) {
-            System.out.printf("%d: %s%n", i+1, AnimalKind.values()[i]);
+            System.out.printf("%d: %s [%s]%n", i+1, AnimalKind.values()[i], AnimalKind.values()[i].getDescription());
         }
         System.out.println("I'll take : ");
         animalKind = AnimalKind.values()[scanner.nextInt()-1];
@@ -100,15 +102,15 @@ public class Main {
         var animalA = theAnimals.get(0);
         var animalB = theAnimals.get(1);
 
-        if(animalA.canAct()){
-            performAction(animalA, animalB);
-        }
-        else System.out.printf("%s can't act.%n%n", animalA.getName());
 
-        if(animalB.canAct()){
+        if(whichIsFaster() == animalA){
+            performAction(animalA, animalB);
             performAction(animalB, animalA);
         }
-        else System.out.printf("%s can't act.%n%n", animalB.getName());
+        else {
+            performAction(animalB, animalA);
+            performAction(animalA, animalB);
+        }
 
         for (Animal animal:theAnimals) {
             animal.endOfTurn();
@@ -124,6 +126,10 @@ public class Main {
     }
 
     public static void performAction(Animal animal, Animal target){
+        if(!animal.canAct()) {
+            System.out.printf("%s can't act.", animal.getName());
+            return;
+        }
         ArrayList<IAttack> attacks = animal.getAttacks();
         var scanner = new Scanner(System.in);
         int choix;
@@ -202,5 +208,24 @@ public class Main {
             System.out.println();
         }
     }
+
+    private static Animal whichIsFaster(){
+        var a1 = theAnimals.get(0);
+        var a2 = theAnimals.get(1);
+        return getSpeed(a1) >= getSpeed(a2) ? a1 : a2;
+
+    }
+    private static float getSpeed(Animal animal){
+        return (animal.getStats().get(StatID.SPEED) * animal.getStatAlterations().get(StatID.SPEED));
+    }
+
+    private static void clearConsole(){
+        System.out.flush();
+        System.out.print("\033[H\033[2J");
+    }
+
+//    private static void waitHalfASec(){
+//
+//    }
 }
 

@@ -4,7 +4,8 @@ public enum StatID {
     MAX_HEALTH,
     ATTACK,
     DEFENSE,
-    ACCURACY
+    ACCURACY,
+    SPEED
     ;
 }
 

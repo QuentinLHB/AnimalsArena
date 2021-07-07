@@ -12,5 +12,4 @@ public class SimpleDefendBehavior extends Defend_Base implements IDefendBehavior
     public SimpleDefendBehavior(IAnimal animal){
         super(animal);
     }
-
 }

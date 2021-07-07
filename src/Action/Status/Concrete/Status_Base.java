@@ -15,6 +15,12 @@ public abstract class Status_Base implements IStatus {
         this.animal = animal;
     }
 
+    protected Status_Base(IAnimal animal, int duration){
+        this(animal);
+        this.duration = duration;
+        this.turnsLeft = duration;
+    }
+
     protected void disappear(IStatus status){
         ArrayList<IStatus> statuses = animal.getStatuses();
         statuses.remove(status);

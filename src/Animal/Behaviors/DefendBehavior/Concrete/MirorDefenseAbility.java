@@ -17,9 +17,12 @@ public class MirorDefenseAbility extends Defend_Base implements IDefendBehavior 
 
     @Override
     public void defend(IAttack attack, int damage) {
+
         super.defend(attack, damage);
         if(!attack.getAttackName().equals(MIROR_MOVE_NAME)){
             animal.attack(attack.getAttackOwner(), new Attack(MIROR_MOVE_NAME, attack.getDamageBase()/fractionOfDamageMirored));
         }
+
+
     }
 }

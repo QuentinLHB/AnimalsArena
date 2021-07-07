@@ -19,12 +19,16 @@ public class AnimalFactory {
         var maxHealthVariation = 1f;
         var attackVariation = 1f;
         var defenseVariation = 1f;
+        var speedVariation = 1f;
+
         var name = "";
 
         for (ElementType elementType: elementTypes) {
             maxHealthVariation += (1-elementType.getHealthVariation());
             attackVariation += (1-elementType.getAttackVariation());
             defenseVariation += (1-elementType.getDefenseVariation());
+            speedVariation += (1-elementType.getSpeedVariation());
+
             name += elementType.name() + " ";
         }
         name += animalKind.name();
@@ -33,7 +37,8 @@ public class AnimalFactory {
                 name,
                 Math.round(animalKind.getMaxHealth()* maxHealthVariation) ,
                 animalKind.getAttack()* attackVariation,
-                animalKind.getDefense()* defenseVariation
+                animalKind.getDefense()* defenseVariation,
+                animalKind.getSpeed()* speedVariation
                 );
 
         for(ElementType elementType: elementTypes){

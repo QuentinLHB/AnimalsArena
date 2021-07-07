@@ -2,13 +2,14 @@ package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
 import Animal.Creation.Abstract.IAnimal;
+import Util.RNG;
 
 public class SleepStatus extends Status_Base implements IStatus {
 
-    private static final int DEFAULT_DURATION = 2;
+    public static final int DEFAULT_DURATION = 2;
 
     public SleepStatus(IAnimal animal){
-        this(animal, DEFAULT_DURATION);
+        this(animal, RNG.GenerateNumber(1, 3));
     }
 
     public SleepStatus(IAnimal animal, int duration){
@@ -47,6 +48,11 @@ public class SleepStatus extends Status_Base implements IStatus {
         super.disappear(this);
         animal.canAct(true);
         System.out.println(String.format("%s wakes up !%n", animal.getName()));
+    }
+
+    @Override
+    public int getDefaultDuration() {
+        return DEFAULT_DURATION;
     }
 
     private void printStatusApplication(){

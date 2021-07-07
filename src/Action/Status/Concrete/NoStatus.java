@@ -30,4 +30,9 @@ public class NoStatus extends Status_Base implements IStatus {
         super.disappear(this);
     }
 
+    @Override
+    public int getDefaultDuration() {
+        return 0;
+    }
+
 }

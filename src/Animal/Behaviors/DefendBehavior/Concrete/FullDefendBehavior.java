@@ -14,12 +14,15 @@ public class FullDefendBehavior extends Defend_Base implements IDefendBehavior {
 
     @Override
     public void defend(IAttack attack, int damage) {
+
         if(animal.getActMode().equals(ActMode.DEFENSE)){
             System.out.printf("%s took no damage due to its Full Defense ability.%n", animal.getName());
         }
         else{
             super.defend(attack, damage);
         }
+
+
 
     }
 }

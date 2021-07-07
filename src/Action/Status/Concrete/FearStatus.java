@@ -27,7 +27,7 @@ public class FearStatus extends Status_Base implements IStatus {
     }
 
     public FearStatus(IAnimal animal, int duration, float onAttackEffect, float onDefenseEffect){
-        super(animal);
+        super(animal, duration);
         super.duration = duration;
         super.turnsLeft = duration;
         this.onAttackEffect = onAttackEffect;
@@ -35,6 +35,7 @@ public class FearStatus extends Status_Base implements IStatus {
         printEffect();
         animal.alterStat(StatID.ATTACK, onAttackEffect);
         animal.alterStat(StatID.DEFENSE, onDefenseEffect);
+        animal.canDefend(false);
     }
 
     @Override
@@ -65,7 +66,13 @@ public class FearStatus extends Status_Base implements IStatus {
         super.disappear(this);
         animal.alterStat(StatID.ATTACK, 1);
         animal.alterStat(StatID.DEFENSE, 1);
+        animal.canDefend();
         System.out.printf("%s is no longer frightened%n", animal.getName());
+    }
+
+    @Override
+    public int getDefaultDuration() {
+        return DEFAULT_DURATION;
     }
 
     private void printEffect(){

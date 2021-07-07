@@ -10,4 +10,5 @@ public interface IStatus {
     int getTurnsLeft();
     void disappear();
     int getDuration();
+    int getDefaultDuration();
 }

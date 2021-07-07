@@ -8,7 +8,7 @@ import Animal.Creation.Concrete.StatID;
 
 public class Defend_Base implements IDefendBehavior {
     protected IAnimal animal;
-    protected boolean canDefend;
+    protected boolean canDefend = true;
     protected static final double ON_DEFENSE_REDUCTION = 0.5;
 
     protected Defend_Base(IAnimal animal){

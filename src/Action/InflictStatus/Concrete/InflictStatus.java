@@ -8,9 +8,15 @@ import Animal.Creation.Abstract.IAnimal;
 public class InflictStatus implements IInflictStatus {
 
     private StatusID statusID;
+    private int duration;
+
+    public InflictStatus(StatusID statusID, int duration){
+        this.statusID = statusID;
+        this.duration = duration;
+    }
 
     public InflictStatus(StatusID statusID){
-        this.statusID = statusID;
+        this(statusID, -1);
     }
 
     @Override
@@ -18,16 +24,21 @@ public class InflictStatus implements IInflictStatus {
         return statusID.lowerCaseName();
     }
 
+    /**
+     * Inflict the status to the target.
+     * @param target IAnimal on which to apply the status.
+     */
     @Override
     public void inflictStatus(IAnimal target) {
+        boolean defaultDuration = duration == -1;
         if (!Status_Base.doesStatusAlreadyExist(target, statusID)) {
             switch (statusID){
-                case FEAR -> target.addStatus(new FearStatus(target));
+                case FEAR -> target.addStatus(defaultDuration ? new FearStatus(target) : new FearStatus(target, duration));
 
-                case SLEEP -> target.addStatus(new SleepStatus(target));
+                case SLEEP -> target.addStatus(defaultDuration ? new SleepStatus(target) : new SleepStatus(target, duration));
 
-                case POISON -> target.addStatus(new PoisonStatus(target));
-                //case PARALYSIS -> target.addStatus(new ParalysisStatus(target));
+                case POISON -> target.addStatus(defaultDuration ? new PoisonStatus(target) : new PoisonStatus(target, duration));
+
                 default -> target.addStatus(new NoStatus(target));
             }
         }

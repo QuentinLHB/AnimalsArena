@@ -89,6 +89,17 @@ public class Animal implements IAnimal {
     public boolean canAct(){
         return canAct;
     }
+
+    @Override
+    public void canDefend(boolean allow) {
+        defendBehavior.canDefend(allow);
+    }
+
+    @Override
+    public boolean canDefend() {
+        return defendBehavior.canDefend();
+    }
+
     @Override
     public void canAct(boolean allow) {
         canAct = allow;
@@ -171,8 +182,8 @@ public class Animal implements IAnimal {
      * @param attackStat Base attack of the animal.
      * @param defenseStat Base defense of the animal.
      */
-    public Animal(int maxHealth, float attackStat, float defenseStat) {
-        this("Unamed Animal", maxHealth, attackStat, defenseStat);
+    public Animal(int maxHealth, float attackStat, float defenseStat, float speed) {
+        this("Unamed Animal", maxHealth, attackStat, defenseStat, speed);
     }
 
     /**
@@ -182,16 +193,21 @@ public class Animal implements IAnimal {
      * @param attackStat Base attack of the animal.
      * @param defenseStat Base defense of the animal.
      */
-    public Animal(String name, float maxHealth, float attackStat, float defenseStat){
+    public Animal(String name, float maxHealth, float attackStat, float defenseStat, float speed){
         this.health = maxHealth;
+
         stats.put(StatID.MAX_HEALTH, maxHealth);
         stats.put(StatID.ATTACK, attackStat);
         stats.put(StatID.DEFENSE, defenseStat);
         stats.put(StatID.ACCURACY, 100f);
+        stats.put(StatID.SPEED, speed);
+
         statAlterations.put(StatID.MAX_HEALTH, 1f);
         statAlterations.put(StatID.ATTACK, 1f);
         statAlterations.put(StatID.DEFENSE, 1f);
         statAlterations.put(StatID.ACCURACY, 1f);
+        statAlterations.put(StatID.SPEED, 1f);
+
         this.name = name;
     }
 
@@ -220,7 +236,8 @@ public class Animal implements IAnimal {
      */
     @Override
     public void defend() {
-        currentMode = ActMode.DEFENSE;
+        if(canDefend()) currentMode = ActMode.DEFENSE;
+        else System.out.printf("%s couldn't defend.%n", name);
     }
 
 

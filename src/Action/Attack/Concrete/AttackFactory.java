@@ -3,6 +3,7 @@ package Action.Attack.Concrete;
 import Action.InflictStatus.Concrete.InflictStatus;
 import Action.Status.Concrete.StatusID;
 import Animal.Creation.Concrete.StatID;
+import Util.RNG;
 
 import java.util.*;
 
@@ -16,13 +17,13 @@ public class AttackFactory {
         switch (attackName){
             case BITE -> attack = new Attack("Bite", 15);
             case FIRE_BITE -> attack = new Attack("Fire Bite", 20);
-            case POISON_BITE -> attack = new Attack("Poison Bite", 10, new InflictStatus(StatusID.POISON));
-            case HYPNOSIS -> attack = new Attack("Hypnosis", 0, 0.75f, new InflictStatus(StatusID.SLEEP));
-            case GROWL -> attack = new Attack("Purr", 0, new InflictStatus(StatusID.FEAR));
-            case PEWK -> attack = new Attack("Pewk", 5, new InflictStatus(StatusID.POISON));
+            case POISON_BITE -> attack = new Attack("Poison Bite", 10, new InflictStatus(StatusID.POISON, 2));
+            case HYPNOSIS -> attack = new Attack("Hypnosis", 0, 0.6f, new InflictStatus(StatusID.SLEEP));
+            case GROWL -> attack = new Attack("Growl", 0, new InflictStatus(StatusID.FEAR, 2));
+            case PEWK -> attack = new Attack("Pewk", 5, new InflictStatus(StatusID.POISON, 3));
             case TORNADO -> attack = new Attack("Tornado", 10, 0.8f, new InflictStatus(StatusID.FEAR));
             case FLAMETHROWER -> attack = new Attack("Flamethrower", 20, 0.8f);
-            case SPIT -> attack = new Attack("Spit", 10, new InflictStatus(StatusID.FEAR));
+            case SPIT -> attack = new Attack("Spit", 10, new InflictStatus(StatusID.FEAR, 3));
             case TSUNAMI -> attack = new Attack("Tsunami", 15);
             case RAGE -> {
                 Map<StatID, Float> stats = new HashMap<>();
