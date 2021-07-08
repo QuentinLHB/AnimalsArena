@@ -3,7 +3,7 @@ package Animal.Creation.Concrete;
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.*;
 import Animal.Behaviors.DefendBehavior.Concrete.FullDefendBehavior;
-import Animal.Behaviors.DefendBehavior.Concrete.MirorDefenseAbility;
+import Animal.Behaviors.DefendBehavior.Concrete.MirorDefenseBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.SimpleDefendBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.UndeadDieBehavior;
@@ -121,7 +121,7 @@ public class AnimalFactory {
         }
 
         switch (animalKind) {
-            case HEDGEHOG -> animal.setDefendBehavior(new MirorDefenseAbility(animal, 2));
+            case HEDGEHOG -> animal.setDefendBehavior(new MirorDefenseBehavior(animal, 2));
             case CLAM -> animal.setDefendBehavior(new FullDefendBehavior(animal));
             default -> setSimpleBehaviors(animal);
         }

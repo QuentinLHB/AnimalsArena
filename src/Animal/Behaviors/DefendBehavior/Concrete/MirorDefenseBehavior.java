@@ -5,12 +5,12 @@ import Action.Attack.Concrete.Attack;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
 
-public class MirorDefenseAbility extends Defend_Base implements IDefendBehavior {
+public class MirorDefenseBehavior extends Defend_Base implements IDefendBehavior {
 
     private static final String MIROR_MOVE_NAME = "MirorDefense";
     private final int fractionOfDamageMirored;
 
-    public MirorDefenseAbility(IAnimal animal, int fractionOfDamageMirored){
+    public MirorDefenseBehavior(IAnimal animal, int fractionOfDamageMirored){
         super(animal);
         this.fractionOfDamageMirored = fractionOfDamageMirored;
     }

@@ -2,6 +2,7 @@ package Action.Attack.Concrete;
 
 import Action.InflictStatus.Concrete.InflictStatus;
 import Action.Status.Concrete.StatusID;
+import Animal.Creation.Concrete.Animal;
 import Animal.Creation.Concrete.StatID;
 import Util.RNG;
 
@@ -42,6 +43,12 @@ public class AttackFactory {
         }
         return attack;
 
+    }
+
+    public static Attack createAttack(Animal animal, AttackEnum attackName){
+        Attack attack = createAttack(attackName);
+        attack.setAttackOwner(animal);
+        return attack;
     }
 
 

@@ -1,38 +1,72 @@
 package Game;
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
+import Action.Attack.Concrete.AttackEnum;
 import Action.Attack.Concrete.AttackFactory;
+import Animal.Behaviors.BehaviorFactory;
+import Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
+import Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
+import Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
 import Animal.Creation.Concrete.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static int nbTour = 1;
+
     public static List<Animal> theAnimals = new ArrayList<Animal>();
+    public static List<Animal> customAnimals = new ArrayList<Animal>();
+
     public static void main(String[] args) {
 
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.NORMAL));
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CAT, ElementType.POISON));
-        StartPVP();
-        battle();
-
-        printAllAttacks();
+        MainMenu();
 
 
     }
 
+    public static void MainMenu(){
+        String menuDisplay = """
+                        Welcome in Animals Arena, where you can experience RPG-like fights. Please select the mode you'd like :                                
+                        1: Player vs Player : Each player composes its animal for an intense fight !
+                        2: Player vs AI : Compose your animal and fight against a computer ! (Soon)
+                        3: Consult animals and attacks' statistics.
+                        4: Create your custom animal.
+                        0 : Exit the program.""";
+
+        System.out.println(menuDisplay);
+
+        int value = getIntInputFromUser(0, 4);
+        
+        switch (value){
+            case 1 -> StartPVP();
+            case 2 -> StartPVE();
+            case 3 -> ConsultInfos();
+            case 4 -> Customize();
+            default -> System.exit(0);
+        }
+        
+        
+    }
+
+    private static void Customize() {
+        customAnimals.add(createCustomAnimal());
+    }
+
+    private static void ConsultInfos() {
+    }
+
+    private static void StartPVE() {
+    }
+
     public static void StartPVP(){
         System.out.println("Player 1:\n");
-        createAnimal();
+        theAnimals.add(createAnimal());
         theAnimals.get(0).printStats();
 
         clearConsole();
 
         System.out.println("Player 2:\n");
-        createAnimal();
+        theAnimals.add(createAnimal());
         theAnimals.get(1).printStats();
 
         clearConsole();
@@ -40,8 +74,79 @@ public class Main {
         battle();
     }
 
-    public static void createAnimal(){
+    public static Animal createCustomAnimal(){
+        // 1. Choose stats
+        EnumMap<StatID, Integer> chosenStats = new EnumMap<>(StatID.class);
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Name your animal :");
+        String name = scanner.nextLine();
+        for(StatID statID: StatID.values()){
+            System.out.printf("Choose the %s stat value (100 being the basis)%n", statID.name().toLowerCase(Locale.ROOT));
+            int value = getIntInputFromUser(0, 200);
+            chosenStats.put(statID, value);
+        }
+        Animal customAnimal = new Animal(
+                name,
+                chosenStats.get(StatID.MAX_HEALTH),
+                (float)chosenStats.get(StatID.ATTACK)/100,
+                (float)chosenStats.get(StatID.DEFENSE)/100,
+                (float) chosenStats.get(StatID.SPEED));
+
+        customAnimal.printStats();
+
+        //2. Add 4 attacks
+        printAllAttacks();
+        for (int i = 1; i < 5; i++) {
+            System.out.println("Add attack n°" + i);
+            int choice = getIntInputFromUser(1, AttackEnum.values().length);
+
+            customAnimal.addAttack(AttackFactory.createAttack(customAnimal, AttackEnum.values()[choice-1]));
+        }
+        System.out.println("Good, you chose :");
+        printAttacks(customAnimal);
+
+        // 3. Add behaviors
+        System.out.println("Customize behavior ?\n0: No\n1: Yes");
+        int choice = getIntInputFromUser(0, 1);
+        if(choice ==1){
+            AttackBehaviorEnum chosenAttackBehavior;
+            DefendBehaviorEnum chosenDefendBehavior;
+            DieBehaviorEnum chosenDieBehavior;
+
+            int counter = 1;
+            System.out.println("Attack behaviors :");
+            for (AttackBehaviorEnum attackBehavior: AttackBehaviorEnum.values()) {
+                System.out.printf("%d: %s - %s%n", counter++, attackBehavior.getName(), attackBehavior.getDescription());
+            }
+            choice = getIntInputFromUser(1, AttackBehaviorEnum.values().length);
+            chosenAttackBehavior = AttackBehaviorEnum.values()[choice-1];
+
+            counter = 1;
+            System.out.println("Defense behaviors :");
+            for (DefendBehaviorEnum defendBehaviorEnum: DefendBehaviorEnum.values()) {
+                System.out.printf("%d: %s - %s%n", counter++, defendBehaviorEnum.getName(), defendBehaviorEnum.getDescription());
+
+            }
+            choice = getIntInputFromUser(1, DefendBehaviorEnum.values().length);
+            chosenDefendBehavior = DefendBehaviorEnum.values()[choice-1];
+
+            counter = 1;
+            System.out.println("Death behaviors :");
+            for (DieBehaviorEnum defendBehaviorEnum: DieBehaviorEnum.values()) {
+                System.out.printf("%d: %s - %s%n", counter++, defendBehaviorEnum.getName(), defendBehaviorEnum.getDescription());
+            }
+            choice = getIntInputFromUser(1, DieBehaviorEnum.values().length);
+            chosenDieBehavior = DieBehaviorEnum.values()[choice-1];
+
+            BehaviorFactory.addBehaviors(customAnimal, chosenAttackBehavior, chosenDefendBehavior, chosenDieBehavior);
+        }
+        return customAnimal;
+    }
+
+
+    public static Animal createAnimal(){
+        Scanner scanner = new Scanner(System.in);
+        int chosenValue;
         AnimalKind animalKind;
         ElementType elementType;
 
@@ -51,15 +156,16 @@ public class Main {
             System.out.printf("%d: %s [%s]%n", i+1, AnimalKind.values()[i], AnimalKind.values()[i].getDescription());
         }
         System.out.println("I'll take : ");
-        animalKind = AnimalKind.values()[scanner.nextInt()-1];
+        chosenValue = getIntInputFromUser(1, AnimalKind.values().length);
+        animalKind = AnimalKind.values()[chosenValue-1];
 
         // Choose type
-        System.out.println("Good ! Now choose its type.");
+        System.out.println("Good ! Now choose its element.");
         for (int i = 0; i < ElementType.values().length; i++) {
             System.out.printf("%d: %s%n", i+1, ElementType.values()[i]);
         }
-        elementType = ElementType.values()[scanner.nextInt()-1];
-        scanner.nextLine();
+        chosenValue = getIntInputFromUser(1, ElementType.values().length);
+        elementType = ElementType.values()[chosenValue-1];
 
         // Choose nickname
         String nickname;
@@ -68,9 +174,9 @@ public class Main {
         nickname = scanner.nextLine();
 
         if(!nickname.equals("0")){
-            theAnimals.add(AnimalFactory.CreateAnimal(animalKind, elementType, nickname));
+             return AnimalFactory.CreateAnimal(animalKind, elementType, nickname);
         }
-        else theAnimals.add(AnimalFactory.CreateAnimal(animalKind, elementType));
+        else return AnimalFactory.CreateAnimal(animalKind, elementType);
 
 
     }
@@ -127,12 +233,12 @@ public class Main {
 
     public static void performAction(Animal animal, Animal target){
         if(!animal.canAct()) {
-            System.out.printf("%s can't act.", animal.getName());
+            System.out.printf("%s can't act.%n", animal.getName());
             return;
         }
         ArrayList<IAttack> attacks = animal.getAttacks();
         var scanner = new Scanner(System.in);
-        int choix;
+        int choice;
 
         do {
             System.out.printf("%s's actions :%n", animal.getName());
@@ -142,24 +248,43 @@ public class Main {
             System.out.println(">> ");
 
             try{
-                choix = scanner.nextInt();
+                choice = scanner.nextInt();
             }catch (Exception e){
-                choix = -1;
+                choice = -1;
                 if(scanner.nextLine().equals("i") || scanner.nextLine().equals("I")){
                     showStats(animal, target);
                 }
             }
 
-        }while (choix < 0 || choix > attacks.size());
+        }while (choice < 0 || choice > attacks.size());
 
-        if(choix == 0) {
+        if(choice == 0) {
             animal.defend();
         }
         else{
-            animal.attack(target, animal.chooseAttack(choix));
+            animal.attack(target, animal.chooseAttack(choice));
         }
 
         separator();
+    }
+
+    public static int getIntInputFromUser(int min, int max){
+        boolean isInt;
+        int value = -1;
+        Scanner scanner = new Scanner(System.in);
+        do {
+            System.out.println(">>");
+            String stringValue = scanner.nextLine();
+            try{
+                 value = Integer.parseInt(stringValue);
+                isInt = true;
+            }catch (Exception e){
+                isInt = false;
+                System.out.println("Please enter a valid number :");
+            }
+        }while (!isInt || (value < min || value > max));
+
+        return value;
     }
 
     private static void showStats(Animal animal, Animal target) {
@@ -183,8 +308,9 @@ public class Main {
 
     public static void printAllAttacks() {
         ArrayList<Attack> allAttacks = AttackFactory.getAllAttacks();
+        int counter = 1;
         for (Attack attack : allAttacks) {
-            System.out.printf("%s [%s]%n", attack.getAttackName(), attack.getDescription());
+            System.out.printf("%d: %s [%s]%n", counter++, attack.getAttackName(), attack.getDescription());
         }
     }
 

@@ -92,6 +92,7 @@ public class Attack implements IAttack {
 
 
 
+
     @Override
     public IAnimal getAttackOwner() {
         return attackOwner;
