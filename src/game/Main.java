@@ -1,4 +1,4 @@
-package Game;
+package game;
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
 import Action.Attack.Concrete.AttackEnum;
@@ -14,18 +14,22 @@ import java.util.*;
 public class Main {
     public static int nbTour = 1;
 
-    public static List<Animal> theAnimals = new ArrayList<Animal>();
-    public static List<Animal> customAnimals = new ArrayList<Animal>();
+    protected static List<Animal> theAnimals = new ArrayList<>();
+    protected static List<Animal> customAnimals = new ArrayList<>();
 
     public static void main(String[] args) {
 
-        MainMenu();
+        mainMenu();
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CAT, ElementType.UNDEAD));
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.NORMAL));
+        battle();
 
 
     }
 
-    public static void MainMenu(){
-        String menuDisplay = """
+    public static void mainMenu(){
+
+        var menuDisplay = """
                         Welcome in Animals Arena, where you can experience RPG-like fights. Please select the mode you'd like :                                
                         1: Player vs Player : Each player composes its animal for an intense fight !
                         2: Player vs AI : Compose your animal and fight against a computer ! (Soon)
@@ -33,32 +37,86 @@ public class Main {
                         4: Create your custom animal.
                         0 : Exit the program.""";
 
-        System.out.println(menuDisplay);
+        var value = 0;
+        do{
+            System.out.println(menuDisplay);
 
-        int value = getIntInputFromUser(0, 4);
-        
-        switch (value){
-            case 1 -> StartPVP();
-            case 2 -> StartPVE();
-            case 3 -> ConsultInfos();
-            case 4 -> Customize();
-            default -> System.exit(0);
-        }
-        
-        
+            value = getIntInputFromUser(0, 4);
+
+            switch (value){
+                case 1 -> startPVP();
+                case 2 -> startPVE();
+                case 3 -> consultInfos();
+                case 4 -> customize();
+                default -> System.exit(0);
+            }
+        }while (true);
+
     }
 
-    private static void Customize() {
+    private static void customize() {
         customAnimals.add(createCustomAnimal());
     }
 
-    private static void ConsultInfos() {
+    private static void consultInfos() {
+
+        var consultInfoMenuDisplay = """
+                1: How are statistics handled ?
+                2: Consult animals' statistics
+                3: Consult element types' statistics
+                4: Consult attacks' statistics
+                0: Go Back to the main menu""";
+
+        int choice;
+        do{
+            System.out.println(consultInfoMenuDisplay);
+            choice = getIntInputFromUser(0, 4);
+
+            switch (choice){
+                case 1->{
+                    var explaination = """
+                            Each animal has stats : Attack, Defense, Speed...
+                            Each elemental type makes these stats vary.
+                            Some attack and statuses make these stats vary too.
+                            Damage taken is based on :
+                                the animal's attack (influenced by its kind and type(s))
+                                the attack's damage base
+                                the foe's defense
+                                the foe's action mode (Attack/Defense)
+                            Ex: AttackingAnimal (1.1Atk, 0.9 Atk Variation) performs Bite (15 DMG)
+                            The foe (1.3 Def) is in Defense Mode :
+                            DmgBase*Atk*AtkVar*(1+(1-Defense))*DefenseMode = 15*1.1*0.9*0.7*0.5 = 5. Roundings along the way may produce a 1dmg difference.""";
+                    System.out.println(explaination);
+                    pressKeyToGoBack();
+                }
+
+                case 2-> {
+                    printAllAnimalKind();
+                    pressKeyToGoBack();
+                }
+
+                case 3 -> {
+                    printAllElementalTypes();
+                    pressKeyToGoBack();
+                }
+
+                case 4 -> {
+                    printAllAttacks();
+                    pressKeyToGoBack();
+                }
+
+                default -> choice =0;
+
+            }
+        }while (choice !=0);
+
     }
 
-    private static void StartPVE() {
+    private static void startPVE() {
+        //todo
     }
 
-    public static void StartPVP(){
+    public static void startPVP(){
         System.out.println("Player 1:\n");
         theAnimals.add(createAnimal());
         theAnimals.get(0).printStats();
@@ -77,15 +135,15 @@ public class Main {
     public static Animal createCustomAnimal(){
         // 1. Choose stats
         EnumMap<StatID, Integer> chosenStats = new EnumMap<>(StatID.class);
-        Scanner scanner = new Scanner(System.in);
+        var scanner = new Scanner(System.in);
         System.out.println("Name your animal :");
         String name = scanner.nextLine();
         for(StatID statID: StatID.values()){
             System.out.printf("Choose the %s stat value (100 being the basis)%n", statID.name().toLowerCase(Locale.ROOT));
-            int value = getIntInputFromUser(0, 200);
+            var value = getIntInputFromUser(0, 200);
             chosenStats.put(statID, value);
         }
-        Animal customAnimal = new Animal(
+        var customAnimal = new Animal(
                 name,
                 chosenStats.get(StatID.MAX_HEALTH),
                 (float)chosenStats.get(StatID.ATTACK)/100,
@@ -113,10 +171,12 @@ public class Main {
             DefendBehaviorEnum chosenDefendBehavior;
             DieBehaviorEnum chosenDieBehavior;
 
-            int counter = 1;
+            String displayFormat = "%d: %s - %s%n";
+
+            var counter = 1;
             System.out.println("Attack behaviors :");
             for (AttackBehaviorEnum attackBehavior: AttackBehaviorEnum.values()) {
-                System.out.printf("%d: %s - %s%n", counter++, attackBehavior.getName(), attackBehavior.getDescription());
+                System.out.printf(displayFormat, counter++, attackBehavior.getName(), attackBehavior.getDescription());
             }
             choice = getIntInputFromUser(1, AttackBehaviorEnum.values().length);
             chosenAttackBehavior = AttackBehaviorEnum.values()[choice-1];
@@ -124,7 +184,7 @@ public class Main {
             counter = 1;
             System.out.println("Defense behaviors :");
             for (DefendBehaviorEnum defendBehaviorEnum: DefendBehaviorEnum.values()) {
-                System.out.printf("%d: %s - %s%n", counter++, defendBehaviorEnum.getName(), defendBehaviorEnum.getDescription());
+                System.out.printf(displayFormat, counter++, defendBehaviorEnum.getName(), defendBehaviorEnum.getDescription());
 
             }
             choice = getIntInputFromUser(1, DefendBehaviorEnum.values().length);
@@ -133,7 +193,7 @@ public class Main {
             counter = 1;
             System.out.println("Death behaviors :");
             for (DieBehaviorEnum defendBehaviorEnum: DieBehaviorEnum.values()) {
-                System.out.printf("%d: %s - %s%n", counter++, defendBehaviorEnum.getName(), defendBehaviorEnum.getDescription());
+                System.out.printf(displayFormat, counter++, defendBehaviorEnum.getName(), defendBehaviorEnum.getDescription());
             }
             choice = getIntInputFromUser(1, DieBehaviorEnum.values().length);
             chosenDieBehavior = DieBehaviorEnum.values()[choice-1];
@@ -145,15 +205,17 @@ public class Main {
 
 
     public static Animal createAnimal(){
-        Scanner scanner = new Scanner(System.in);
+        var scanner = new Scanner(System.in);
         int chosenValue;
         AnimalKind animalKind;
         ElementType elementType;
 
+
         // Choose animal
+        String displayFormat = "%d: %s [%s]%n";
         System.out.println("Please choose one of the following animals :");
         for (int i = 0; i < AnimalKind.values().length; i++) {
-            System.out.printf("%d: %s [%s]%n", i+1, AnimalKind.values()[i], AnimalKind.values()[i].getDescription());
+            System.out.printf(displayFormat, i+1, AnimalKind.values()[i], AnimalKind.values()[i].getDescription());
         }
         System.out.println("I'll take : ");
         chosenValue = getIntInputFromUser(1, AnimalKind.values().length);
@@ -186,7 +248,7 @@ public class Main {
         var animalB = theAnimals.get(1);
 
         do {
-            Turn();
+            turn();
         }while (animalA.isAlive() && animalB.isAlive());
 
         if(animalA.isAlive()){
@@ -201,7 +263,7 @@ public class Main {
         System.out.println(animal.getName() + " : " + animal.getHealth() + " / "+ animal.getMaxHealth());
     }
 
-    public static void Turn(){
+    public static void turn(){
 
         System.out.println("Tour n°" + nbTour + "\n");
 
@@ -271,10 +333,10 @@ public class Main {
     public static int getIntInputFromUser(int min, int max){
         boolean isInt;
         int value = -1;
-        Scanner scanner = new Scanner(System.in);
+        var scanner = new Scanner(System.in);
         do {
             System.out.println(">>");
-            String stringValue = scanner.nextLine();
+            var stringValue = scanner.nextLine();
             try{
                  value = Integer.parseInt(stringValue);
                 isInt = true;
@@ -290,8 +352,7 @@ public class Main {
     private static void showStats(Animal animal, Animal target) {
         animal.printStats();
         target.printStats();
-        System.out.println("press any key to go back...");
-        new Scanner(System.in).nextLine();
+        pressKeyToGoBack();
     }
 
     public static void printAttacks(Animal animal){
@@ -302,13 +363,15 @@ public class Main {
         }
     }
 
+
+
     public static void separator(){
         System.out.println("---------------");
     }
 
     public static void printAllAttacks() {
         ArrayList<Attack> allAttacks = AttackFactory.getAllAttacks();
-        int counter = 1;
+        var counter = 1;
         for (Attack attack : allAttacks) {
             System.out.printf("%d: %s [%s]%n", counter++, attack.getAttackName(), attack.getDescription());
         }
@@ -324,7 +387,7 @@ public class Main {
 
         for(Animal animal : allAnimals){
             Map<StatID, Float> stats = animal.getStats();
-            String infos = String.format("** %s **%nStats :%n", animal.getName());
+            var infos = String.format("** %s **%nStats :%n", animal.getName());
             for (int i = 0; i < StatID.values().length; i++) {
                 infos += String.format(" %s: %d%n", StatID.values()[i], Math.round(100*stats.get(StatID.values()[i])));
             }
@@ -332,6 +395,29 @@ public class Main {
             System.out.println(infos);
             printAttacks(animal);
             System.out.println();
+        }
+    }
+
+    private static void printAllAnimalKind(){
+        for (AnimalKind animalKind:AnimalKind.values()){
+            var infos = String.format("** %s **%n", animalKind.name());
+            infos += String.format("Descripton : %s%n", animalKind.getDescription());
+            infos += String.format("Max Health : %d%n", Math.round(animalKind.getMaxHealth()));
+            infos += String.format("Attack : %d%n", Math.round(100*animalKind.getAttack()));
+            infos += String.format("Defense : %d%n", Math.round(100*animalKind.getDefense()));
+            infos += String.format("Speed : %d%n", Math.round(100*animalKind.getSpeed()));
+            System.out.println(infos);
+        }
+    }
+
+    private static void printAllElementalTypes(){
+        for(ElementType elementType: ElementType.values()){
+            var infos = String.format("** %s **%n", elementType.name());
+            infos += String.format("Health variation : %d%s%n", Math.round(elementType.getHealthVariation()*100), "%");
+            infos += String.format("Attack variation : %d%s%n", Math.round(elementType.getAttackVariation()*100), "%");
+            infos += String.format("Defense variation : %d%s%n", Math.round(elementType.getDefenseVariation()*100), "%");
+            infos += String.format("Speed variation : %d%s%n", Math.round(elementType.getSpeedVariation()*100), "%");
+            System.out.println(infos);
         }
     }
 
@@ -350,8 +436,9 @@ public class Main {
         System.out.print("\033[H\033[2J");
     }
 
-//    private static void waitHalfASec(){
-//
-//    }
+    private static void pressKeyToGoBack(){
+        System.out.println("press any key to go back...");
+        new Scanner(System.in).nextLine();
+    }
 }
 

@@ -259,6 +259,7 @@ public class Animal implements IAnimal {
     public void hurt(int damage){
         if(damage > health) damage = Math.round(health);
         health -= damage;
+        System.out.printf("%s lost %d HP.%n%n", name, damage);
         checkIfDead();
     }
 

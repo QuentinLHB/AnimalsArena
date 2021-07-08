@@ -17,12 +17,14 @@ public class Defend_Base implements IDefendBehavior {
 
     @Override
     public void defend(IAttack attack, int damage) {
-        damage *= (animal.getStats().get(StatID.DEFENSE) * animal.getStatAlterations().get(StatID.DEFENSE));
+        float defStat = (animal.getStats().get(StatID.DEFENSE) * animal.getStatAlterations().get(StatID.DEFENSE));
+        damage = Math.round(damage*(1+(1-defStat)));
         if(animal.getActMode().equals(ActMode.DEFENSE)){
             damage *= ON_DEFENSE_REDUCTION;
         }
+
         animal.hurt(damage);
-        System.out.printf("%s lost %d damage.%n%n", animal.getName(), damage);
+
     }
 
     @Override

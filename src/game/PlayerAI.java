@@ -1,4 +1,4 @@
-package Game;
+package game;
 
 import Animal.Creation.Concrete.Animal;
 import Animal.Creation.Concrete.AnimalFactory;
