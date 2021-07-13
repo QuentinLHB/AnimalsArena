@@ -9,15 +9,22 @@ public class InflictStatus implements IInflictStatus {
 
     private StatusID statusID;
     private int duration;
+    private boolean selfInflicting;
 
     public InflictStatus(StatusID statusID, int duration){
-        this.statusID = statusID;
-        this.duration = duration;
+        this(statusID, duration, false);
     }
 
     public InflictStatus(StatusID statusID){
         this(statusID, -1);
     }
+
+    public InflictStatus(StatusID statusID, int duration, boolean selfInflicting){
+        this.statusID = statusID;
+        this.duration = duration;
+        this.selfInflicting = selfInflicting;
+    }
+
 
     @Override
     public String getStatusName() {
@@ -42,5 +49,16 @@ public class InflictStatus implements IInflictStatus {
                 default -> target.addStatus(new NoStatus(target));
             }
         }
+        else System.out.printf("%s is already under %s status%n", target.getName(), statusID.lowerCaseName());
+    }
+
+    @Override
+    public boolean isSelfInflicting() {
+        return selfInflicting;
+    }
+
+    @Override
+    public StatusID getStatusID() {
+        return statusID;
     }
 }

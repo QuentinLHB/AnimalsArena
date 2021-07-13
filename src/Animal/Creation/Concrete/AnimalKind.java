@@ -2,11 +2,11 @@ package Animal.Creation.Concrete;
 
 public enum AnimalKind{
     DOG(100, 1, 1, 1, "Average stats"),
-    CAT(90, 1.15f, 1, 1.3f, "Average stats"),
-    SNAKE(70, 1.3f,0.8f, 0.7f, "Low health and defense, high attack"),
-    UNICORN(130, 0.9f, 1.15f, 0.6f,"Low attack, high defense and health"),
-    HEDGEHOG(100, 1.08f, 1.15f, 0.7f, "Defend well, sends back half damage in defense mode"),
-    CLAM(55, 0.8f, 1.3f, 0.5f, "Takes no damage when defending, but low health and attack.")
+    CAT(90, 1.05f, 0.95f, 1.1f, "Average stats"),
+    SNAKE(70, 1.3f,0.8f, 1.2f, "Low health and defense, high attack"),
+    UNICORN(130, 0.75f, 1.15f, 0.8f,"Low attack, high defense and health"),
+    HEDGEHOG(100, 1.05f, 1.15f, 0.8f, "Defend well, sends back half damage in defense mode"),
+    CLAM(70, 0.8f, 1.5f, 0.7f, "Takes no damage when defending, but low health and attack.")
 
     ;
 

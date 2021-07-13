@@ -1,6 +1,7 @@
 package Animal.Behaviors.PeformAttackBehavior.Concrete;
 
 import Action.Attack.Abstract.IAttack;
+import Action.Attack.Concrete.Defend;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
@@ -22,11 +23,12 @@ public class SimpleAttackBehavior implements IPerformAttackBehavior {
     @Override
     public void attack(IAnimal target, IAttack attack, float attackStat) {
         if(attackingAnimal.canAct()){
-            attackingAnimal.setActMode(ActMode.ATTACK);
+            if(attack.getClass() != Defend.class) attackingAnimal.setActMode(ActMode.ATTACK);
             if(target.isAlive()){
                 System.out.printf("%s performs %s%n", attackingAnimal.getName(), attack.getAttackName());
                 attack.performAttack(target, attackStat);
             }
         }
+        else System.out.printf("%s can't act.%n", attackingAnimal.getName());
     }
 }

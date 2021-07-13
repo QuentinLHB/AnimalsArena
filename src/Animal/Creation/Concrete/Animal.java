@@ -61,6 +61,8 @@ public class Animal implements IAnimal {
         }
 
     }
+
+    @Override
     public ArrayList<IAttack> getAttacks(){
         return (ArrayList<IAttack>) attacks.clone();
     }
@@ -118,6 +120,11 @@ public class Animal implements IAnimal {
         return clonedStats;
     }
 
+    @Override
+    public Float getStat(StatID statID) {
+        return stats.get(statID);
+    }
+
     private Map<StatID, Float> statAlterations = new HashMap<>();
     /**
      * Return a clone of the stat alterations dictionnary.
@@ -130,6 +137,11 @@ public class Animal implements IAnimal {
             clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
         }
         return clonedStatAlt;
+    }
+
+    @Override
+    public Float getStatAlterations(StatID statID) {
+        return statAlterations.get(statID);
     }
 
     private ActMode currentMode = ActMode.ATTACK;
@@ -218,7 +230,7 @@ public class Animal implements IAnimal {
      * @return The attack.
      */
     public IAttack chooseAttack(int index){
-        return attacks.get(index-1);
+        return attacks.get(index);
     }
 
     /**
@@ -295,7 +307,8 @@ public class Animal implements IAnimal {
         }
         else{
             statAlterations.put(statID, statAlterations.get(statID)*amount);
-            System.out.printf("%s's %s was lowered%n", name, statID.name().toLowerCase(Locale.ROOT));
+            String change = amount > 1 ? "raised" : "lowered";
+            System.out.printf("%s's %s was %s%n", name, statID.name().toLowerCase(Locale.ROOT), change);
         }
     }
 
@@ -321,10 +334,14 @@ public class Animal implements IAnimal {
                         "Attack : %d%n" +
                         "Defense : %d%n%n",
                 name,
-                Math.round(health),getMaxHealth(),
+                Math.round(health), Math.round(stats.get(StatID.MAX_HEALTH) * statAlterations.get(StatID.MAX_HEALTH)),
                 Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)*100),
                 Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100)
         );
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

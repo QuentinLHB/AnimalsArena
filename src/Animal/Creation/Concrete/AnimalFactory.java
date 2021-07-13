@@ -24,10 +24,10 @@ public class AnimalFactory {
         var name = "";
 
         for (ElementType elementType: elementTypes) {
-            maxHealthVariation += (1-elementType.getHealthVariation());
-            attackVariation += (1-elementType.getAttackVariation());
-            defenseVariation += (1-elementType.getDefenseVariation());
-            speedVariation += (1-elementType.getSpeedVariation());
+            maxHealthVariation *= elementType.getHealthVariation();
+            attackVariation *= elementType.getAttackVariation();
+            defenseVariation *= elementType.getDefenseVariation();
+            speedVariation *= elementType.getSpeedVariation();
 
             name += elementType.name() + " ";
         }
@@ -45,6 +45,8 @@ public class AnimalFactory {
             setBehaviors(animal, animalKind, elementType);
         }
 
+        animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.DEFEND));
+
         for (ElementType elementType: elementTypes){
             addAttacks(animal, animalKind, elementType);
         }
@@ -59,8 +61,8 @@ public class AnimalFactory {
     }
 
     public static Animal CreateRandomAnimal(){
-        int rngAnimal = RNG.GenerateNumber(0, AnimalKind.values().length);
-        int rngType = RNG.GenerateNumber(0, ElementType.values().length);
+        int rngAnimal = RNG.GenerateNumber(0, AnimalKind.values().length-1);
+        int rngType = RNG.GenerateNumber(0, ElementType.values().length-1);
 
         return CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
     }
@@ -68,38 +70,40 @@ public class AnimalFactory {
     private static void addAttacks(Animal animal, AnimalKind animalKind, ElementType elementType){
         switch (animalKind){
             case DOG:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.GROWL));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.GROWL));
                 addElementalBite(animal, elementType);
                 break;
 
             case SNAKE:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.HYPNOSIS));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.HYPNOSIS));
                 addElementalBite(animal, elementType);
                 break;
             case CAT:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.BITE));
-                animal.addAttack((AttackFactory.createAttack(AttackEnum.PURR)));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
+                animal.addAttack((AttackFactory.createAttack(animal, AttackEnum.PURR)));
 
                 addElementalBite(animal, elementType);
 
                 break;
 
             case UNICORN:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.TORNADO));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.TORNADO));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.STOMP));
                 addElementalGenericAttack(animal, elementType);
                 break;
 
             case CLAM:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.SPIT));
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.HYPNOSIS));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.SPIT));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.HYPNOSIS));
                 addElementalGenericAttack(animal, elementType);
                 break;
 
             case HEDGEHOG:
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.RAGE));
                 addElementalBite(animal, elementType);
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.RAGE));
+                addElementalGenericAttack(animal, elementType);
                 break;
 
             default:
@@ -145,14 +149,18 @@ public class AnimalFactory {
     private static void addElementalBite(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.FIRE_BITE));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.FIRE_BITE));
                 break;
 
             case POISON:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.POISON_BITE));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.POISON_BITE));
                 break;
 
+            case UNDEAD:
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.DEATH_BITE));
+
             default:
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
                 break;
         }
     }
@@ -160,13 +168,19 @@ public class AnimalFactory {
     private static void addElementalGenericAttack(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.FLAMETHROWER));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.FLAMETHROWER));
                 break;
 
             case POISON:
-                animal.addAttack(AttackFactory.createAttack(AttackEnum.PEWK));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.PEWK));
                 break;
 
+            case WATER:
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.TSUNAMI));
+                break;
+            case UNDEAD:
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.GIFT_OF_LIFE));
+                break;
             default:
                 break;
         }

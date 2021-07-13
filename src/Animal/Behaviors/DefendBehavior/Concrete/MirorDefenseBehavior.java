@@ -20,9 +20,7 @@ public class MirorDefenseBehavior extends Defend_Base implements IDefendBehavior
 
         super.defend(attack, damage);
         if(!attack.getAttackName().equals(MIROR_MOVE_NAME)){
-            animal.attack(attack.getAttackOwner(), new Attack(MIROR_MOVE_NAME, attack.getDamageBase()/fractionOfDamageMirored));
+            animal.attack(attack.getAttackOwner(), new Attack(animal, MIROR_MOVE_NAME, attack.getDamageBase()/fractionOfDamageMirored, 1));
         }
-
-
     }
 }

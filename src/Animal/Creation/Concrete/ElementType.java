@@ -2,8 +2,8 @@ package Animal.Creation.Concrete;
 
 public enum ElementType {
     NORMAL(1, 1, 1, 1),
-    FIRE(1.1f, 1.1f, 1.05f, 1.1f),
-    POISON(0.7f, 1.3f, 0.8f, 0.9f),
+    FIRE(0.8f, 1.1f, 0.9f, 1.2f),
+    POISON(0.95f, 1.3f, 0.8f, 0.95f),
     WATER(1.3f, 0.7f, 1.2f, 0.8f),
     UNDEAD(1, 1, 1, 0.5f);
 

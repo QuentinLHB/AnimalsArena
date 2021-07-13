@@ -2,6 +2,8 @@ package Action.Attack.Concrete;
 
 import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.InflictStatus.Concrete.InflictNoStatus;
+import Action.InflictStatus.Concrete.InflictStatus;
+import Action.Status.Concrete.StatusID;
 import Animal.Creation.Abstract.IAnimal;
 import Action.Attack.Abstract.IAttack;
 import Animal.Creation.Concrete.Animal;
@@ -17,7 +19,9 @@ public class Attack implements IAttack {
     private int damageBase;
     private float accuracy;
     IInflictStatus inflictStatus;
+    Map<StatID, Float> statsToAlter;
     IAnimal attackOwner;
+    boolean selfInflicting;
 
 
     /**
@@ -29,68 +33,54 @@ public class Attack implements IAttack {
      * @param inflictStatus Status inflicted by the attack if any.
      *                      If none, InflictNoStatus, or alternate constructor can be used.
      */
-    public Attack(Animal attackOwner, String name, int damageBase, float accuracy, IInflictStatus inflictStatus){
+    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy,
+                  IInflictStatus inflictStatus, Map<StatID, Float> statsToAlter, boolean selfInflicting){
         this.name = name;
         this.damageBase = damageBase;
         this.inflictStatus = inflictStatus;
         this.accuracy = accuracy;
         this.attackOwner = attackOwner;
+        this.selfInflicting = selfInflicting;
+        this.statsToAlter = statsToAlter;
     }
 
     /**
-     * Constructor missing the attack owner.
-     * @param name Name of the attack.
-     * @param damageBase Damage base of the attack.
-     * @param accuracy Accuracy of the attack (float between 0 and 1)
-     * @param inflictStatus Status inflicted by the attack if any.
-     *                      If none, InflictNoStatus, or alternate constructor can be used.
+     * Constructor of an attack that doesn't inflict any status or alters any stat, and attacks the opponent only.
+     * @param attackOwner
+     * @param name
+     * @param damageBase
+     * @param accuracy
      */
-    public Attack(String name, int damageBase, float accuracy, IInflictStatus inflictStatus){
-        this(null, name, damageBase, accuracy, inflictStatus);
+    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy){
+        this(attackOwner, name, damageBase, accuracy, new InflictNoStatus(), null, false);
+    }
+
+    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy, IInflictStatus inflictStatus){
+        this(attackOwner, name, damageBase, accuracy, inflictStatus, null, false);
     }
 
     /**
-     * Constructor missing accuracy (1 by default).
-     * @param attackOwner Animal owning this attack.
-     * @param name Name of the attack.
-     * @param damageBase Damage base of the attack.
-     * @param inflictStatus Status inflicted by the attack if any.
-     *                      If none, InflictNoStatus, or alternate constructor can be used.
+     * Constructor of an attack that alters stats but doesn't inflict status, and can be self-attacking (ex: raise its stats)
+     * @param attackOwner
+     * @param name
+     * @param damageBase
+     * @param accuracy
+     * @param statsToAlter
+     * @param selfInflicting
      */
-    public Attack(Animal attackOwner, String name, int damageBase, IInflictStatus inflictStatus){
-        this(attackOwner, name, damageBase, 1f, inflictStatus);
-    }
-
-    /**
-     * Constructor missing owner and status. A InflictNoStatus is used by default.
-     * @param name Name of the attack.
-     * @param damageBase Damage base of the attack.
-     * @param accuracy Accuracy of the attack (float between 0 and 1)
-     */
-    public Attack(String name, int damageBase, float accuracy){
-        this(null, name, damageBase, accuracy, new InflictNoStatus());
-    }
-
-    /**
-     * Constructor missing attack owner (none used) and accuracy (1 by default).     * @param name Name of the attack.
-     * @param damageBase Damage base of the attack.
-     * @param inflictStatus Status inflicted by the attack if any.
-     *                      If none, InflictNoStatus, or alternate constructor can be used.
-     */
-    public Attack(String name, int damageBase, IInflictStatus inflictStatus){
-        this(name, damageBase, 1f, inflictStatus);
-    }
-
-    /**
-     * Constructor missing attack owner (none used), accuracy (1 by default) and status (none by default).
-     * @param name Name of the attack.
-     * @param damageBase Damage base of the attack.
-     */
-    public Attack(String name, int damageBase){
-        this(name, damageBase, 1f);
+    public Attack(Animal attackOwner, String name, int damageBase, float accuracy, Map<StatID, Float> statsToAlter, boolean selfInflicting){
+        this(attackOwner, name, damageBase, accuracy, new InflictNoStatus(), statsToAlter, selfInflicting);
     }
 
 
+
+//    public Attack(String name, int damageBase, boolean selfInflicting){
+//        this(null, name, damageBase, 1f, new InflictNoStatus(), selfInflicting);
+//    }
+//
+//    public Attack(String name, int damageBase, float accuracy, boolean selfInflicting){
+//        this(null, name, damageBase, accuracy, new InflictNoStatus(), selfInflicting);
+//    }
 
 
     @Override
@@ -105,11 +95,20 @@ public class Attack implements IAttack {
 
     @Override
     public void performAttack(IAnimal target, float attackStat) {
+        IAnimal actualTarget = selfInflicting ? attackOwner : target;
         if(accuracyTest()){
             if(damageBase > 0){
-                target.attacked(this,Math.round(damageBase*attackStat));
+                actualTarget.attacked(this,Math.round(damageBase*attackStat));
             }
-            inflictStatus.inflictStatus(target);
+
+            if(statsToAlter != null){
+                for(StatID statToAlter: statsToAlter.keySet()){
+                    actualTarget.alterStat(statToAlter, statsToAlter.get(statToAlter));
+                }
+            }
+
+            IAnimal statusTarget = inflictStatus.isSelfInflicting() ? attackOwner : target;
+            inflictStatus.inflictStatus(statusTarget);
         }
         else{
             System.out.println("The attack missed.");
@@ -153,6 +152,21 @@ public class Attack implements IAttack {
     }
 
     @Override
+    public boolean isSelfInflicting() {
+        return selfInflicting;
+    }
+
+    @Override
+    public StatusID getStatusInflicted() {
+        return inflictStatus.getStatusID();
+    }
+
+    @Override
+    public Map<StatID, Float> getStatAlterations() {
+        return statsToAlter;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -175,5 +189,10 @@ public class Attack implements IAttack {
                 * attackOwner.getStatAlterations().get(StatID.ACCURACY)
                 * accuracy);
         return RNG.RNGsuccess(accuracyAfterAlterations);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

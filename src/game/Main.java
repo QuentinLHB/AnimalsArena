@@ -1,6 +1,5 @@
 package game;
 import Action.Attack.Abstract.IAttack;
-import Action.Attack.Concrete.Attack;
 import Action.Attack.Concrete.AttackEnum;
 import Action.Attack.Concrete.AttackFactory;
 import Animal.Behaviors.BehaviorFactory;
@@ -8,22 +7,29 @@ import Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
 import Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
 import Animal.Creation.Concrete.*;
+import Util.RNG;
+import playerAI.Concrete.PlayerAI;
+import playerAI.Concrete.RandomStrategy;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Main {
-    public static int nbTour = 1;
+    public static int turns = 1;
 
     protected static List<Animal> theAnimals = new ArrayList<>();
     protected static List<Animal> customAnimals = new ArrayList<>();
 
     public static void main(String[] args) {
 
-        mainMenu();
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CAT, ElementType.UNDEAD));
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.NORMAL));
-        battle();
 
+        mainMenu();
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.HEDGEHOG, ElementType.POISON));
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.DOG, ElementType.NORMAL));
+//
+//        Animal a1 = theAnimals.get(0);
+//        Animal a2 = theAnimals.get(1);
+//        battle(null, null);
 
     }
 
@@ -33,12 +39,15 @@ public class Main {
                         Welcome in Animals Arena, where you can experience RPG-like fights. Please select the mode you'd like :                                
                         1: Player vs Player : Each player composes its animal for an intense fight !
                         2: Player vs AI : Compose your animal and fight against a computer ! (Soon)
-                        3: Consult animals and attacks' statistics.
-                        4: Create your custom animal.
+                        4: AI vs AI : Spectate a fight between two AI !
+                        5: Consult animals and attacks' statistics.
+                        6: Create your custom animal.
                         0 : Exit the program.""";
 
         var value = 0;
         do{
+            theAnimals.clear();
+            turns = 1;
             System.out.println(menuDisplay);
 
             value = getIntInputFromUser(0, 4);
@@ -46,12 +55,28 @@ public class Main {
             switch (value){
                 case 1 -> startPVP();
                 case 2 -> startPVE();
-                case 3 -> consultInfos();
-                case 4 -> customize();
+                case 3 -> startAIvAI();
+                case 4 -> consultInfos();
+                case 5 -> customize();
                 default -> System.exit(0);
             }
         }while (true);
 
+    }
+
+    private static void startAIvAI() {
+        //Todo faire choisir l'user
+        theAnimals.add(AnimalFactory.CreateRandomAnimal());
+        theAnimals.add(AnimalFactory.CreateRandomAnimal());
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.UNICORN, ElementType.FIRE));
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.HEDGEHOG, ElementType.WATER));
+
+
+
+        //todo choisir la difficulté de l'IA ?
+        PlayerAI playerA = new PlayerAI(theAnimals.get(0), theAnimals.get(1));
+        PlayerAI playerB = new PlayerAI(theAnimals.get(1), theAnimals.get(0));
+        battle(playerA, playerB);
     }
 
     private static void customize() {
@@ -113,7 +138,16 @@ public class Main {
     }
 
     private static void startPVE() {
-        //todo
+        System.out.println("Player :\n");
+        theAnimals.add(createAnimal());
+        theAnimals.get(0).printStats();
+
+        theAnimals.add(AnimalFactory.CreateRandomAnimal());
+        System.out.println("AI's animal :");
+        theAnimals.get(1).printStats();
+
+        PlayerAI playerAI = new PlayerAI(theAnimals.get(1), theAnimals.get(0));
+        battle(null, playerAI);
     }
 
     public static void startPVP(){
@@ -129,7 +163,7 @@ public class Main {
 
         clearConsole();
 
-        battle();
+        battle(null, null);
     }
 
     public static Animal createCustomAnimal(){
@@ -243,12 +277,12 @@ public class Main {
 
     }
 
-    public static void battle(){
+    public static void battle(PlayerAI playerA, PlayerAI playerB){
         var animalA = theAnimals.get(0);
         var animalB = theAnimals.get(1);
 
         do {
-            turn();
+            turn(playerA, playerB);
         }while (animalA.isAlive() && animalB.isAlive());
 
         if(animalA.isAlive()){
@@ -263,34 +297,39 @@ public class Main {
         System.out.println(animal.getName() + " : " + animal.getHealth() + " / "+ animal.getMaxHealth());
     }
 
-    public static void turn(){
+    public static void turn(PlayerAI playerA, PlayerAI playerB){
 
-        System.out.println("Tour n°" + nbTour + "\n");
+        System.out.println("Tour n°" + turns + "\n");
 
         var animalA = theAnimals.get(0);
         var animalB = theAnimals.get(1);
 
-
         if(whichIsFaster() == animalA){
-            performAction(animalA, animalB);
-            performAction(animalB, animalA);
+            if(playerA == null) performAction(animalA, animalB);
+            else playerA.performMove();
+            if(playerB == null) performAction(animalB, animalA);
+            else playerB.performMove();
         }
         else {
-            performAction(animalB, animalA);
-            performAction(animalA, animalB);
+            if(playerB == null) performAction(animalB, animalA);
+            else playerB.performMove();
+            if(playerA == null) performAction(animalA, animalB);
+            else playerA.performMove();
         }
 
         for (Animal animal:theAnimals) {
             animal.endOfTurn();
         }
 
+        delay();
         printLives(animalA);
         printLives(animalB);
+        delay();
         separator();
         separator();
         System.out.println("");
 
-        nbTour++;
+        turns++;
     }
 
     public static void performAction(Animal animal, Animal target){
@@ -304,7 +343,6 @@ public class Main {
 
         do {
             System.out.printf("%s's actions :%n", animal.getName());
-            System.out.println("0: Defend");
             printAttacks(animal);
             System.out.println("(i: Display stats)");
             System.out.println(">> ");
@@ -320,12 +358,8 @@ public class Main {
 
         }while (choice < 0 || choice > attacks.size());
 
-        if(choice == 0) {
-            animal.defend();
-        }
-        else{
-            animal.attack(target, animal.chooseAttack(choice));
-        }
+        animal.attack(target, animal.chooseAttack(choice));
+        delay();
 
         separator();
     }
@@ -359,7 +393,7 @@ public class Main {
         ArrayList<IAttack> attacks = animal.getAttacks();
         for (var i = 0; i < attacks.size(); i++) {
             IAttack attaque = attacks.get(i);
-            System.out.printf("%d: %s [%s]%n", i+1, attaque.getAttackName(), attaque.getDescription());
+            System.out.printf("%d: %s [%s]%n", i, attaque.getAttackName(), attaque.getDescription());
         }
     }
 
@@ -370,9 +404,9 @@ public class Main {
     }
 
     public static void printAllAttacks() {
-        ArrayList<Attack> allAttacks = AttackFactory.getAllAttacks();
+        ArrayList<IAttack> allAttacks = AttackFactory.getAllAttacks();
         var counter = 1;
-        for (Attack attack : allAttacks) {
+        for (IAttack attack : allAttacks) {
             System.out.printf("%d: %s [%s]%n", counter++, attack.getAttackName(), attack.getDescription());
         }
     }
@@ -439,6 +473,14 @@ public class Main {
     private static void pressKeyToGoBack(){
         System.out.println("press any key to go back...");
         new Scanner(System.in).nextLine();
+    }
+
+    private static void delay(){
+        try{
+            Thread.sleep(1000);
+        } catch(InterruptedException e){
+
+        }
     }
 }
 

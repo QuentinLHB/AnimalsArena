@@ -1,9 +1,14 @@
 package Action.Attack.Concrete;
 
 public enum AttackEnum {
+
+    DEFEND,
+
     //Normal attacks
     BITE,
     TORNADO,
+    FURY,
+    STOMP,
 
     //Status attacks
     HYPNOSIS,
@@ -24,6 +29,13 @@ public enum AttackEnum {
     // Water attacks
     SPIT,
     TSUNAMI,
+
+    //Undead attacks
+    DEATH_BITE,
+    GIFT_OF_LIFE,
+
+
+    ;
 
 
 }
