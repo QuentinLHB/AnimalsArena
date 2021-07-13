@@ -21,10 +21,11 @@ public class AttackFactory {
             case BITE -> attack = new Attack(animal, "Bite", 15, 1);
             case FIRE_BITE -> attack = new Attack(animal, "Fire Bite", 20, 1);
             case POISON_BITE -> attack = new Attack(animal, "Poison Bite", 10, 1, new InflictStatus(StatusID.POISON, 2));
-            case DEATH_BITE -> attack = new Attack(animal, "Death Bite", 15, 1); //todo ajouter heal
+            case DEATH_BITE -> attack = new HealingMove(animal, "Death Bite", 15, 1);
             case HYPNOSIS -> attack = new Attack(animal, "Hypnosis", 0, 0.6f, new InflictStatus(StatusID.SLEEP));
             case GROWL -> attack = new Attack(animal, "Growl", 0, 1, new InflictStatus(StatusID.FEAR, 2));
             case PEWK -> attack = new Attack(animal, "Pewk", 5, 1, new InflictStatus(StatusID.POISON, 3));
+            case HEALING_POWER -> attack = new HealingMove(animal, "Healing Power", 0.2f, 1);
             case TORNADO -> attack = new Attack(animal, "Tornado", 10, 0.8f, new InflictStatus(StatusID.FEAR));
             case FLAMETHROWER -> attack = new Attack(animal, "Flamethrower", 20, 0.8f);
             case SPIT -> attack = new Attack(animal, "Spit", 10, 1, new InflictStatus(StatusID.FEAR, 3));

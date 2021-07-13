@@ -30,6 +30,7 @@ public class Main {
 //        Animal a1 = theAnimals.get(0);
 //        Animal a2 = theAnimals.get(1);
 //        battle(null, null);
+//        printAllAttacks();
 
     }
 
@@ -294,7 +295,7 @@ public class Main {
     }
 
     public static void printLives(Animal animal){
-        System.out.println(animal.getName() + " : " + animal.getHealth() + " / "+ animal.getMaxHealth());
+        System.out.println(animal.getName() + " : " + animal.getHealth() + " / "+ Math.round(animal.getStat(StatID.MAX_HEALTH)* animal.getStatAlterations(StatID.MAX_HEALTH)));
     }
 
     public static void turn(PlayerAI playerA, PlayerAI playerB){

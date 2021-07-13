@@ -75,6 +75,8 @@ public class Animal implements IAnimal {
     }
     @Override
     public void setHealth(float health) {
+        int maxHealth = Math.round(stats.get(StatID.MAX_HEALTH)*statAlterations.get(StatID.MAX_HEALTH));
+        if(health > maxHealth) health = maxHealth;
         this.health = health;
     }
 
@@ -332,11 +334,13 @@ public class Animal implements IAnimal {
         System.out.printf("%s's stats :%n" +
                         "Health : %d/%d%n" +
                         "Attack : %d%n" +
-                        "Defense : %d%n%n",
+                        "Defense : %d%n" +
+                        "Speed : %d%n%n",
                 name,
                 Math.round(health), Math.round(stats.get(StatID.MAX_HEALTH) * statAlterations.get(StatID.MAX_HEALTH)),
                 Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)*100),
-                Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100)
+                Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100),
+                Math.round(stats.get(StatID.SPEED)*statAlterations.get(StatID.SPEED)*100)
         );
     }
 

@@ -1,6 +1,7 @@
 package playerAI.Concrete;
 
 import Action.Attack.Abstract.IAttack;
+import Action.Attack.Concrete.Attack;
 import Action.Status.Concrete.Status_Base;
 import Animal.Behaviors.DefendBehavior.Concrete.Defend_Base;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
@@ -75,7 +76,7 @@ public class WiseStrategy implements IStrategy {
     }
 
     private boolean canKill(IAttack attack, IAnimal target){
-        return simulateDamage(attack, target) >= target.getHealth();
+        return Attack.simulateDamage(player.getAllyAnimal(), target, attack) >= target.getHealth();
     }
 
     private int calculateScore(IAttack attack, IAnimal target){
@@ -83,43 +84,18 @@ public class WiseStrategy implements IStrategy {
         if(canKill(attack, target)) {
             score += 1000;
         }
-        score += simulateDamage(attack, target);
-       // printScore(attack, score);
+        score += Attack.simulateDamage(player.getAllyAnimal(), target, attack);
         if(attack.getStatusInflicted() != null && doesAttackInflictNewStatus(attack, target)) score += 20;
-       // printScore(attack, score);
         if(attack.getStatAlterations() != null){
             float statusScore = 1;
             for (Float amount: attack.getStatAlterations().values()) {
                 statusScore *= 1-(1+amount);
             }
             score += Math.round(20*statusScore);
-          //  printScore(attack, score);
         }
-
-        //Reverse if it's self inflicting.
-//        score = attack.isSelfInflicting() ? -score : score;
         return score;
     }
-//    private void printScore(IAttack attack, int score){ //TOdo suppr quand plus besoin de debug
-////        System.out.printf("Calcul score %s : %d%n", attack.getAttackName(), score);
-//    }
 
-    private int simulateDamage(IAttack attack, IAnimal target){
-        if(attack.getDamageBase() == 0) return 0;
-        float atkStat = player.getAllyAnimal().getStats().get(StatID.ATTACK);
-        float atkVar = player.getAllyAnimal().getStatAlterations().get(StatID.ATTACK);
-
-        float targetsDef = target.getStats().get(StatID.DEFENSE);
-        float targetsDefVar = target.getStatAlterations().get(StatID.DEFENSE);
-
-        double defMode = target.getActMode() == ActMode.DEFENSE ? Defend_Base.ON_DEFENSE_REDUCTION : 1;
-
-        //DmgBase*Atk*AtkVar*(1+(1-Def*DefVar))*DefenseMode
-        return Math.round((float)(attack.getDamageBase()
-                *atkStat*atkVar
-                *(1+(1-targetsDef*targetsDefVar)
-                * defMode)));
-    }
 
     /**
      * Checks if the attack inflicts a new status to the foe.

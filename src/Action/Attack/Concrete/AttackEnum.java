@@ -17,6 +17,7 @@ public enum AttackEnum {
     // Stat altering moves
     PURR,
     RAGE,
+    HEALING_POWER,
 
     //Fire attacks
     FIRE_BITE,

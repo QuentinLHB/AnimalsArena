@@ -96,7 +96,7 @@ public class AnimalFactory {
 
             case CLAM:
                 animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.SPIT));
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.HYPNOSIS));
+                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.HEALING_POWER));
                 addElementalGenericAttack(animal, elementType);
                 break;
 
