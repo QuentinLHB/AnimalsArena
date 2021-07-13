@@ -1,11 +1,11 @@
 package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 import java.util.ArrayList;
 
-public abstract class Status_Base {
+public abstract class Status_Base implements IStatus {
 
     protected int duration;
     protected int turnsLeft;
@@ -13,6 +13,12 @@ public abstract class Status_Base {
 
     protected Status_Base(IAnimal animal){
         this.animal = animal;
+    }
+
+    protected Status_Base(IAnimal animal, int duration){
+        this(animal);
+        this.duration = duration;
+        this.turnsLeft = duration;
     }
 
     protected void disappear(IStatus status){
@@ -32,5 +38,15 @@ public abstract class Status_Base {
             if(existingStatus.getStatusID().equals(statusID)) return true;
         }
         return false;
+    }
+
+    @Override
+    public int getDuration(){
+        return duration;
+    }
+
+    @Override
+    public int getTurnsLeft() {
+        return turnsLeft;
     }
 }

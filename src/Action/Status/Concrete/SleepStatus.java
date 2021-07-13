@@ -1,23 +1,22 @@
 package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
+import Util.RNG;
 
 public class SleepStatus extends Status_Base implements IStatus {
 
-    private final int DEFAULT_DURATION = 2;
+    public static final int DEFAULT_DURATION = 2;
 
     public SleepStatus(IAnimal animal){
-        super(animal);
-        super.turnsLeft = DEFAULT_DURATION;
-        super.duration = DEFAULT_DURATION;
-        printStatusApplication();
+        this(animal, RNG.GenerateNumber(1, 3));
     }
 
     public SleepStatus(IAnimal animal, int duration){
         super(animal);
         super.turnsLeft = duration;
         super.duration = duration;
+        disableAct();
         printStatusApplication();
     }
 
@@ -34,16 +33,14 @@ public class SleepStatus extends Status_Base implements IStatus {
     @Override
     public void consumeEffect() {
         if(turnsLeft >0){
-            animal.canAct(false);
+            disableAct();
             turnsLeft--;
         }
         else disappear();
-
     }
 
-    @Override
-    public int getTurnsLeft() {
-        return turnsLeft;
+    private void disableAct(){
+        animal.canAct(false);
     }
 
     @Override
@@ -54,8 +51,8 @@ public class SleepStatus extends Status_Base implements IStatus {
     }
 
     @Override
-    public int getTurns() {
-        return 0;
+    public int getDefaultDuration() {
+        return DEFAULT_DURATION;
     }
 
     private void printStatusApplication(){

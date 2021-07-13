@@ -1,18 +1,31 @@
-package Animal.Abstract;
+package Animal.Creation.Abstract;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Status.Abstract.IStatus;
-import Animal.Concrete.StatID;
+import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
+import Animal.Creation.Concrete.StatID;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface IAnimal {
 
     void setName(String name);
-
     String getName();
 
+    void setActMode(ActMode actMode);
+    ActMode getActMode();
+
+    int getHealth();
+    void setHealth(float health);
+
     void canAct(boolean allow);
+    boolean canAct();
+
+    void canDefend(boolean allow);
+    boolean canDefend();
+
+    ArrayList<IAttack> getAttacks();
 
     /**
      * Performs an attack.
@@ -30,7 +43,7 @@ public interface IAnimal {
      * Reacts upon an attack.
      * @param damage Damage inflicted by the foe's attack.
      */
-    void attacked(int damage);
+    void attacked(IAttack attack, int damage);
 
     /**
      * Reacts upon being hurt by attack or status effect.
@@ -56,7 +69,11 @@ public interface IAnimal {
      */
     void removeStatus(IStatus status);
 
+    Map<StatID, Float> getStats();
+    Float getStat(StatID statID);
     void alterStat(StatID statID, float amount);
+    Map<StatID, Float> getStatAlterations();
+    Float getStatAlterations(StatID statID);
 
     /**
      * Get the max health stat of the animal.

@@ -1,7 +1,7 @@
 package Action.Status.Concrete;
 
 import Action.Status.Abstract.IStatus;
-import Animal.Abstract.IAnimal;
+import Animal.Creation.Abstract.IAnimal;
 
 public class NoStatus extends Status_Base implements IStatus {
 
@@ -26,17 +26,13 @@ public class NoStatus extends Status_Base implements IStatus {
     }
 
     @Override
-    public int getTurnsLeft() {
-        return 0;
-    }
-
-    @Override
     public void disappear() {
         super.disappear(this);
     }
 
     @Override
-    public int getTurns() {
+    public int getDefaultDuration() {
         return 0;
     }
+
 }
