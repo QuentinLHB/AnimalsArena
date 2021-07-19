@@ -8,25 +8,24 @@ import Animal.Creation.Concrete.StatID;
 
 import java.util.Map;
 
+/**
+ * Concrete class of the IAttack abstract.
+ * Behaves as a defense move : Change the mode to defense mode.
+ */
 public class Defend implements IAttack {
 
     private IAnimal attackOwner;
 
-    public Defend(){
-
+    public Defend(IAnimal attackOwner){
+        this.attackOwner = attackOwner;
+        attackOwner.addAttack(this);
     }
     @Override
     public IAnimal getAttackOwner() {
         return attackOwner;
     }
-
     @Override
-    public void setAttackOwner(IAnimal attackOwner) {
-        this.attackOwner = attackOwner;
-    }
-
-    @Override
-    public void performAttack(IAnimal target, float damage) {
+    public void performAttack(IAnimal target) {
         if(attackOwner.canDefend()) attackOwner.setActMode(ActMode.DEFENSE);
     }
 

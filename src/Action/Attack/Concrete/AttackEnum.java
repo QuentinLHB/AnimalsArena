@@ -1,5 +1,8 @@
 package Action.Attack.Concrete;
 
+/**
+ * Enumerator of the possible attacks.
+ */
 public enum AttackEnum {
 
     DEFEND,

@@ -2,7 +2,6 @@ package Action.Attack.Concrete;
 
 import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.InflictStatus.Concrete.InflictNoStatus;
-import Action.InflictStatus.Concrete.InflictStatus;
 import Action.Status.Concrete.StatusID;
 import Animal.Behaviors.DefendBehavior.Concrete.Defend_Base;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
@@ -15,6 +14,10 @@ import Util.RNG;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Concrete class of a basic attack.
+ * It can deal damage, apply status, lower or raise stats, and can be self inflicting.
+ */
 public class Attack implements IAttack {
 
     protected final String name;
@@ -47,6 +50,7 @@ public class Attack implements IAttack {
         this.selfInflicting = selfInflicting;
         this.statsToAlter = statsToAlter;
         this.description = description;
+        attackOwner.addAttack(this);
     }
 
     public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy,
@@ -97,15 +101,15 @@ public class Attack implements IAttack {
         return attackOwner;
     }
 
-    @Override
-    public void setAttackOwner(IAnimal attackOwner) {
-        this.attackOwner = attackOwner;
-    }
+//    @Override
+//    public void setAttackOwner(IAnimal attackOwner) {
+//        this.attackOwner = attackOwner;
+//    }
 
     @Override
-    public void performAttack(IAnimal foe, float attackStat) {
+    public void performAttack(IAnimal foe) {
         if(accuracyTest()){
-            doDamage(foe, attackStat);
+            doDamage(foe);
             alterStats(foe);
             inflictStatus(foe);
         }
@@ -114,11 +118,19 @@ public class Attack implements IAttack {
         }
     }
 
+    /**
+     * Inflict a status to a target. If the status is self inflicting, the attack owner will be affected.
+     * @param foe opposing animal.
+     */
     protected void inflictStatus(IAnimal foe) {
         IAnimal statusTarget = inflictStatus.isSelfInflicting() ? attackOwner : foe;
         inflictStatus.inflictStatus(statusTarget);
     }
 
+    /**
+     * Alter stat to a target. If the attack is self inflicting, the attack owner will be affected.
+     * @param foe opposing animal.
+     */
     protected void alterStats(IAnimal foe) {
         IAnimal target = selfInflicting ? attackOwner : foe;
         if(statsToAlter != null){
@@ -128,10 +140,14 @@ public class Attack implements IAttack {
         }
     }
 
-    protected void doDamage(IAnimal foe, float attackStat){
+    /**
+     * Attack a target. If the attack is self inflicting, the attack owner will be damaged.
+     * @param foe opposing animal.
+     */
+    protected void doDamage(IAnimal foe){
         IAnimal target = selfInflicting ? attackOwner : foe;
         if(damageBase > 0){
-            target.attacked(this,Math.round(damageBase*attackStat));
+            target.attacked(this,Math.round(damageBase*(attackOwner.getStat(StatID.ATTACK)*attackOwner.getStatAlteration(StatID.ATTACK))));
         }
     }
 
@@ -150,6 +166,11 @@ public class Attack implements IAttack {
         return accuracy;
     }
 
+    /**
+     * Generate a description based on the damage base, accuracy, status inflicted, stats altered, and optional description
+     * Example : dmg: 10 | accuracy : 100 | Applies fear to the foe | Lower the animal's attack stat by 10% | optional desc
+     * @return a string of the generated description.
+     */
     @Override
     public String getDescription() {
         String description = "";
@@ -228,8 +249,8 @@ public class Attack implements IAttack {
      * @return true if the test is successful, else false.
      */
     protected boolean accuracyTest(){
-         int accuracyAfterAlterations = Math.round(attackOwner.getStats().get(StatID.ACCURACY)
-                * attackOwner.getStatAlterations().get(StatID.ACCURACY)
+         int accuracyAfterAlterations = Math.round(attackOwner.getStat(StatID.ACCURACY)
+                * attackOwner.getStatAlteration(StatID.ACCURACY)
                 * accuracy);
         return RNG.RNGsuccess(accuracyAfterAlterations);
     }
@@ -239,13 +260,20 @@ public class Attack implements IAttack {
         return name;
     }
 
+    /**
+     * Calculate the damages taken by a target by an animal with a specific attack.
+     * @param attackingAnimal Attacking animal
+     * @param target Target of the attack.
+     * @param attack Attack used by the attacking animal.
+     * @return Integer representing the amount of damages taken by the foe.
+     */
     public static int simulateDamage(IAnimal attackingAnimal, IAnimal target, IAttack attack){
         if(attack.getDamageBase() == 0) return 0;
-        float atkStat = attackingAnimal.getStats().get(StatID.ATTACK);
-        float atkVar = attackingAnimal.getStatAlterations().get(StatID.ATTACK);
+        float atkStat = attackingAnimal.getStat(StatID.ATTACK);
+        float atkVar = attackingAnimal.getStatAlteration(StatID.ATTACK);
 
-        float targetsDef = target.getStats().get(StatID.DEFENSE);
-        float targetsDefVar = target.getStatAlterations().get(StatID.DEFENSE);
+        float targetsDef = target.getStat(StatID.DEFENSE);
+        float targetsDefVar = target.getStatAlteration(StatID.DEFENSE);
 
         double defMode = target.getActMode() == ActMode.DEFENSE ? Defend_Base.ON_DEFENSE_REDUCTION : 1;
 

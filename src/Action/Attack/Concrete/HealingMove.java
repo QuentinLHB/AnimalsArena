@@ -7,6 +7,10 @@ import Animal.Creation.Concrete.StatID;
 
 import java.util.Map;
 
+/**
+ * Concrete class of the IAttack interface.
+ * Used to create moves that can heal
+ */
 public class HealingMove extends Attack{
     private float healingBase;
 
@@ -33,12 +37,11 @@ public class HealingMove extends Attack{
     /**
      * Attacks the foe and drains half of the damage dealt.
      * @param foe
-     * @param attackStat
      */
     @Override
-    public void performAttack(IAnimal foe, float attackStat) {
+    public void performAttack(IAnimal foe) {
         if(accuracyTest()){
-            doDamage(foe, attackStat);
+            doDamage(foe);
 
             int health = attackOwner.getHealth();
             int amount = 0;

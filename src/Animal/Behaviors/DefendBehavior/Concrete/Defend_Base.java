@@ -17,7 +17,7 @@ public class Defend_Base implements IDefendBehavior {
 
     @Override
     public void defend(IAttack attack, int damage) {
-        float defStat = (animal.getStats().get(StatID.DEFENSE) * animal.getStatAlterations().get(StatID.DEFENSE));
+        float defStat = (animal.getStat(StatID.DEFENSE) * animal.getStatAlteration(StatID.DEFENSE));
         damage = Math.round(damage*(1+(1-defStat)));
         if(animal.getActMode().equals(ActMode.DEFENSE)){
             damage *= ON_DEFENSE_REDUCTION;

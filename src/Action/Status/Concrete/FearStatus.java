@@ -4,6 +4,9 @@ import Action.Status.Abstract.IStatus;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Creation.Concrete.StatID;
 
+/**
+ * Concrete of the abstract Status
+ */
 public class FearStatus extends Status_Base implements IStatus {
 
     /**

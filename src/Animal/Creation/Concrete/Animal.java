@@ -55,6 +55,8 @@ public class Animal implements IAnimal {
 
     //** Attacks **
     private ArrayList<IAttack> attacks = new ArrayList<>();
+
+    @Override
     public void addAttack(IAttack attack){
         if(!attacks.contains(attack)){
             attacks.add(attack);
@@ -128,21 +130,20 @@ public class Animal implements IAnimal {
     }
 
     private Map<StatID, Float> statAlterations = new HashMap<>();
-    /**
-     * Return a clone of the stat alterations dictionnary.
-     * @return clone of the stat alterations dictionnary.
-     */
-    @Override
-    public  Map<StatID, Float> getStatAlterations(){
-        Map<StatID, Float> clonedStatAlt = new HashMap<StatID, Float>();
-        for (var i = 0; i < StatID.values().length; i++) {
-            clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
-        }
-        return clonedStatAlt;
-    }
+//    /**
+//     * Return a clone of the stat alterations dictionnary.
+//     * @return clone of the stat alterations dictionnary.
+//     */
+//    public  Map<StatID, Float> getStatAlterations(){
+//        Map<StatID, Float> clonedStatAlt = new HashMap<StatID, Float>();
+//        for (var i = 0; i < StatID.values().length; i++) {
+//            clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
+//        }
+//        return clonedStatAlt;
+//    }
 
     @Override
-    public Float getStatAlterations(StatID statID) {
+    public Float getStatAlteration(StatID statID) {
         return statAlterations.get(statID);
     }
 

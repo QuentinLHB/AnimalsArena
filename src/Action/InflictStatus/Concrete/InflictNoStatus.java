@@ -4,6 +4,10 @@ import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.Status.Concrete.StatusID;
 import Animal.Creation.Abstract.IAnimal;
 
+/**
+ * Concrete class of the InflictStatus abstract.
+ * Used if the attack inflicts no status.
+ */
 public class InflictNoStatus implements IInflictStatus {
     @Override
     public String getStatusName() {

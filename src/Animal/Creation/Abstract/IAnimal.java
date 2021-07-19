@@ -26,6 +26,7 @@ public interface IAnimal {
     boolean canDefend();
 
     ArrayList<IAttack> getAttacks();
+    void addAttack(IAttack attack);
 
     /**
      * Performs an attack.
@@ -69,11 +70,21 @@ public interface IAnimal {
      */
     void removeStatus(IStatus status);
 
+    /**
+     * Get a clone of the attacks' stats.
+     * @return Dictionary containing all the stats.
+     */
     Map<StatID, Float> getStats();
+
+    /**
+     * Get a specific stat.
+     * @param statID StatID of the attack.
+     * @return float representing the stat.
+     */
     Float getStat(StatID statID);
     void alterStat(StatID statID, float amount);
-    Map<StatID, Float> getStatAlterations();
-    Float getStatAlterations(StatID statID);
+//    Map<StatID, Float> getStatAlterations();
+    Float getStatAlteration(StatID statID);
 
     /**
      * Get the max health stat of the animal.
