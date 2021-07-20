@@ -18,6 +18,8 @@ public interface IAnimal {
 
     int getHealth();
     void setHealth(float health);
+    void heal(float amount);
+    void heal(int amount);
 
     void canAct(boolean allow);
     boolean canAct();
@@ -90,7 +92,7 @@ public interface IAnimal {
      * Get the max health stat of the animal.
      * @return
      */
-    int getMaxHealth(); // TODO Remplacer par un getStats ?
+    int getMaxHealth();
 
     /**
      * Get the statuses inflicted to the IAnimal.

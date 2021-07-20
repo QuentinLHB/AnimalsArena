@@ -3,6 +3,7 @@ import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
 import Action.Attack.Concrete.AttackEnum;
 import Action.Attack.Concrete.AttackFactory;
+import Action.Status.Abstract.IStatus;
 import Animal.Behaviors.BehaviorFactory;
 import Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
@@ -38,9 +39,9 @@ public class Main {
                         Welcome in Animals Arena, where you can experience RPG-like fights. Please select the mode you'd like :                                
                         1: Player vs Player : Each player composes its animal for an intense fight !
                         2: Player vs AI : Compose your animal and fight against a computer !
-                        4: AI vs AI : Spectate a fight between two AI !
-                        5: Consult animals and attacks' statistics.
-                        6: Create your custom animal.
+                        3: AI vs AI : Spectate a fight between two AI !
+                        4: Consult animals and attacks' statistics.
+                        5: Create your custom animal.
                         0 : Exit the program.""";
 
         var value = 0;
@@ -322,15 +323,20 @@ public class Main {
         }while (animalA.isAlive() && animalB.isAlive());
 
         if(animalA.isAlive()){
-            System.out.printf("%s wins ! ", animalA.getName());
+            System.out.printf("%s wins ! %n", animalA.getName());
         }
         else{
-            System.out.printf("%s wins ! ", animalB.getName());
+            System.out.printf("%s wins ! %n", animalB.getName());
         }
     }
 
     public static void printLives(Animal animal){
-        System.out.println(animal.getName() + " : " + animal.getHealth() + " / "+ Math.round(animal.getStat(StatID.MAX_HEALTH)* animal.getStatAlteration(StatID.MAX_HEALTH)));
+        String statuses ="";
+        for (IStatus status :
+                animal.getStatuses()) {
+            statuses += String.format(" [%s] ", status.getStatusName().toUpperCase(Locale.ROOT));
+        }
+        System.out.printf("%s %s : %d / %d%n", animal.getName(), statuses, animal.getHealth(),Math.round(animal.getMaxHealth()));
     }
 
     public static void turn(PlayerAI playerA, PlayerAI playerB){

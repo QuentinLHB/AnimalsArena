@@ -77,13 +77,37 @@ public class Animal implements IAnimal {
     }
     @Override
     public void setHealth(float health) {
-        int maxHealth = Math.round(stats.get(StatID.MAX_HEALTH)*statAlterations.get(StatID.MAX_HEALTH));
+        int maxHealth = getMaxHealth();
         if(health > maxHealth) health = maxHealth;
         this.health = health;
     }
 
+    /**
+     * Heals a % of the animal's max HP.
+     * @param amount Percentage of HP to restore (1.2 = 20%)
+     */
+    @Override
+    public void heal(float amount) {
+        if(amount <=1) return;
+        int maxHealth = getMaxHealth();
+        health += maxHealth * amount;
+        if(health > maxHealth) health = maxHealth;
+    }
+
+    /**
+     * Heals a fix amount of HP.
+     * @param amount Amount of HP to add to the current health.
+     */
+    @Override
+    public void heal(int amount) {
+        if(amount <=0) return;
+        int maxHealth = getMaxHealth();
+        health += amount;
+        if(health > maxHealth) health = maxHealth;
+    }
+
     public int getMaxHealth() {
-        return Math.round(stats.get(StatID.MAX_HEALTH));
+        return Math.round(stats.get(StatID.MAX_HEALTH)*statAlterations.get(StatID.MAX_HEALTH));
     }
 
     @Override
@@ -310,6 +334,7 @@ public class Animal implements IAnimal {
         }
         else{
             statAlterations.put(statID, statAlterations.get(statID)*amount);
+            if(statAlterations.get(statID) > 2f) statAlterations.put(statID, 2f);
             String change = amount > 1 ? "raised" : "lowered";
             System.out.printf("%s's %s was %s%n", name, statID.name().toLowerCase(Locale.ROOT), change);
         }

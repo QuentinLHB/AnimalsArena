@@ -43,19 +43,17 @@ public class HealingMove extends Attack{
         if(accuracyTest()){
             doDamage(foe);
 
-            int health = attackOwner.getHealth();
             int amount = 0;
             if(damageBase > 0){
-                amount = health+(int)(Attack.simulateDamage(attackOwner, foe, this)/2);
-                attackOwner.setHealth(amount);
+                amount = Attack.simulateDamage(attackOwner, foe, this)/2;
+                attackOwner.heal(amount);
+                System.out.printf("%d HP were restored to %s.%n", amount, attackOwner.getName());
             }
 
             if(healingBase != 1){
-                amount = Math.round(attackOwner.getStat(StatID.MAX_HEALTH)*healingBase);
-                attackOwner.setHealth(health+ amount);
+                attackOwner.heal(healingBase);
+                System.out.printf("%d%s of %s's HP were restored.%n", Math.round(healingBase*100), "%", attackOwner.getName());
             }
-
-            System.out.printf("%d HP were restored to %s%n", amount, attackOwner.getName());
         }
     }
 

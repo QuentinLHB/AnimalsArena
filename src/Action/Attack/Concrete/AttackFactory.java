@@ -54,7 +54,7 @@ public class AttackFactory {
             case STOMP -> new Attack(animal, "Stomp", 35, 0.5f, new InflictStatus(StatusID.FEAR, 2));
             case GIFT_OF_LIFE -> {
                 Map<StatID, Float> stats = new HashMap<>();
-                stats.put(StatID.MAX_HEALTH, 1.5f);
+                stats.put(StatID.MAX_HEALTH, 1.25f);
                 new Attack(animal, "Gift of life", 0, 0.8f, stats, true);
             }
 

@@ -2,6 +2,7 @@ package Animal.Creation.Concrete;
 
 import Action.Attack.Concrete.*;
 import Animal.Behaviors.DefendBehavior.Concrete.FullDefendBehavior;
+import Animal.Behaviors.DefendBehavior.Concrete.HealDefendBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.MirorDefenseBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.SimpleDefendBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
@@ -117,6 +118,8 @@ public class AnimalFactory {
                 animal.setAttackBehavior(new UndeadAttackBehavior(animal));
                 animal.setDieBehavior(new UndeadDieBehavior(animal));
             }
+
+            case WATER -> animal.setDefendBehavior(new HealDefendBehavior(animal));
             default -> setSimpleBehaviors(animal);
         }
 
