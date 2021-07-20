@@ -11,7 +11,7 @@ Inclut :
 
 EN
 A test program intended for testing design patterns. 
-The program simulates battles opposing elementary animals (Fire Dog, Poison Unicorn...), both in a PvP and a PvE setup. The player first chooses its animal and element, upon which is build an animal possessing diverse statistiques et attacks. They then fight in an RPG-like fight.
+The program simulates battles opposing elementary animals (Fire Dog, Poison Unicorn...), both in a PvP and a PvE setup. The player first chooses its animal and element, upon which is build an animal possessing diverse stats, attacks and behaviors. They then fight in an RPG-like fight.
 
 Includes :
 * Strategy Pattern
