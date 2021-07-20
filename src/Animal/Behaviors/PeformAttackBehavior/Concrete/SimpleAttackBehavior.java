@@ -26,7 +26,7 @@ public class SimpleAttackBehavior implements IPerformAttackBehavior {
             if(attack.getClass() != Defend.class) attackingAnimal.setActMode(ActMode.ATTACK);
             if(target.isAlive()){
                 System.out.printf("%s performs %s%n", attackingAnimal.getName(), attack.getAttackName());
-                attack.performAttack(target, attackStat);
+                attack.performAttack(target);
             }
         }
         else System.out.printf("%s can't act.%n", attackingAnimal.getName());

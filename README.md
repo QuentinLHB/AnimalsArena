@@ -1,8 +1,9 @@
 # AnimalsArena
 
 FR (EN below)
-Un programme créé dans le but de tester les patrons de conception. 
-Il simule des combats d'animaux élémentaires (Fire Dog, Poison Unicorn...), en PvP ou PvE (contre une IA). Le joueur choisit son animal, son élément, et selon ces deux facteurs, un animal possédant diverses statistiques,  attaques et comportements est créé. Ils s'affrontent ensuite dans un combat au tour par tour à la façon d'un RPG.
+Programme initialement créé pour tester les patrons de conception.
+Il simule des combats d'animaux élémentaires (Fire Dog, Poison Unicorn...), en PvP ou PvE. Le joueur choisit son animal, son élément, et selon ces deux facteurs, un animal possédant diverses statistiques et attaques est créé. Ils s'affrontent ensuite dans un combat au tour par tour à la façon d'un RPG.
+Il est également possible de créer ses propres animaux, en définissant leurs statistiques et leurs attaques.
 
 Inclut :
 * Strategy Pattern +Composition over inheritance (Une seule classe Animal, dans laquelle on injecte des comportements issus de classes abstraites)

@@ -1,5 +1,8 @@
 package Action.Attack.Concrete;
 
+/**
+ * Enumerator of the possible attacks.
+ */
 public enum AttackEnum {
 
     DEFEND,
@@ -17,6 +20,7 @@ public enum AttackEnum {
     // Stat altering moves
     PURR,
     RAGE,
+    HEALING_POWER,
 
     //Fire attacks
     FIRE_BITE,

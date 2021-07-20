@@ -1,8 +1,8 @@
 package Animal.Creation.Concrete;
 
-import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.*;
 import Animal.Behaviors.DefendBehavior.Concrete.FullDefendBehavior;
+import Animal.Behaviors.DefendBehavior.Concrete.HealDefendBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.MirorDefenseBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.SimpleDefendBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
@@ -45,7 +45,7 @@ public class AnimalFactory {
             setBehaviors(animal, animalKind, elementType);
         }
 
-        animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.DEFEND));
+        AttackFactory.addAttackToAnimal(animal, AttackEnum.DEFEND);
 
         for (ElementType elementType: elementTypes){
             addAttacks(animal, animalKind, elementType);
@@ -70,47 +70,44 @@ public class AnimalFactory {
     private static void addAttacks(Animal animal, AnimalKind animalKind, ElementType elementType){
         switch (animalKind){
             case DOG:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.GROWL));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.GROWL);
                 addElementalBite(animal, elementType);
                 break;
 
             case SNAKE:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.HYPNOSIS));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.HYPNOSIS);
                 addElementalBite(animal, elementType);
                 break;
             case CAT:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
-                animal.addAttack((AttackFactory.createAttack(animal, AttackEnum.PURR)));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.PURR);
 
                 addElementalBite(animal, elementType);
 
                 break;
 
             case UNICORN:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.TORNADO));
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.STOMP));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.TORNADO);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.STOMP);
                 addElementalGenericAttack(animal, elementType);
                 break;
 
             case CLAM:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.SPIT));
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.HYPNOSIS));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.SPIT);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.HEALING_POWER);
                 addElementalGenericAttack(animal, elementType);
                 break;
 
             case HEDGEHOG:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.RAGE));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.RAGE);
                 addElementalBite(animal, elementType);
                 addElementalGenericAttack(animal, elementType);
                 break;
 
             default:
                 break;
-        }
-        for(IAttack attack: animal.getAttacks()){
-            attack.setAttackOwner(animal);
         }
     }
 
@@ -121,6 +118,8 @@ public class AnimalFactory {
                 animal.setAttackBehavior(new UndeadAttackBehavior(animal));
                 animal.setDieBehavior(new UndeadDieBehavior(animal));
             }
+
+            case WATER -> animal.setDefendBehavior(new HealDefendBehavior(animal));
             default -> setSimpleBehaviors(animal);
         }
 
@@ -149,18 +148,18 @@ public class AnimalFactory {
     private static void addElementalBite(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.FIRE_BITE));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FIRE_BITE);
                 break;
 
             case POISON:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.POISON_BITE));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.POISON_BITE);
                 break;
 
             case UNDEAD:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.DEATH_BITE));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.DEATH_BITE);
 
             default:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.BITE));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
                 break;
         }
     }
@@ -168,18 +167,18 @@ public class AnimalFactory {
     private static void addElementalGenericAttack(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.FLAMETHROWER));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FLAMETHROWER);
                 break;
 
             case POISON:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.PEWK));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.PEWK);
                 break;
 
             case WATER:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.TSUNAMI));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.TSUNAMI);
                 break;
             case UNDEAD:
-                animal.addAttack(AttackFactory.createAttack(animal, AttackEnum.GIFT_OF_LIFE));
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.GIFT_OF_LIFE);
                 break;
             default:
                 break;

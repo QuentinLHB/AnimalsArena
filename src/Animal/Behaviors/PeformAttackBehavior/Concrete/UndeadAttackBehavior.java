@@ -3,9 +3,11 @@ package Animal.Behaviors.PeformAttackBehavior.Concrete;
 import Action.Attack.Abstract.IAttack;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
+import Animal.Creation.Concrete.StatID;
 
 /**
- * Classe décrivant le comportement d'attaque des Undeads : S'infligent des dégats égaux à la moitié de leur stat d'attaque.
+ * Concrete class of the abstract Attack Behavior interface.
+ * User's max HP are lowered for each damaging move, affecting its reincarnation.
  */
 public class UndeadAttackBehavior extends SimpleAttackBehavior implements IPerformAttackBehavior {
 
@@ -18,9 +20,10 @@ public class UndeadAttackBehavior extends SimpleAttackBehavior implements IPerfo
     public void attack(IAnimal target, IAttack attack, float attackStat) {
         super.attack(target, attack, attackStat);
         if(attack.getDamageBase() > 0){
-            System.out.printf("%s hurt itself while attacking and lost %d HP%n", attackingAnimal.getName(), attack.getDamageBase()/2);
-            attackingAnimal.hurt(attack.getDamageBase()/2);
+            attackingAnimal.alterStat(StatID.MAX_HEALTH, 0.95f);
+            if(attackingAnimal.getHealth() > attackingAnimal.getMaxHealth()){
+                attackingAnimal.setHealth(attackingAnimal.getMaxHealth());
+            }
         }
-
     }
 }

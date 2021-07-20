@@ -22,6 +22,7 @@ public class BehaviorFactory {
             case NODEFEND_BEHAVIOR -> animal.setDefendBehavior(new NoDefendBehavior(animal));
             case FULLDEFEND_BEHAVIOR -> animal.setDefendBehavior(new FullDefendBehavior(animal));
             case MIRRORDEFEND_BEHAVIOR -> animal.setDefendBehavior(new MirorDefenseBehavior(animal, 2));
+            case HEALDEFND_BEHAVIOR -> animal.setDefendBehavior(new HealDefendBehavior(animal));
             default -> animal.setDefendBehavior(new SimpleDefendBehavior(animal));
         }
 

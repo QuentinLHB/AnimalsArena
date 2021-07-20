@@ -55,6 +55,8 @@ public class Animal implements IAnimal {
 
     //** Attacks **
     private ArrayList<IAttack> attacks = new ArrayList<>();
+
+    @Override
     public void addAttack(IAttack attack){
         if(!attacks.contains(attack)){
             attacks.add(attack);
@@ -75,11 +77,37 @@ public class Animal implements IAnimal {
     }
     @Override
     public void setHealth(float health) {
+        int maxHealth = getMaxHealth();
+        if(health > maxHealth) health = maxHealth;
         this.health = health;
     }
 
+    /**
+     * Heals a % of the animal's max HP.
+     * @param amount Percentage of HP to restore (1.2 = 20%)
+     */
+    @Override
+    public void heal(float amount) {
+        if(amount <=1) return;
+        int maxHealth = getMaxHealth();
+        health += maxHealth * amount;
+        if(health > maxHealth) health = maxHealth;
+    }
+
+    /**
+     * Heals a fix amount of HP.
+     * @param amount Amount of HP to add to the current health.
+     */
+    @Override
+    public void heal(int amount) {
+        if(amount <=0) return;
+        int maxHealth = getMaxHealth();
+        health += amount;
+        if(health > maxHealth) health = maxHealth;
+    }
+
     public int getMaxHealth() {
-        return Math.round(stats.get(StatID.MAX_HEALTH));
+        return Math.round(stats.get(StatID.MAX_HEALTH)*statAlterations.get(StatID.MAX_HEALTH));
     }
 
     @Override
@@ -126,21 +154,20 @@ public class Animal implements IAnimal {
     }
 
     private Map<StatID, Float> statAlterations = new HashMap<>();
-    /**
-     * Return a clone of the stat alterations dictionnary.
-     * @return clone of the stat alterations dictionnary.
-     */
-    @Override
-    public  Map<StatID, Float> getStatAlterations(){
-        Map<StatID, Float> clonedStatAlt = new HashMap<StatID, Float>();
-        for (var i = 0; i < StatID.values().length; i++) {
-            clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
-        }
-        return clonedStatAlt;
-    }
+//    /**
+//     * Return a clone of the stat alterations dictionnary.
+//     * @return clone of the stat alterations dictionnary.
+//     */
+//    public  Map<StatID, Float> getStatAlterations(){
+//        Map<StatID, Float> clonedStatAlt = new HashMap<StatID, Float>();
+//        for (var i = 0; i < StatID.values().length; i++) {
+//            clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
+//        }
+//        return clonedStatAlt;
+//    }
 
     @Override
-    public Float getStatAlterations(StatID statID) {
+    public Float getStatAlteration(StatID statID) {
         return statAlterations.get(statID);
     }
 
@@ -307,6 +334,7 @@ public class Animal implements IAnimal {
         }
         else{
             statAlterations.put(statID, statAlterations.get(statID)*amount);
+            if(statAlterations.get(statID) > 2f) statAlterations.put(statID, 2f);
             String change = amount > 1 ? "raised" : "lowered";
             System.out.printf("%s's %s was %s%n", name, statID.name().toLowerCase(Locale.ROOT), change);
         }
@@ -332,11 +360,13 @@ public class Animal implements IAnimal {
         System.out.printf("%s's stats :%n" +
                         "Health : %d/%d%n" +
                         "Attack : %d%n" +
-                        "Defense : %d%n%n",
+                        "Defense : %d%n" +
+                        "Speed : %d%n%n",
                 name,
                 Math.round(health), Math.round(stats.get(StatID.MAX_HEALTH) * statAlterations.get(StatID.MAX_HEALTH)),
                 Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)*100),
-                Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100)
+                Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100),
+                Math.round(stats.get(StatID.SPEED)*statAlterations.get(StatID.SPEED)*100)
         );
     }
 

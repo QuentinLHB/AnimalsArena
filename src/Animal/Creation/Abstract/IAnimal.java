@@ -18,6 +18,8 @@ public interface IAnimal {
 
     int getHealth();
     void setHealth(float health);
+    void heal(float amount);
+    void heal(int amount);
 
     void canAct(boolean allow);
     boolean canAct();
@@ -26,6 +28,7 @@ public interface IAnimal {
     boolean canDefend();
 
     ArrayList<IAttack> getAttacks();
+    void addAttack(IAttack attack);
 
     /**
      * Performs an attack.
@@ -69,17 +72,27 @@ public interface IAnimal {
      */
     void removeStatus(IStatus status);
 
+    /**
+     * Get a clone of the attacks' stats.
+     * @return Dictionary containing all the stats.
+     */
     Map<StatID, Float> getStats();
+
+    /**
+     * Get a specific stat.
+     * @param statID StatID of the attack.
+     * @return float representing the stat.
+     */
     Float getStat(StatID statID);
     void alterStat(StatID statID, float amount);
-    Map<StatID, Float> getStatAlterations();
-    Float getStatAlterations(StatID statID);
+//    Map<StatID, Float> getStatAlterations();
+    Float getStatAlteration(StatID statID);
 
     /**
      * Get the max health stat of the animal.
      * @return
      */
-    int getMaxHealth(); // TODO Remplacer par un getStats ?
+    int getMaxHealth();
 
     /**
      * Get the statuses inflicted to the IAnimal.

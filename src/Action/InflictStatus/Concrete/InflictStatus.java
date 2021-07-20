@@ -5,6 +5,10 @@ import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.Status.Concrete.*;
 import Animal.Creation.Abstract.IAnimal;
 
+/**
+ * Concrete of the InflictStatus abstract?
+ *
+ */
 public class InflictStatus implements IInflictStatus {
 
     private StatusID statusID;
@@ -19,6 +23,12 @@ public class InflictStatus implements IInflictStatus {
         this(statusID, -1);
     }
 
+    /**
+     * Full constructor of InflictStatus.
+     * @param statusID Status enumerator.
+     * @param duration
+     * @param selfInflicting
+     */
     public InflictStatus(StatusID statusID, int duration, boolean selfInflicting){
         this.statusID = statusID;
         this.duration = duration;
