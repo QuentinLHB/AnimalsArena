@@ -19,7 +19,7 @@ import java.util.Objects;
  * Concrete class of a basic attack.
  * It can deal damage, apply status, lower or raise stats, and can be self inflicting.
  */
-public class Attack implements IAttack, Serializable {
+public class Attack implements IAttack {
 
     protected final String name;
     protected int damageBase;

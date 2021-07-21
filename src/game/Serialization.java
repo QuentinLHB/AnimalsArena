@@ -19,14 +19,11 @@ public class Serialization {
                 fichier.createNewFile();
 
             }catch (Exception e){
-                e.printStackTrace();
                 ok = false;
             }
             oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
             oos.writeObject(animals) ;
-            System.out.println("done");
         }catch (Exception e){
-            e.printStackTrace();
             ok = false;
         }finally {
             try {
@@ -35,7 +32,6 @@ public class Serialization {
                     oos.close();
                 }
             } catch (final IOException ex) {
-                ex.printStackTrace();
                 ok = false;
             }
         }
@@ -52,12 +48,11 @@ public class Serialization {
             // désérialization de l'objet
             animals = (ArrayList<Animal>)ois.readObject() ;
         }catch (Exception e){
-            e.printStackTrace();
+
         }finally {
             try{
                 ois.close();
             }catch(Exception e){
-                e.printStackTrace();
             }
         }
         return animals;

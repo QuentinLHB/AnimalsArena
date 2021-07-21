@@ -5,10 +5,11 @@ import Action.Status.Abstract.IStatus;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Creation.Concrete.StatID;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface IAnimal {
+public interface IAnimal extends Serializable {
 
     void setName(String name);
     String getName();

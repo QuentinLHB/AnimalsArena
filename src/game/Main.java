@@ -25,29 +25,7 @@ public class Main {
     static Animal animalB;
 
     public static void main(String[] args) {
-
-
         mainMenu();
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.ELETRIC));
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.DOG, ElementType.ELETRIC));
-//
-//        Animal a1 = theAnimals.get(0);
-//        Animal a2 = animalB;
-//        battle(null, null);
-//        printAllAttacks();
-
-//        Animal test1 = new Animal("AnimalTest1", 1f, 1f, 1f, 1f);
-//        Animal test2 = new Animal("AnimalTest2", 1.5f, 1.2f, 1f, 1.3f);
-//        ArrayList<Animal> allAnimals = loadAnimals();
-//        addAnimalToSave(test1);
-//        addAnimalToSave(test2);
-//
-//        ArrayList<Animal> printTest = loadAnimals();
-//        for (Animal animal: printTest) {
-//            animal.printStats();
-//        }
-
-
     }
 
     public static void mainMenu(){
@@ -67,7 +45,7 @@ public class Main {
             turns = 1;
             System.out.println(menuDisplay);
 
-            value = getIntInputFromUser(0, 4);
+            value = getIntInputFromUser(0, 5);
 
             switch (value){
                 case 1 -> startPVP();

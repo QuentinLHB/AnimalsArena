@@ -2,7 +2,9 @@ package Action.Status.Abstract;
 
 import Action.Status.Concrete.StatusID;
 
-public interface IStatus {
+import java.io.Serializable;
+
+public interface IStatus extends Serializable {
 
     /**
      * Get the ID of the status.

@@ -6,9 +6,10 @@ import Action.Status.Concrete.StatusID;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Creation.Concrete.StatID;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public interface IAttack {
+public interface IAttack extends Serializable {
     /**
      *
      * @return the Animal possessing the attack.

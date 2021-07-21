@@ -72,7 +72,7 @@ public class AttackFactory {
             case ICESHIELD -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.DEFENSE, 1.2f);
-                new Attack(animal, "Bonfire", 0, 1, stats, true);
+                new Attack(animal, "Iceshield", 0, 1, stats, true);
             }
 
             case PERMASTINK -> new Attack(animal, "Perma-Stink", 0, 0.8f, new InflictStatus(StatusID.POISON, 7));
@@ -90,6 +90,9 @@ public class AttackFactory {
     public static ArrayList<IAttack> getAllAttacks(){
         Animal fakeAnimal = new Animal(0, 0, 0, 0);
         for (AttackEnum attack:AttackEnum.values()) {
+            if(attack.equals(AttackEnum.ICESHIELD)){
+                int a= 1;
+            }
             addAttackToAnimal(fakeAnimal, attack);
         }
         return fakeAnimal.getAttacks();

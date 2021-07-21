@@ -56,6 +56,10 @@ public class AnimalCreation {
         System.out.println("Name your animal :");
         String name = scanner.nextLine();
         for(StatID statID: StatID.values()){
+            if(statID.equals(StatID.ACCURACY)) {
+                chosenStats.put(StatID.ACCURACY, 100);
+                continue;
+            }
             System.out.printf("Choose the %s stat value (100 being the basis)%n", statID.name().toLowerCase(Locale.ROOT));
             var value = getIntInputFromUser(0, 200);
             chosenStats.put(statID, value);
@@ -74,7 +78,7 @@ public class AnimalCreation {
         printAllAttacks();
         for (int i = 1; i < 5; i++) {
             System.out.println("Add attack n°" + i);
-            int choice = getIntInputFromUser(1, AttackEnum.values().length);
+            int choice = getIntInputFromUser(1, AttackEnum.values().length-1);
 
             AttackFactory.addAttackToAnimal(customAnimal, AttackEnum.values()[choice]);
         }

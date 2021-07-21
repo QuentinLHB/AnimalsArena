@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Animal implements IAnimal, Serializable {
+public class Animal implements IAnimal {
 
 
     @Serial

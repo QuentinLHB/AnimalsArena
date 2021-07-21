@@ -3,7 +3,9 @@ package Action.InflictStatus.Abstract;
 import Action.Status.Concrete.StatusID;
 import Animal.Creation.Abstract.IAnimal;
 
-public interface IInflictStatus {
+import java.io.Serializable;
+
+public interface IInflictStatus extends Serializable {
 
 
     /**
