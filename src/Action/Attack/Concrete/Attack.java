@@ -11,6 +11,7 @@ import Animal.Creation.Concrete.Animal;
 import Animal.Creation.Concrete.StatID;
 import Util.RNG;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ import java.util.Objects;
  * Concrete class of a basic attack.
  * It can deal damage, apply status, lower or raise stats, and can be self inflicting.
  */
-public class Attack implements IAttack {
+public class Attack implements IAttack, Serializable {
 
     protected final String name;
     protected int damageBase;
@@ -103,17 +104,8 @@ public class Attack implements IAttack {
         return attackOwner;
     }
 
-//    @Override
-//    public void setAttackOwner(IAnimal attackOwner) {
-//        this.attackOwner = attackOwner;
-//    }
-
     @Override
     public void performAttack(IAnimal foe) {
-//        if(!enabled) {
-//            System.out.printf("%s can't perform %s", attackOwner.getName(), this.name);
-//            return;
-//        }
         if(accuracyTest()){
             doDamage(foe);
             alterStats(foe);
@@ -153,7 +145,7 @@ public class Attack implements IAttack {
     protected void doDamage(IAnimal foe){
         IAnimal target = selfInflicting ? attackOwner : foe;
         if(damageBase > 0){
-            target.attacked(this,Math.round(damageBase*(attackOwner.getStat(StatID.ATTACK)*attackOwner.getStatAlteration(StatID.ATTACK))));
+            target.attacked(this, Math.round(damageBase*(attackOwner.getStat(StatID.ATTACK)*attackOwner.getStatAlteration(StatID.ATTACK))));
         }
     }
 

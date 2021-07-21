@@ -29,7 +29,7 @@ public interface IAnimal {
 
     ArrayList<IAttack> getAttacks();
     void addAttack(IAttack attack);
-    void disableAttack(IAttack attack);
+    void removeAttack(IAttack attack);
 
     /**
      * Performs an attack.

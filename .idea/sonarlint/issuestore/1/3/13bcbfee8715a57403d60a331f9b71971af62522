@@ -1,0 +1,8 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÉÎÛ½
+k
+java:S1128"IRemove this unused import 'Action.InflictStatus.Abstract.IInflictStatus'.(ÇÂÓ«øÿÿÿÿ8…Íõ÷©/
+X
+java:S1128";Remove this unused import 'Action.Status.Abstract.IStatus'.(¯ªş¨8…Íõ÷©/
+W	java:S125"<This block of commented-out lines of code should be removed.(¯ã­8å ”ù«/
+]	java:S1256"<This block of commented-out lines of code should be removed.(§÷×®ıÿÿÿÿ8‘øšÀ¬/

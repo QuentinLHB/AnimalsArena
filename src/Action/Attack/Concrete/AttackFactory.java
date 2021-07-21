@@ -45,6 +45,9 @@ public class AttackFactory {
             case FURY -> {
                 new Attack(animal, "Fury", 50, 0.9f, new InflictStatus(StatusID.PARALYSIS, 3, true));
             }
+
+            case HEADBUTT -> new RandomPowerAttack(animal, "Headbutt", 5, 30, 1f);
+
             case PURR -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.ATTACK, 0.9f);
@@ -59,6 +62,20 @@ public class AttackFactory {
             }
 
             case THUNDER -> new Attack(animal, "Thunder", 10, 0.8f, new InflictStatus(StatusID.PARALYSIS, 2));
+            case FRY ->  new Attack(animal, "Fry", 5, 1f, new InflictStatus(StatusID.PARALYSIS, 5));
+            case BONFIRE -> {
+                Map<StatID, Float> stats = new HashMap<>();
+                stats.put(StatID.ATTACK, 1.2f);
+                new Attack(animal, "Bonfire", 0, 1, stats, true);
+            }
+
+            case ICESHIELD -> {
+                Map<StatID, Float> stats = new HashMap<>();
+                stats.put(StatID.DEFENSE, 1.2f);
+                new Attack(animal, "Bonfire", 0, 1, stats, true);
+            }
+
+            case PERMASTINK -> new Attack(animal, "Perma-Stink", 0, 0.8f, new InflictStatus(StatusID.POISON, 7));
 
             case INTIMIDATION -> new Attack(animal, "Intimidation", 0, 1f, new InflictStatus(StatusID.PARALYSIS, 5));
             //add here

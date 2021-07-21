@@ -1,0 +1,6 @@
+
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(œÿò‰øÿÿÿÿ
+p
+java:S1104"ZMake onAttackEffect a static final constant or non-public and provide accessors if needed.(²û¢Ò
+v
+java:S1104"[Make onDefenseEffect a static final constant or non-public and provide accessors if needed.(üœÀÎþÿÿÿÿ

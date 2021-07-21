@@ -1,6 +1,8 @@
 package Animal.Behaviors.DieBehavior.Abstract;
 
-public interface IDieBehavior {
+import java.io.Serializable;
+
+public interface IDieBehavior extends Serializable {
 
     void die();
 

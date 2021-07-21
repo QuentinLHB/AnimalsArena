@@ -1,9 +1,10 @@
 package Animal.Creation.Concrete;
 
+import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.*;
 import Animal.Behaviors.DefendBehavior.Concrete.FullDefendBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.HealDefendBehavior;
-import Animal.Behaviors.DefendBehavior.Concrete.MirorDefenseBehavior;
+import Animal.Behaviors.DefendBehavior.Concrete.MirrorDefenseBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.SimpleDefendBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Animal.Behaviors.DieBehavior.Concrete.UndeadDieBehavior;
@@ -13,6 +14,7 @@ import Util.RNG;
 
 public class AnimalFactory {
 
+    private static final int MAX_ATTACKS = 5;
     private AnimalFactory(){}
 
     public static Animal CreateAnimal(AnimalKind animalKind, ElementType... elementTypes){
@@ -73,6 +75,7 @@ public class AnimalFactory {
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.GROWL);
                 addElementalBite(animal, elementType);
+                addElementalGenericAttack(animal, elementType);
                 break;
 
             case SNAKE:
@@ -111,6 +114,13 @@ public class AnimalFactory {
             default:
                 break;
         }
+        if(animal.getAttacks().size() > MAX_ATTACKS){
+            int amountAttacksToRemove = animal.getAttacks().size()-MAX_ATTACKS;
+            for (int i = 0; i < amountAttacksToRemove; i++) {
+                IAttack randomAttack = animal.getAttacks().get(RNG.GenerateNumber(1, animal.getAttacks().size()-1));
+                animal.removeAttack(randomAttack);
+            }
+        }
     }
 
     private static void setBehaviors(Animal animal, AnimalKind animalKind, ElementType elementType){
@@ -126,7 +136,7 @@ public class AnimalFactory {
         }
 
         switch (animalKind) {
-            case HEDGEHOG -> animal.setDefendBehavior(new MirorDefenseBehavior(animal, 2));
+            case HEDGEHOG -> animal.setDefendBehavior(new MirrorDefenseBehavior(animal, 2));
             case CLAM -> animal.setDefendBehavior(new FullDefendBehavior(animal));
             default -> setSimpleBehaviors(animal);
         }
@@ -168,16 +178,26 @@ public class AnimalFactory {
 
     private static void addElementalGenericAttack(Animal animal, ElementType elementType){
         switch (elementType){
+
+            case NORMAL:
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.HEADBUTT);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FURY);
+                break;
+
             case FIRE:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.FLAMETHROWER);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BONFIRE);
                 break;
 
             case POISON:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.PEWK);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.PERMASTINK);
+
                 break;
 
             case WATER:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.TSUNAMI);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.ICESHIELD);
                 break;
             case UNDEAD:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.GIFT_OF_LIFE);
@@ -185,6 +205,7 @@ public class AnimalFactory {
 
             case ELETRIC:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.THUNDER);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FRY);
 
             default:
                 break;

@@ -11,12 +11,18 @@ import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
 import Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Animal implements IAnimal {
+public class Animal implements IAnimal, Serializable {
+
+
+    @Serial
+    private static final long serialVersionUID = 3492485037626697204L;
 
     // ** Behaviors **
     IPerformAttackBehavior attackBehavior;
@@ -65,7 +71,7 @@ public class Animal implements IAnimal {
     }
 
     @Override
-    public void disableAttack(IAttack attack) {
+    public void removeAttack(IAttack attack) {
         attacks.remove(attack);
     }
 

@@ -36,7 +36,7 @@ public class ParalysisStatus extends Status_Base implements IStatus {
             ArrayList<IAttack> attacks = animal.getAttacks();
             IAttack attackToDisable = attacks.get(RNG.GenerateNumber(0, attacks.size()-1));
             disabledAttacks.add(attackToDisable);
-            animal.disableAttack(attackToDisable);
+            animal.removeAttack(attackToDisable);
             System.out.printf("%s was disabled.%n", attackToDisable.getAttackName());
         }
     }

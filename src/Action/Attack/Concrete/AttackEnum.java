@@ -13,6 +13,7 @@ public enum AttackEnum {
     FURY,
     STOMP,
     INTIMIDATION,
+    HEADBUTT,
 
     //Status attacks
     HYPNOSIS,
@@ -26,17 +27,21 @@ public enum AttackEnum {
     //Fire attacks
     FIRE_BITE,
     FLAMETHROWER,
+    BONFIRE,
 
     //Poison attacks
     POISON_BITE,
     PEWK,
+    PERMASTINK,
 
     // Water attacks
     SPIT,
     TSUNAMI,
+    ICESHIELD,
 
     // Electric attacks
     THUNDER,
+    FRY,
 
     //Undead attacks
     DEATH_BITE,

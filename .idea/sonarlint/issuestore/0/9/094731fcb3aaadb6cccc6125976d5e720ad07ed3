@@ -1,0 +1,6 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Áº Û
+S
+java:S1128"=Remove this unused import 'Animal.Creation.Abstract.IAnimal'.(â¦ßÑ
+L
+java:S1481"1Remove this unused "chosenAttack" local variable.(½›ë‚úÿÿÿÿ
