@@ -47,11 +47,24 @@ public interface IAttack {
      */
     String getDescription();
 
+//    /**
+//     * Enable or disable the attack.
+//     * @param enable True to enable, false to disable.
+//     */
+//    void enabled(boolean enable);
+//
+//    /**
+//     *
+//     * @return true if the attack is enabled.
+//     */
+//    boolean isEnabled();
+
     /**
      *
      * @return True if the attack is to be inflicted to the attack owner.
      */
     boolean isSelfInflicting();
+
 
     /**
      * StatusID (enum) inflicted by the attack.

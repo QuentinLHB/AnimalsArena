@@ -79,11 +79,12 @@ public class AnimalFactory {
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.HYPNOSIS);
                 addElementalBite(animal, elementType);
+                addElementalGenericAttack(animal, elementType);
                 break;
             case CAT:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.PURR);
-
+                addElementalGenericAttack(animal, elementType);
                 addElementalBite(animal, elementType);
 
                 break;
@@ -102,6 +103,7 @@ public class AnimalFactory {
 
             case HEDGEHOG:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.RAGE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.INTIMIDATION);
                 addElementalBite(animal, elementType);
                 addElementalGenericAttack(animal, elementType);
                 break;
@@ -180,6 +182,10 @@ public class AnimalFactory {
             case UNDEAD:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.GIFT_OF_LIFE);
                 break;
+
+            case ELETRIC:
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.THUNDER);
+
             default:
                 break;
         }

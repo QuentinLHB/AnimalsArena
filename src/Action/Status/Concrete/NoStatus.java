@@ -6,7 +6,7 @@ import Animal.Creation.Abstract.IAnimal;
 public class NoStatus extends Status_Base implements IStatus {
 
     public NoStatus(IAnimal animal) {
-        super(animal);
+        super(animal, 0);
         disappear();
     }
 

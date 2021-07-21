@@ -3,16 +3,12 @@ package playerAI.Concrete;
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
 import Action.Status.Concrete.Status_Base;
-import Animal.Behaviors.DefendBehavior.Concrete.Defend_Base;
-import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Creation.Abstract.IAnimal;
-import Animal.Creation.Concrete.StatID;
 import Util.RNG;
 import playerAI.Abstract.IStrategy;
 
+import java.lang.reflect.Array;
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.AbstractMap.SimpleEntry;
 
 /**
  * Choose an attack based on a score calculated by taking into account :
@@ -43,8 +39,50 @@ public class WiseStrategy implements IStrategy {
         }
     }
 
+    private void refreshAttackList(){
+        ArrayList<IAttack> attacks = player.getAllyAnimal().getAttacks();
+
+        if(attacks.size() < scoredAttacks.size()){
+            ArrayList<ScoredAttack> attacksToRemove = new ArrayList<>();
+            for (int i = 0; i < scoredAttacks.size(); i++) {
+                boolean found = false;
+                ScoredAttack scoredAttack = scoredAttacks.get(i);
+                for (IAttack attack : attacks) {
+                    if(scoredAttack.getAttack().equals(attack)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found){
+                    attacksToRemove.add(scoredAttack);
+                }
+            }
+            for(ScoredAttack attackToRemove : attacksToRemove){
+                scoredAttacks.remove(attackToRemove);
+            }
+        }
+
+        if(attacks.size() > scoredAttacks.size()){
+//            ArrayList<ScoredAttack> attacksToAdd = new ArrayList<>();
+            for (IAttack attack : attacks) {
+                boolean found = false;
+                for (ScoredAttack scoredAttack : scoredAttacks) {
+                    if(attack.equals(scoredAttack.getAttack())) {
+                        found = true;
+                        break;
+                }
+            }
+                if(!found){
+                    scoredAttacks.add(new ScoredAttack(attack, 0, 100));
+                }
+            }
+        }
+
+    }
+
     @Override
     public IAttack chooseAttack() {
+        refreshAttackList();
         for (ScoredAttack scoredAttack :
                 scoredAttacks) {
             IAttack attack = scoredAttack.getAttack();
@@ -58,10 +96,10 @@ public class WiseStrategy implements IStrategy {
         IAttack chosenAttack = scoredAttacks.get(0).getAttack();
         int scoreMax = ScoredAttack.getMaxProba(scoredAttacks);
         for(ScoredAttack scoredAttack : scoredAttacks){
-            if(RNG.RNGsuccess(scoreMax, scoredAttack.getProba())) {
+            if (RNG.RNGsuccess(scoreMax, scoredAttack.getProba())) {
                 chosenAttack = scoredAttack.getAttack();
                 // Probability for the attack to be chosen again next time is lowered by half.
-                scoredAttack.setProba(scoredAttack.getProba()/2);
+                scoredAttack.setProba(scoredAttack.getProba() / 2);
                 break;
             }
         }

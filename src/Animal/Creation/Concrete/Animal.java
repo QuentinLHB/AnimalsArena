@@ -65,6 +65,11 @@ public class Animal implements IAnimal {
     }
 
     @Override
+    public void disableAttack(IAttack attack) {
+        attacks.remove(attack);
+    }
+
+    @Override
     public ArrayList<IAttack> getAttacks(){
         return (ArrayList<IAttack>) attacks.clone();
     }
@@ -296,8 +301,8 @@ public class Animal implements IAnimal {
      */
     @Override
     public void hurt(int damage){
-        if(damage > health) damage = Math.round(health);
-        health -= damage;
+        if(damage > health) health = 0;
+        else health -= damage;
         System.out.printf("%s lost %d HP.%n%n", name, damage);
         checkIfDead();
     }

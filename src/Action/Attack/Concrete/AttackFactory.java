@@ -43,7 +43,7 @@ public class AttackFactory {
                 new Attack(animal, "Rage", 0, 1, stats, true);
             }
             case FURY -> {
-                new Attack(animal, "Fury", 50, 0.9f, new InflictStatus(StatusID.SLEEP, 2, true));
+                new Attack(animal, "Fury", 50, 0.9f, new InflictStatus(StatusID.PARALYSIS, 3, true));
             }
             case PURR -> {
                 Map<StatID, Float> stats = new HashMap<>();
@@ -58,6 +58,9 @@ public class AttackFactory {
                 new Attack(animal, "Gift of life", 0, 0.8f, stats, true);
             }
 
+            case THUNDER -> new Attack(animal, "Thunder", 10, 0.8f, new InflictStatus(StatusID.PARALYSIS, 2));
+
+            case INTIMIDATION -> new Attack(animal, "Intimidation", 0, 1f, new InflictStatus(StatusID.PARALYSIS, 5));
             //add here
             default -> new Attack(animal, "Cry", 0, 1f);
         }

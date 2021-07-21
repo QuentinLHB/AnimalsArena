@@ -28,6 +28,7 @@ public class Attack implements IAttack {
     protected IAnimal attackOwner;
     protected boolean selfInflicting;
     protected String description;
+//    protected boolean enabled;
 
 
     /**
@@ -50,6 +51,7 @@ public class Attack implements IAttack {
         this.selfInflicting = selfInflicting;
         this.statsToAlter = statsToAlter;
         this.description = description;
+//        this.enabled = true;
         attackOwner.addAttack(this);
     }
 
@@ -108,6 +110,10 @@ public class Attack implements IAttack {
 
     @Override
     public void performAttack(IAnimal foe) {
+//        if(!enabled) {
+//            System.out.printf("%s can't perform %s", attackOwner.getName(), this.name);
+//            return;
+//        }
         if(accuracyTest()){
             doDamage(foe);
             alterStats(foe);
@@ -214,6 +220,16 @@ public class Attack implements IAttack {
 
         return description;
     }
+
+//    @Override
+//    public void enabled(boolean enable) {
+//        this.enabled = enable;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return enabled;
+//    }
 
     @Override
     public boolean isSelfInflicting() {

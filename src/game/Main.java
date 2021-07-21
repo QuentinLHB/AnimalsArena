@@ -23,8 +23,8 @@ public class Main {
 
 
         mainMenu();
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.HEDGEHOG, ElementType.POISON));
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.DOG, ElementType.NORMAL));
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.ELETRIC));
+//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.DOG, ElementType.ELETRIC));
 //
 //        Animal a1 = theAnimals.get(0);
 //        Animal a2 = theAnimals.get(1);
@@ -66,10 +66,10 @@ public class Main {
 
     private static void startAIvAI() {
         //Todo faire choisir l'user
-        theAnimals.add(AnimalFactory.CreateRandomAnimal());
-        theAnimals.add(AnimalFactory.CreateRandomAnimal());
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.UNICORN, ElementType.FIRE));
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.HEDGEHOG, ElementType.WATER));
+//        theAnimals.add(AnimalFactory.CreateRandomAnimal());
+//        theAnimals.add(AnimalFactory.CreateRandomAnimal());
+        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.UNDEAD));
+        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.UNICORN, ElementType.WATER));
 
 
 
@@ -341,6 +341,9 @@ public class Main {
 
     public static void turn(PlayerAI playerA, PlayerAI playerB){
 
+        if(turns == 16){
+            int a =1;
+        }
         System.out.println("Tour n°" + turns + "\n");
 
         var animalA = theAnimals.get(0);
@@ -398,7 +401,7 @@ public class Main {
                 }
             }
 
-        }while (choice < 0 || choice > attacks.size());
+        }while (choice < 0 || choice > attacks.size()-1);
 
         animal.attack(target, animal.chooseAttack(choice));
         delay();
@@ -524,11 +527,11 @@ public class Main {
     }
 
     private static void delay(){
-        try{
-            Thread.sleep(1000);
-        } catch(InterruptedException e){
-
-        }
+//        try{
+//            Thread.sleep(1000);
+//        } catch(InterruptedException e){
+//
+//        }
     }
 }
 

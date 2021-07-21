@@ -56,6 +56,8 @@ public class InflictStatus implements IInflictStatus {
 
                 case POISON -> target.addStatus(defaultDuration ? new PoisonStatus(target) : new PoisonStatus(target, duration));
 
+                case PARALYSIS -> target.addStatus(defaultDuration ? new ParalysisStatus(target) : new ParalysisStatus(target, duration));
+
                 default -> target.addStatus(new NoStatus(target));
             }
         }

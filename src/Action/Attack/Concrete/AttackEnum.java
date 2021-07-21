@@ -12,6 +12,7 @@ public enum AttackEnum {
     TORNADO,
     FURY,
     STOMP,
+    INTIMIDATION,
 
     //Status attacks
     HYPNOSIS,
@@ -33,6 +34,9 @@ public enum AttackEnum {
     // Water attacks
     SPIT,
     TSUNAMI,
+
+    // Electric attacks
+    THUNDER,
 
     //Undead attacks
     DEATH_BITE,

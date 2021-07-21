@@ -15,7 +15,12 @@ public class RNG {
      * @return
      */
     public static boolean RNGsuccess(int maxRNGValue, int valueToReach){
-        return GenerateNumber(1, maxRNGValue) <= valueToReach;
+        try{
+            return GenerateNumber(1, maxRNGValue) <= valueToReach;
+        }catch (Exception e){
+            return false;
+        }
+
     }
 
     public static int GenerateNumber(int min, int max){

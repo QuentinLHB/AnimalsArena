@@ -40,6 +40,11 @@ public class HealingMove extends Attack{
      */
     @Override
     public void performAttack(IAnimal foe) {
+//        if(!enabled) {
+//            System.out.printf("%s can't perform %s", attackOwner.getName(), this.name);
+//            return;
+//        }
+
         if(accuracyTest()){
             doDamage(foe);
 

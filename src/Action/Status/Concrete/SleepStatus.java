@@ -13,7 +13,7 @@ public class SleepStatus extends Status_Base implements IStatus {
     }
 
     public SleepStatus(IAnimal animal, int duration){
-        super(animal);
+        super(animal, DEFAULT_DURATION);
         super.turnsLeft = duration;
         super.duration = duration;
         disableAct();

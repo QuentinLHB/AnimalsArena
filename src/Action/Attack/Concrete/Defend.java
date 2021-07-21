@@ -15,9 +15,11 @@ import java.util.Map;
 public class Defend implements IAttack {
 
     private IAnimal attackOwner;
+//    private boolean enabled;
 
     public Defend(IAnimal attackOwner){
         this.attackOwner = attackOwner;
+//        enabled = true;
         attackOwner.addAttack(this);
     }
     @Override
@@ -48,6 +50,16 @@ public class Defend implements IAttack {
     public String getDescription() {
         return "Sets the current mode to Defense.";
     }
+
+//    @Override
+//    public void enabled(boolean enable) {
+//        this.enabled = enable;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return enabled;
+//    }
 
     @Override
     public boolean isSelfInflicting() {
