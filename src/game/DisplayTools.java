@@ -141,11 +141,15 @@ public class DisplayTools {
     }
 
     static void delay(){
-        try{
-            Thread.sleep(1000);
-        } catch(InterruptedException e){
+//        try{
+//            Thread.sleep(1000);
+//        } catch(InterruptedException e){
+//
+//        }
+    }
 
-        }
+    static void nextLine(){
+        System.out.println("");
     }
 
 

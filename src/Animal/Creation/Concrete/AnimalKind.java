@@ -6,7 +6,7 @@ public enum AnimalKind{
     SNAKE(70, 1.3f,0.8f, 1.2f, "Low health and defense, high attack"),
     UNICORN(130, 0.75f, 1.15f, 0.8f,"Low attack, high defense and health"),
     HEDGEHOG(100, 1.05f, 1.15f, 0.8f, "Defend well, sends back half damage in defense mode"),
-    CLAM(70, 0.8f, 1.5f, 0.7f, "Takes no damage when defending, but low health and attack.")
+    CLAM(85, 0.8f, 1.5f, 0.7f, "Takes no damage when defending, but low health and attack.")
 
     ;
 

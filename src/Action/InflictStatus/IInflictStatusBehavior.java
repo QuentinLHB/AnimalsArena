@@ -1,11 +1,12 @@
-package Action.InflictStatus.Abstract;
+package Action.InflictStatus;
 
+import Action.IActionBehavior;
 import Action.Status.Concrete.StatusID;
 import Animal.Creation.Abstract.IAnimal;
 
 import java.io.Serializable;
 
-public interface IInflictStatus extends Serializable {
+public interface IInflictStatusBehavior extends IActionBehavior {
 
 
     /**
@@ -18,13 +19,8 @@ public interface IInflictStatus extends Serializable {
      * Inflict status to a target.
      * @param target Animal on which to inflict the status.
      */
-    void inflictStatus(IAnimal target);
+    void execute(IAnimal target);
 
-    /**
-     *
-     * @return True if the status is to be inflicted to the attack owner.
-     */
-    boolean isSelfInflicting();
 
     /**
      * Get the ID of the status, based on the @StatusID Enumerator.

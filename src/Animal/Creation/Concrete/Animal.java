@@ -101,7 +101,7 @@ public class Animal implements IAnimal {
     public void heal(float amount) {
         if(amount <=1) return;
         int maxHealth = getMaxHealth();
-        health += maxHealth * amount;
+        health += maxHealth * (1-amount);
         if(health > maxHealth) health = maxHealth;
     }
 
@@ -165,17 +165,6 @@ public class Animal implements IAnimal {
     }
 
     private Map<StatID, Float> statAlterations = new HashMap<>();
-//    /**
-//     * Return a clone of the stat alterations dictionnary.
-//     * @return clone of the stat alterations dictionnary.
-//     */
-//    public  Map<StatID, Float> getStatAlterations(){
-//        Map<StatID, Float> clonedStatAlt = new HashMap<StatID, Float>();
-//        for (var i = 0; i < StatID.values().length; i++) {
-//            clonedStatAlt.put(StatID.values()[i], this.statAlterations.get(StatID.values()[i]));
-//        }
-//        return clonedStatAlt;
-//    }
 
     @Override
     public Float getStatAlteration(StatID statID) {
@@ -309,7 +298,7 @@ public class Animal implements IAnimal {
     public void hurt(int damage){
         if(damage > health) health = 0;
         else health -= damage;
-        System.out.printf("%s lost %d HP.%n%n", name, damage);
+        System.out.printf("%s lost %d HP.%n", name, damage);
         checkIfDead();
     }
 

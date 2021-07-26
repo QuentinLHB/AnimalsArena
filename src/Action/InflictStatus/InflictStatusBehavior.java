@@ -1,7 +1,6 @@
-package Action.InflictStatus.Concrete;
+package Action.InflictStatus;
 
 import Action.Attack.Abstract.IAttack;
-import Action.InflictStatus.Abstract.IInflictStatus;
 import Action.Status.Concrete.*;
 import Animal.Creation.Abstract.IAnimal;
 
@@ -9,17 +8,15 @@ import Animal.Creation.Abstract.IAnimal;
  * Concrete of the InflictStatus abstract?
  *
  */
-public class InflictStatus implements IInflictStatus {
+public class InflictStatusBehavior implements IInflictStatusBehavior {
 
-    private StatusID statusID;
-    private int duration;
-    private boolean selfInflicting;
+    protected IAttack attack;
+    protected StatusID statusID;
+    protected int duration;
+//    private boolean selfInflicting;
 
-    public InflictStatus(StatusID statusID, int duration){
-        this(statusID, duration, false);
-    }
 
-    public InflictStatus(StatusID statusID){
+    public InflictStatusBehavior(StatusID statusID){
         this(statusID, -1);
     }
 
@@ -27,12 +24,10 @@ public class InflictStatus implements IInflictStatus {
      * Full constructor of InflictStatus.
      * @param statusID Status enumerator.
      * @param duration
-     * @param selfInflicting
      */
-    public InflictStatus(StatusID statusID, int duration, boolean selfInflicting){
+    public InflictStatusBehavior(StatusID statusID, int duration){
         this.statusID = statusID;
         this.duration = duration;
-        this.selfInflicting = selfInflicting;
     }
 
 
@@ -46,7 +41,7 @@ public class InflictStatus implements IInflictStatus {
      * @param target IAnimal on which to apply the status.
      */
     @Override
-    public void inflictStatus(IAnimal target) {
+    public void execute(IAnimal target) {
         boolean defaultDuration = duration == -1;
         if (!Status_Base.doesStatusAlreadyExist(target, statusID)) {
             switch (statusID){
@@ -65,12 +60,26 @@ public class InflictStatus implements IInflictStatus {
     }
 
     @Override
-    public boolean isSelfInflicting() {
-        return selfInflicting;
+    public int score(IAnimal target) {
+        if(!Status_Base.doesStatusAlreadyExist(target, statusID)){
+            if(duration == -1) return 15;
+            else return 3*duration;
+        }
+        return 0;
     }
 
     @Override
     public StatusID getStatusID() {
         return statusID;
+    }
+
+    @Override
+    public String getDescription() {
+        return String.format("Applies %s to the foe.", getStatusName());
+    }
+
+    @Override
+    public void setAttack(IAttack attack) {
+        this.attack = attack;
     }
 }

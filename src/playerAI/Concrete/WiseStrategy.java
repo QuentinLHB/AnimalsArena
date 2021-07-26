@@ -2,6 +2,8 @@ package playerAI.Concrete;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
+import Action.IActionBehavior;
+import Action.InflictStatus.IInflictStatusBehavior;
 import Action.Status.Concrete.Status_Base;
 import Animal.Creation.Abstract.IAnimal;
 import Util.RNG;
@@ -63,7 +65,6 @@ public class WiseStrategy implements IStrategy {
         }
 
         if(attacks.size() > scoredAttacks.size()){
-//            ArrayList<ScoredAttack> attacksToAdd = new ArrayList<>();
             for (IAttack attack : attacks) {
                 boolean found = false;
                 for (ScoredAttack scoredAttack : scoredAttacks) {
@@ -86,8 +87,9 @@ public class WiseStrategy implements IStrategy {
         for (ScoredAttack scoredAttack :
                 scoredAttacks) {
             IAttack attack = scoredAttack.getAttack();
-            IAnimal target = attack.isSelfInflicting() ? player.getAllyAnimal() : player.getFoesAnimal();
-            int score = calculateScore(attack, target);
+
+            int score = calculateScore(attack, player.getFoesAnimal());
+
             scoredAttack.setScore(score);
         }
 
@@ -98,8 +100,8 @@ public class WiseStrategy implements IStrategy {
         for(ScoredAttack scoredAttack : scoredAttacks){
             if (RNG.RNGsuccess(scoreMax, scoredAttack.getProba())) {
                 chosenAttack = scoredAttack.getAttack();
-                // Probability for the attack to be chosen again next time is lowered by half.
-                scoredAttack.setProba(scoredAttack.getProba() / 2);
+                // Probability for the attack to be chosen again next time is lowered.
+                scoredAttack.setProba(scoredAttack.getProba() / 3);
                 break;
             }
         }
@@ -118,30 +120,18 @@ public class WiseStrategy implements IStrategy {
     }
 
     private int calculateScore(IAttack attack, IAnimal target){
+
         int score = 0;
+        for(IActionBehavior behavior : attack.getBehaviors()){
+            score += behavior.score(target);
+        }
+
         if(canKill(attack, target)) {
             score += 1000;
         }
-        score += Attack.simulateDamage(player.getAllyAnimal(), target, attack);
-        if(attack.getStatusInflicted() != null && doesAttackInflictNewStatus(attack, target)) score += 20;
-        if(attack.getStatAlterations() != null){
-            float statusScore = 1;
-            for (Float amount: attack.getStatAlterations().values()) {
-                statusScore *= 1-(1+amount);
-            }
-            score += Math.round(20*statusScore);
-        }
+
+        System.out.printf("Score %s : %d%n", attack.getAttackName(), score);
+
         return score;
-    }
-
-
-    /**
-     * Checks if the attack inflicts a new status to the foe.
-     * @param attack Attack used for the simulation.
-     * @param target Target of the attack.
-     * @return True if is a new status, else false. /!\ If no status is inflicted by the attack, this method returns true.
-     */
-    private boolean doesAttackInflictNewStatus(IAttack attack, IAnimal target){
-        return !Status_Base.doesStatusAlreadyExist(target, attack.getStatusInflicted());
     }
 }

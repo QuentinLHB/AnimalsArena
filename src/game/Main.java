@@ -41,7 +41,6 @@ public class Main {
 
         var value = 0;
         do{
-//            theAnimals.clear();
             turns = 1;
             System.out.println(menuDisplay);
 
@@ -62,9 +61,10 @@ public class Main {
     private static void startAIvAI() {
         //Todo faire choisir l'user
         animalA = AnimalFactory.CreateRandomAnimal();
-        animalB = AnimalFactory.CreateRandomAnimal();
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.UNDEAD));
-//        theAnimals.add(AnimalFactory.CreateAnimal(AnimalKind.UNICORN, ElementType.WATER));
+//        animalB = AnimalFactory.CreateRandomAnimal();
+        animalB = AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.FIRE);
+        System.out.printf("%s VS %s%n", animalA, animalB);
+
 
         PlayerAI playerA = new PlayerAI(animalA, animalB);
         PlayerAI playerB = new PlayerAI(animalB, animalA);

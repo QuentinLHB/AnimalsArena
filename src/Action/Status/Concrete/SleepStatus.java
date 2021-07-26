@@ -47,7 +47,7 @@ public class SleepStatus extends Status_Base implements IStatus {
     public void disappear() {
         super.disappear(this);
         animal.canAct(true);
-        System.out.println(String.format("%s wakes up !%n", animal.getName()));
+        System.out.printf("%s wakes up !%n", animal);
     }
 
     @Override
@@ -55,7 +55,12 @@ public class SleepStatus extends Status_Base implements IStatus {
         return DEFAULT_DURATION;
     }
 
+    @Override
+    protected void printEffect(String effect) {
+        System.out.printf("%s falls asleep. zZzZ", animal);
+    }
+
     private void printStatusApplication(){
-        System.out.println(String.format("%s falls asleep. zZzZ", animal.getName()));
+
     }
 }

@@ -7,7 +7,7 @@ public class PoisonStatus extends Status_Base implements IStatus {
 
     //Constants
     private static final int DEFAULT_DURATION = 3;
-    private static final int FRACTION_OF_MAX_HEALTH = 10;
+    private static final float FRACTION_OF_MAX_HEALTH = 0.05f;
 
     public PoisonStatus(IAnimal animal){
         this(animal, DEFAULT_DURATION);
@@ -15,6 +15,7 @@ public class PoisonStatus extends Status_Base implements IStatus {
 
     public PoisonStatus(IAnimal animal, int duration){
         super(animal, duration);
+        super.printEffect("poisoned");
     }
 
     @Override
@@ -31,8 +32,8 @@ public class PoisonStatus extends Status_Base implements IStatus {
     @Override
     public void consumeEffect() {
         if(turnsLeft > 0){
-            animal.hurt(animal.getMaxHealth()/FRACTION_OF_MAX_HEALTH);
             System.out.println("The poison hurt " + animal.getName());
+            animal.hurt(Math.round(animal.getMaxHealth() * FRACTION_OF_MAX_HEALTH));
             turnsLeft--;
         }
         else disappear();

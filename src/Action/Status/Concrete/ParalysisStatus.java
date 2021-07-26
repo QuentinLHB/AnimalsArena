@@ -17,7 +17,7 @@ public class ParalysisStatus extends Status_Base implements IStatus {
 
     public ParalysisStatus(IAnimal animal, int duration){
         super(animal, duration);
-        System.out.printf("%s is paralysed :%n", animal.getName());
+        super.printEffect("paralyzed");
         disableAttacks();
     }
 
@@ -73,4 +73,6 @@ public class ParalysisStatus extends Status_Base implements IStatus {
     public int getDefaultDuration() {
         return DEFAULT_DURATION;
     }
+
+
 }

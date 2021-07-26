@@ -42,6 +42,7 @@ public class Battle {
             else playerA.performMove();
             if(playerB == null) performAction(animalB, animalA);
             else playerB.performMove();
+
         }
         else {
             if(playerB == null) performAction(animalB, animalA);
@@ -54,12 +55,15 @@ public class Battle {
         animalB.endOfTurn();
 
         delay();
+        nextLine();
+        separator();
+        nextLine();
         printHP(animalA);
         printHP(animalB);
         delay();
         separator();
         separator();
-        System.out.println("");
+        nextLine();
 
         Main.turns++;
     }
@@ -72,28 +76,30 @@ public class Battle {
         ArrayList<IAttack> attacks = animal.getAttacks();
         var scanner = new Scanner(System.in);
         int choice;
-
+        System.out.printf("%s's actions :%n", animal.getName());
+        printAttacks(animal);
+        System.out.println("(i: Display stats)");
         do {
-            System.out.printf("%s's actions :%n", animal.getName());
-            printAttacks(animal);
-            System.out.println("(i: Display stats)");
             System.out.println(">> ");
-
+            String stringChoice = scanner.nextLine();
             try{
-                choice = scanner.nextInt();
+                choice = Integer.parseInt(stringChoice);
             }catch (Exception e){
                 choice = -1;
-                if(scanner.nextLine().equals("i") || scanner.nextLine().equals("I")){
+                if(stringChoice.equals("i") || stringChoice.equals("I")){
                     printStats(animal, target);
+                    printAttacks(animal);
                 }
             }
 
         }while (choice < 0 || choice > attacks.size()-1);
 
         animal.attack(target, animal.chooseAttack(choice));
+        nextLine();
+        separator();
         delay();
 
-        separator();
+
     }
 
 }

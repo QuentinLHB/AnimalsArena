@@ -1,8 +1,7 @@
 package Action.Attack.Concrete;
 
-import Action.InflictStatus.Abstract.IInflictStatus;
-import Action.InflictStatus.Concrete.InflictNoStatus;
-import Action.Status.Concrete.StatusID;
+import Action.DoDamage.IDoDamageBehavior;
+import Action.IActionBehavior;
 import Animal.Behaviors.DefendBehavior.Concrete.Defend_Base;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Creation.Abstract.IAnimal;
@@ -11,8 +10,8 @@ import Animal.Creation.Concrete.Animal;
 import Animal.Creation.Concrete.StatID;
 import Util.RNG;
 
-import java.io.Serializable;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -22,81 +21,24 @@ import java.util.Objects;
 public class Attack implements IAttack {
 
     protected final String name;
-    protected int damageBase;
     protected float accuracy;
-    protected IInflictStatus inflictStatus;
-    protected Map<StatID, Float> statsToAlter;
     protected IAnimal attackOwner;
-    protected boolean selfInflicting;
-    protected String description;
-//    protected boolean enabled;
+    private IDoDamageBehavior doDamage;
+    private IActionBehavior[] behaviors;
 
-
-    /**
-     * Full Constructor of a damage-based attack.
-     * @param attackOwner Animal owning this attack.
-     * @param name Name of the attack.
-     * @param damageBase Damage base of the attack.
-     * @param accuracy Accuracy of the attack (float between 0 and 1)
-     * @param inflictStatus Status inflicted by the attack if any.
-     *                      If none, InflictNoStatus, or alternate constructor can be used.
-     */
-    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy,
-                  IInflictStatus inflictStatus, Map<StatID, Float> statsToAlter, boolean selfInflicting,
-                  String description){
-        this.name = name;
-        this.damageBase = damageBase;
-        this.inflictStatus = inflictStatus;
-        this.accuracy = accuracy;
+    public Attack(IAnimal attackOwner, String name, float accuracy, IDoDamageBehavior doDamage, IActionBehavior... behaviors) {
         this.attackOwner = attackOwner;
-        this.selfInflicting = selfInflicting;
-        this.statsToAlter = statsToAlter;
-        this.description = description;
-//        this.enabled = true;
+        this.name = name;
+        this.accuracy = accuracy;
+        this.doDamage = doDamage;
+        this.behaviors = behaviors;
+
+        doDamage.setAttack(this);
+        for (IActionBehavior behavior :
+                behaviors) {
+            behavior.setAttack(this);
+        }
         attackOwner.addAttack(this);
-    }
-
-    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy,
-                  IInflictStatus inflictStatus, Map<StatID, Float> statsToAlter, boolean selfInflicting){
-        this(attackOwner, name, damageBase, accuracy, inflictStatus, statsToAlter, selfInflicting, null);
-    }
-
-    /**
-     * Constructor of an attack that doesn't inflict any status or alters any stat, and attacks the opponent only.
-     * @param attackOwner
-     * @param name
-     * @param damageBase
-     * @param accuracy
-     */
-    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy){
-        this(attackOwner, name, damageBase, accuracy, new InflictNoStatus(), null, false, null);
-    }
-
-    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy, IInflictStatus inflictStatus){
-        this(attackOwner, name, damageBase, accuracy, inflictStatus, null, false, null);
-    }
-
-    public Attack(IAnimal attackOwner, String name, int damageBase, float accuracy, IInflictStatus inflictStatus, String description){
-        this(attackOwner, name, damageBase, accuracy, inflictStatus, null, false, description);
-    }
-
-    /**
-     * Constructor of an attack that alters stats but doesn't inflict status, and can be self-attacking (ex: raise its stats)
-     * @param attackOwner
-     * @param name
-     * @param damageBase
-     * @param accuracy
-     * @param statsToAlter
-     * @param selfInflicting
-     */
-    public Attack(Animal attackOwner, String name, int damageBase, float accuracy,
-                  Map<StatID, Float> statsToAlter, boolean selfInflicting){
-        this(attackOwner, name, damageBase, accuracy, new InflictNoStatus(), statsToAlter, selfInflicting);
-    }
-
-    public Attack(Animal attackOwner, String name, int damageBase, float accuracy,
-                  Map<StatID, Float> statsToAlter, boolean selfInflicting, String description){
-        this(attackOwner, name, damageBase, accuracy, new InflictNoStatus(), statsToAlter, selfInflicting, description);
     }
 
     @Override
@@ -105,47 +47,20 @@ public class Attack implements IAttack {
     }
 
     @Override
+    public int getDamageBase() {
+        return doDamage.getDamageBase();
+    }
+
+    @Override
     public void performAttack(IAnimal foe) {
         if(accuracyTest()){
-            doDamage(foe);
-            alterStats(foe);
-            inflictStatus(foe);
+            doDamage.execute(foe);
+            for(IActionBehavior behavior : behaviors){
+                behavior.execute(foe);
+            }
         }
         else{
             System.out.println("The attack missed.");
-        }
-    }
-
-    /**
-     * Inflict a status to a target. If the status is self inflicting, the attack owner will be affected.
-     * @param foe opposing animal.
-     */
-    protected void inflictStatus(IAnimal foe) {
-        IAnimal statusTarget = inflictStatus.isSelfInflicting() ? attackOwner : foe;
-        inflictStatus.inflictStatus(statusTarget);
-    }
-
-    /**
-     * Alter stat to a target. If the attack is self inflicting, the attack owner will be affected.
-     * @param foe opposing animal.
-     */
-    protected void alterStats(IAnimal foe) {
-        IAnimal target = selfInflicting ? attackOwner : foe;
-        if(statsToAlter != null){
-            for(StatID statToAlter: statsToAlter.keySet()){
-                target.alterStat(statToAlter, statsToAlter.get(statToAlter));
-            }
-        }
-    }
-
-    /**
-     * Attack a target. If the attack is self inflicting, the attack owner will be damaged.
-     * @param foe opposing animal.
-     */
-    protected void doDamage(IAnimal foe){
-        IAnimal target = selfInflicting ? attackOwner : foe;
-        if(damageBase > 0){
-            target.attacked(this, Math.round(damageBase*(attackOwner.getStat(StatID.ATTACK)*attackOwner.getStatAlteration(StatID.ATTACK))));
         }
     }
 
@@ -154,10 +69,6 @@ public class Attack implements IAttack {
         return name;
     }
 
-    @Override
-    public int getDamageBase() {
-        return damageBase;
-    }
 
     @Override
     public float getAccuracy() {
@@ -172,70 +83,24 @@ public class Attack implements IAttack {
     @Override
     public String getDescription() {
         String description = "";
-        if(damageBase >0){
-            description += String.format("dmg: %d", damageBase);
-        }
+        description += doDamage.getDescription();
 
-        if(!(description.equals(""))){
-            description +=" | ";
-        }
+        if(!description.equals("")) description += " | ";
 
         description +=  String.format("accuracy: %d", (int)(accuracy*100));
 
-        if(inflictStatus.getClass() != InflictNoStatus.class){
-            String target = inflictStatus.isSelfInflicting() ? "the animal" : "the foe";
-            description += String.format(" | Applies %s to %s.", inflictStatus.getStatusName(), target);
+        for(IActionBehavior behavior : behaviors){
+            description += " | " + behavior.getDescription() ;
         }
-
-        if(statsToAlter != null){
-            for (Map.Entry<StatID, Float> stat :
-                    statsToAlter.entrySet()) {
-                String effect;
-                int amount;
-                if(stat.getValue() >= 1){
-                    effect = "Raises";
-                    amount = Math.round((stat.getValue()-1)*100);
-                }
-                else{
-                    effect = "Lower";
-                    amount = Math.round((1-stat.getValue())*100);
-                }
-                String target = selfInflicting ? "the animal" : "the foe";
-                description += String.format(" | %s the %s's %s stat by %d%s",
-                        effect, target, stat.getKey().name(), amount, "%");
-            }
-        }
-
-        if(this.description != null){
-            description += " | " + this.description;
-        }
-
         return description;
     }
 
-//    @Override
-//    public void enabled(boolean enable) {
-//        this.enabled = enable;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
-
     @Override
-    public boolean isSelfInflicting() {
-        return selfInflicting;
-    }
-
-    @Override
-    public StatusID getStatusInflicted() {
-        return inflictStatus.getStatusID();
-    }
-
-    @Override
-    public Map<StatID, Float> getStatAlterations() {
-        return statsToAlter;
+    public ArrayList<IActionBehavior> getBehaviors() {
+        ArrayList<IActionBehavior> allBehaviors = new ArrayList<>();
+        allBehaviors.add(doDamage);
+        Collections.addAll(allBehaviors, behaviors);
+        return allBehaviors;
     }
 
     @Override

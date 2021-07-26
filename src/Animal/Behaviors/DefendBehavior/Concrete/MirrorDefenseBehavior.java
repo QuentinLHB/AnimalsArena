@@ -2,6 +2,8 @@ package Animal.Behaviors.DefendBehavior.Concrete;
 
 import Action.Attack.Abstract.IAttack;
 import Action.Attack.Concrete.Attack;
+import Action.DoDamage.DoNoDamageBehavior;
+import Action.DoDamage.SimpleDoDamageBehavior;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
@@ -32,7 +34,9 @@ public class MirrorDefenseBehavior extends Defend_Base implements IDefendBehavio
 
         super.defend(attack, damage);
         if(animal.getActMode().equals(ActMode.DEFENSE) && !attack.getAttackName().equals(MIROR_MOVE_NAME)) {
-            animal.attack(attack.getAttackOwner(), new Attack(animal, MIROR_MOVE_NAME, attack.getDamageBase()/ fractionOfDamageMirrored, 1));
+            animal.attack(attack.getAttackOwner(),
+                    new Attack(animal, MIROR_MOVE_NAME, 1f,
+                            new SimpleDoDamageBehavior(attack.getDamageBase()/ fractionOfDamageMirrored)));
         }
     }
 }

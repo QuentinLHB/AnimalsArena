@@ -1,11 +1,14 @@
 package Action.Attack.Concrete;
 
 import Action.Attack.Abstract.IAttack;
+import Action.DoDamage.DoNoDamageBehavior;
+import Action.IActionBehavior;
 import Action.Status.Concrete.StatusID;
 import Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Animal.Creation.Abstract.IAnimal;
 import Animal.Creation.Concrete.StatID;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -15,11 +18,9 @@ import java.util.Map;
 public class Defend implements IAttack {
 
     private IAnimal attackOwner;
-//    private boolean enabled;
 
     public Defend(IAnimal attackOwner){
         this.attackOwner = attackOwner;
-//        enabled = true;
         attackOwner.addAttack(this);
     }
     @Override
@@ -51,28 +52,11 @@ public class Defend implements IAttack {
         return "Sets the current mode to Defense.";
     }
 
-//    @Override
-//    public void enabled(boolean enable) {
-//        this.enabled = enable;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
-
     @Override
-    public boolean isSelfInflicting() {
-        return true;
+    public ArrayList<IActionBehavior> getBehaviors() {
+        ArrayList<IActionBehavior> behaviors = new ArrayList<IActionBehavior>();
+        behaviors.add(new DoNoDamageBehavior());
+        return behaviors;
     }
 
-    @Override
-    public StatusID getStatusInflicted() {
-        return null;
-    }
-
-    @Override
-    public Map<StatID, Float> getStatAlterations() {
-        return null;
-    }
 }

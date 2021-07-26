@@ -45,4 +45,8 @@ public abstract class Status_Base implements IStatus {
     public int getTurnsLeft() {
         return turnsLeft;
     }
+
+    protected void printEffect(String effect){
+        System.out.printf("%s is %s for %d turns.%n", animal, effect, duration);
+    }
 }
