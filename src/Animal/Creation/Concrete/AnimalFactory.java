@@ -26,6 +26,7 @@ public class AnimalFactory {
         var name = "";
 
         for (ElementType elementType: elementTypes) {
+            if(elementType == null) break;
             maxHealthVariation *= elementType.getHealthVariation();
             attackVariation *= elementType.getAttackVariation();
             defenseVariation *= elementType.getDefenseVariation();
@@ -44,29 +45,37 @@ public class AnimalFactory {
                 );
 
         for(ElementType elementType: elementTypes){
+            if(elementType == null) break;
             setBehaviors(animal, animalKind, elementType);
         }
 
         AttackFactory.addAttackToAnimal(animal, AttackEnum.DEFEND);
 
         for (ElementType elementType: elementTypes){
+            if(elementType == null) break;
             addAttacks(animal, animalKind, elementType);
         }
 
         return animal;
     }
 
-    public static Animal CreateAnimal(AnimalKind animalKind, ElementType elementType, String name){
-        var animal = CreateAnimal(animalKind, elementType);
+    public static Animal CreateAnimal(AnimalKind animalKind, String name, ElementType... elementTypes){
+        var animal = CreateAnimal(animalKind, elementTypes);
         animal.setName(name);
         return animal;
     }
 
     public static Animal CreateRandomAnimal(){
         int rngAnimal = RNG.GenerateNumber(0, AnimalKind.values().length-1);
-        int rngType = RNG.GenerateNumber(0, ElementType.values().length-1);
 
-        return CreateAnimal(AnimalKind.values()[rngAnimal], ElementType.values()[rngType]);
+        int nbTypes = RNG.GenerateNumber(1, 2);
+        ElementType[] types = new ElementType[2];
+        for (int i = 0; i < nbTypes; i++) {
+            int rngType = RNG.GenerateNumber(0, ElementType.values().length-1);
+            types[i] = ElementType.values()[rngType];
+        }
+
+        return CreateAnimal(AnimalKind.values()[rngAnimal], types);
     }
 
     private static void addAttacks(Animal animal, AnimalKind animalKind, ElementType elementType){

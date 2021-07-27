@@ -45,14 +45,17 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
                 }
             }
             else{
-                score -= 100 * (1+(1-statToAlter.getValue()));
+                score -= 100 * (1-statToAlter.getValue());
             }
         }
         return score;
     }
 
     private int calculateScore(int base, Map.Entry<StatID, Float> statToAlter){
-        return Math.round(base * (statToAlter.getValue()-1) * attack.getAttackOwner().getStat(statToAlter.getKey()));
+        float animalsStat = attack.getAttackOwner().getStat(statToAlter.getKey());
+        if(statToAlter.getKey().equals(StatID.MAX_HEALTH))
+            animalsStat /= 100;
+        return Math.round(base * (statToAlter.getValue()-1) * animalsStat);
     }
 
     @Override

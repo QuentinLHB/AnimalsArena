@@ -27,9 +27,6 @@ public class SimpleDoDamageBehavior implements IDoDamageBehavior {
 
     @Override
     public int score(IAnimal target) {
-        if(this.attack == null){
-            int a = 1;
-        }
         return Attack.simulateDamage(attack.getAttackOwner(), target, attack);
     }
 

@@ -75,22 +75,22 @@ public class AttackFactory {
             case RAGE -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.ATTACK, 1.25f);
-                stats.put(StatID.DEFENSE, 0.8f);
+                stats.put(StatID.DEFENSE, 0.9f);
                 new Attack(animal, "Rage", 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
             case FURY -> {
-                new Attack(animal, "Fury", 0.8f, new SimpleDoDamageBehavior(35),
+                new Attack(animal, "Fury", 0.7f, new SimpleDoDamageBehavior(30),
                         new SelfInflictStatusBehavior(StatusID.PARALYSIS, 3));
             }
 
-            case HEADBUTT -> new Attack(animal, "Headbutt", 1f, new DoRandomDamage(5, 30));
+            case HEADBUTT -> new Attack(animal, "Headbutt", 1f, new DoRandomDamage(1, 30));
 
             case PURR -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.ATTACK, 0.9f);
                 stats.put(StatID.DEFENSE, 0.9f);
-                new Attack(animal, "Purr",0.9f, new DoNoDamageBehavior(),
+                new Attack(animal, "Purr",1f, new DoNoDamageBehavior(),
                         new AlterFoesStatsBehavior(stats));
             }
 

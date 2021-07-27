@@ -1,22 +1,24 @@
 
 o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¡∫†€
 Q
-java:S1128
-"4Remove this unused import 'java.lang.reflect.Array'.(á°…ò8Ôêõ¿¨/
-Q	java:S125"<This block of commented-out lines of code should be removed.(ƒß‚ã
-V	java:S125"<This block of commented-out lines of code should be removed.(Ü¢Å–˛ˇˇˇˇ
+java:S1128"4Remove this unused import 'java.lang.reflect.Array'.(á°…ò8Ôêõ¿¨/
+e
+java:S1128"HRemove this unused import 'Action.InflictStatus.IInflictStatusBehavior'.(√≠Í∆8óœÒòÆ/
+a
+java:S1128"?Remove this unused import 'Action.Status.Concrete.Status_Base'.(ÆØü˛ˇˇˇˇ8òœÒòÆ/
+Q	java:S125"<This block of commented-out lines of code should be removed.(ƒß‚ã
+V	java:S125"<This block of commented-out lines of code should be removed.(Ü¢Å–˛ˇˇˇˇ
 E
-java:S6212%"/Declare this local variable with "var" instead.(∏ôê˝
+java:S6212'"/Declare this local variable with "var" instead.(∏ôê˝
 t
-java:S3776*"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(õÚÚÄˇˇˇˇˇ8ˇêõ¿¨/
+java:S3776,"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(õÚÚÄˇˇˇˇˇ8ˇêõ¿¨/
 L
-java:S6212/"/Declare this local variable with "var" instead.(ƒìÌ´8ˇêõ¿¨/
+java:S62121"/Declare this local variable with "var" instead.(ƒìÌ´8ˇêõ¿¨/
 Q
-java:S62120"/Declare this local variable with "var" instead.(Õ™è‰˙ˇˇˇˇ8ˇêõ¿¨/
+java:S62122"/Declare this local variable with "var" instead.(Õ™è‰˙ˇˇˇˇ8ˇêõ¿¨/
 L
-java:S62121"/Declare this local variable with "var" instead.(‡˛‰˝8ˇêõ¿¨/
-X	java:S125B"<This block of commented-out lines of code should be removed.(Ö∆∞∂8ˇêõ¿¨/
+java:S62123"/Declare this local variable with "var" instead.(‡˛‰˝8ªœÒòÆ/
 Q
-java:S6212D"/Declare this local variable with "var" instead.(Õ™è‰˙ˇˇˇˇ8ˇêõ¿¨/
+java:S6212E"/Declare this local variable with "var" instead.(Õ™è‰˙ˇˇˇˇ8ˇêõ¿¨/
 E
-java:S6212y"/Declare this local variable with "var" instead.(≤˘ü«
+java:S6212|"/Declare this local variable with "var" instead.(≤˘ü«

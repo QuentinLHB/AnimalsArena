@@ -12,7 +12,7 @@ import static game.DisplayTools.*;
 public class Battle {
 
 
-    static void battle(PlayerAI playerA, PlayerAI playerB){
+    static Animal battle(PlayerAI playerA, PlayerAI playerB){
         var animalA = Main.animalA;
         var animalB = Main.animalB;
 
@@ -22,11 +22,14 @@ public class Battle {
 
         if(animalA.isAlive()){
             System.out.printf("%s wins ! %n", animalA.getName());
+            return animalA;
         }
         else if(animalB.isAlive()){
             System.out.printf("%s wins ! %n", animalB.getName());
+            return animalB;
         }
         else System.out.println("Double KO !");
+        return null;
     }
 
 
@@ -40,16 +43,25 @@ public class Battle {
         if(whichIsFaster() == animalA){
             if(playerA == null) performAction(animalA, animalB);
             else playerA.performMove();
+            nextLine();
+            delay();
             if(playerB == null) performAction(animalB, animalA);
             else playerB.performMove();
+            nextLine();
+            delay();
 
         }
         else {
             if(playerB == null) performAction(animalB, animalA);
             else playerB.performMove();
+            nextLine();
+            delay();
             if(playerA == null) performAction(animalA, animalB);
             else playerA.performMove();
+            nextLine();
+            delay();
         }
+
 
         animalA.endOfTurn();
         animalB.endOfTurn();
@@ -60,10 +72,10 @@ public class Battle {
         nextLine();
         printHP(animalA);
         printHP(animalB);
-        delay();
         separator();
         separator();
         nextLine();
+        delay();
 
         Main.turns++;
     }
@@ -95,9 +107,7 @@ public class Battle {
         }while (choice < 0 || choice > attacks.size()-1);
 
         animal.attack(target, animal.chooseAttack(choice));
-        nextLine();
-        separator();
-        delay();
+
 
 
     }

@@ -19,11 +19,6 @@ public class PlayerAI {
     }
 
     private IAnimal foesAnimal;
-    private int turn = 1;
-
-    //public PlayerAI(IStrategy strategy){
-//        this(strategy, null, null);
-//    }
 
     public PlayerAI(IAnimal ally, IAnimal foe){
         this.allyAnimal = ally;
@@ -31,21 +26,9 @@ public class PlayerAI {
         this.currentStrategy = new WiseStrategy(this);
     }
 
-    public void setStrategy(IStrategy strategy){
-        currentStrategy =  strategy;
-    }
-
     public void performMove(){
-        changeStrategy();
         IAttack chosenAttack = currentStrategy.chooseAttack();
         allyAnimal.attack(foesAnimal, chosenAttack);
-        turn++;
-    }
-
-    private void changeStrategy() {
-        //todo
-//
-//        currentStrategy = new WiseStrategy(this);
     }
 
 

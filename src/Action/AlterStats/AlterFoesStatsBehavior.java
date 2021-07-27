@@ -39,18 +39,14 @@ public class AlterFoesStatsBehavior extends AlterAllyStatsBehavior {
             if(statToAlter.getValue() < 1){
                 float animalsStatAlt = target.getStatAlteration(statToAlter.getKey());
                 if(animalsStatAlt <= 0.5f){
-                    calculateScore(target, 25, statToAlter);
+                    score += calculateScore(target, 25, statToAlter);
                 }
                 else if(animalsStatAlt <= 0.9f){
-                    calculateScore(target, 50, statToAlter);
+                    score += calculateScore(target, 50, statToAlter);
                 }
                 else{
-                    calculateScore(target, 100, statToAlter);
+                    score += calculateScore(target, 100, statToAlter);
                 }
-
-                score += 100
-                        * (1+(1-statToAlter.getValue())
-                        * target.getStat(statToAlter.getKey()));
             }
         }
         return score;
@@ -66,7 +62,7 @@ public class AlterFoesStatsBehavior extends AlterAllyStatsBehavior {
      * @return
      */
     private int calculateScore(IAnimal target, int basis, Map.Entry<StatID, Float> statToAlter){
-        float attacksStatAlt = (1+(1-statToAlter.getValue()));
+        float attacksStatAlt = 1-statToAlter.getValue();
         float targetsStat = target.getStat(statToAlter.getKey());
         return Math.round(basis * attacksStatAlt * targetsStat);
     }

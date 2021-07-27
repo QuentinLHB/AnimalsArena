@@ -1,6 +1,0 @@
-
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÅË™Îúÿÿÿÿ
-V
-java:S1128";Remove this unused import 'Action.Attack.Abstract.IAttack'.(«ğÎ‰ùÿÿÿÿ
-t
-java:S37761"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(…¬°üÿÿÿÿ8ïøšÀ¬/

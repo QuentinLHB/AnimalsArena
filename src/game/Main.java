@@ -1,22 +1,15 @@
 package game;
-import Action.Attack.Abstract.IAttack;
-import Action.Attack.Concrete.Attack;
-import Action.Attack.Concrete.AttackEnum;
-import Action.Attack.Concrete.AttackFactory;
-import Action.Status.Abstract.IStatus;
-import Animal.Behaviors.BehaviorFactory;
-import Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
-import Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
-import Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
 import Animal.Creation.Concrete.*;
 import playerAI.Concrete.PlayerAI;
 
-import java.util.*;
+import javax.lang.model.element.TypeElement;
+import java.util.HashMap;
+import java.util.Map;
 
 import static game.AnimalCreation.*;
 import static game.Battle.*;
 import static game.DisplayTools.*;
-import static game.Serialization.*;
+import static game.Serialization.isSaveEmpty;
 
 public class Main {
     static int turns = 1;
@@ -59,12 +52,11 @@ public class Main {
     }
 
     private static void startAIvAI() {
-        //Todo faire choisir l'user
-        animalA = AnimalFactory.CreateRandomAnimal();
-//        animalB = AnimalFactory.CreateRandomAnimal();
-        animalB = AnimalFactory.CreateAnimal(AnimalKind.CLAM, ElementType.FIRE);
-        System.out.printf("%s VS %s%n", animalA, animalB);
 
+
+        animalA = chooseMethodCreationMenu("AI 1");
+        animalB = chooseMethodCreationMenu("AI 2");
+        System.out.printf("%s VS %s%n", animalA, animalB);
 
         PlayerAI playerA = new PlayerAI(animalA, animalB);
         PlayerAI playerB = new PlayerAI(animalB, animalA);
@@ -127,11 +119,12 @@ public class Main {
 
     private static void startPVE() {
         System.out.println("Player :\n");
-        animalA = pickAnimal();
+        animalA = chooseMethodCreationMenu("Player 1");
         animalA.printStats();
 
-        animalB = AnimalFactory.CreateRandomAnimal();
+
         System.out.println("AI's animal :");
+        animalB = chooseMethodCreationMenu("the AI");
         animalB.printStats();
 
         PlayerAI playerAI = new PlayerAI(animalB, animalA);
@@ -140,14 +133,16 @@ public class Main {
 
     public static void startPVP(){
 
-        System.out.println("Player 1:\n");
-        animalA = pickAnimal();
+        String playerName = "Player 1";
+        System.out.printf("%s:%n%n", playerName);
+        animalA = chooseMethodCreationMenu(playerName);
         animalA.printStats();
 
         clearConsole();
 
-        System.out.println("Player 2:\n");
-        animalB = pickAnimal();
+        playerName = "Player 2";
+        System.out.printf("%s:%n%n", playerName);
+        animalB = chooseMethodCreationMenu(playerName);
         animalB.printStats();
 
         clearConsole();

@@ -6,14 +6,12 @@ import Animal.Behaviors.BehaviorFactory;
 import Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
 import Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
+import Animal.Creation.Abstract.IAnimal;
 import Animal.Creation.Concrete.*;
 
-import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static game.DisplayTools.*;
-import static game.Main.*;
 import static game.Serialization.*;
 
 public class AnimalCreation {
@@ -23,23 +21,24 @@ public class AnimalCreation {
      * Make the user choose between customization or not.
      * @return the animal, whether customized or not.
      */
-    static Animal pickAnimal(){
+    static Animal chooseMethodCreationMenu(String playerName){
         int choice;
-        System.out.println("How will your fight ?");
+        System.out.printf("How will %s fight ?%n", playerName);
+        System.out.println("0: Pick a random animal");
         System.out.println("1: Create an animal based on existing species and types (recommended)");
         System.out.println("2: Customize your own animal and stats");
         if(!isSaveEmpty()){
             System.out.println("3: Choose one of the customized animals");
-            choice = getIntInputFromUser(1, 3);
+            choice = getIntInputFromUser(0, 3);
         }
-        else choice = getIntInputFromUser(1, 2);
+        else choice = getIntInputFromUser(0, 2);
 
         Animal pickedAnimal;
         switch (choice) {
-            case 1 -> pickedAnimal = createAnimal();
+            case 1 -> pickedAnimal = pickPreCreatedAnimal();
             case 2 -> pickedAnimal = createCustomAnimal();
             case 3 -> pickedAnimal = chooseExistingCustomAnimal();
-            default -> pickedAnimal = createAnimal();
+            default -> pickedAnimal = AnimalFactory.CreateRandomAnimal();
         }
         return pickedAnimal;
 
@@ -148,11 +147,11 @@ public class AnimalCreation {
      * Make the user choose from animal kinds and types to create the animal.
      * @return
      */
-    static Animal createAnimal(){
+    static Animal pickPreCreatedAnimal(){
         var scanner = new Scanner(System.in);
         int chosenValue;
         AnimalKind animalKind;
-        ElementType elementType;
+        ElementType[] elementType = new ElementType[2];
 
 
         // Choose animal
@@ -165,30 +164,48 @@ public class AnimalCreation {
         chosenValue = getIntInputFromUser(1, AnimalKind.values().length);
         animalKind = AnimalKind.values()[chosenValue-1];
 
-        // Choose type
+        // Choose type(s)
         System.out.println("Good ! Now choose its element.");
-        for (int i = 0; i < ElementType.values().length; i++) {
-            System.out.printf("%d: %s%n", i+1, ElementType.values()[i]);
-        }
+        displayTypes();
         chosenValue = getIntInputFromUser(1, ElementType.values().length);
-        elementType = ElementType.values()[chosenValue-1];
+        elementType[0] = ElementType.values()[chosenValue-1];
+
+        System.out.println("Do you want another type ? It's optional.");
+        System.out.println("0: None");
+        displayTypes();
+        chosenValue = getIntInputFromUser(0, ElementType.values().length);
+        if(chosenValue != 0)
+            elementType[1] = ElementType.values()[chosenValue-1];
+
+
 
         // Choose nickname
         String nickname;
-        System.out.printf("Nice, you created a %s %s. Would you like to rename it ?%n", elementType.name(), animalKind.name());
+        String initialName = "";
+        for (ElementType element: elementType) {
+            if(element != null)
+                initialName += element.name() + " ";
+        }
+        System.out.printf("Nice, you created a %s%s. Would you like to rename it ?%n", initialName, animalKind.name());
         System.out.println("Enter a name or press 0 : ");
         nickname = scanner.nextLine();
 
         Animal animal;
 
         if(!nickname.equals("0")){
-            animal = AnimalFactory.CreateAnimal(animalKind, elementType, nickname);
+            animal = AnimalFactory.CreateAnimal(animalKind, nickname, elementType);
         }
         else animal = AnimalFactory.CreateAnimal(animalKind, elementType);
 
         return animal;
 
 
+    }
+
+    private static void displayTypes(){
+        for (int i = 0; i < ElementType.values().length; i++) {
+            System.out.printf("%d: %s%n", i+1, ElementType.values()[i]);
+        }
     }
 
 }
