@@ -80,7 +80,7 @@ public class Serialization {
         saveCustomAnimals(animals);
     }
 
-    static boolean isSaveEmpty(){
+    public static boolean isSaveEmpty(){
         return loadAnimals().isEmpty();
     }
 }

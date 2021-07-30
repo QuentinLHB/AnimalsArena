@@ -5,6 +5,7 @@ import Action.AlterStats.AlterFoesStatsBehavior;
 import Action.AlterStats.AlterNoStatBehavior;
 import Action.AlterStats.IAlterStatsBehavior;
 import Action.Attack.Abstract.IAttack;
+import Action.Defend.SimpleDefendBehavior;
 import Action.DoDamage.DoNoDamageBehavior;
 import Action.DoDamage.DoRandomDamage;
 import Action.DoDamage.IDoDamageBehavior;
@@ -38,7 +39,7 @@ public class AttackFactory {
      */
     public static void addAttackToAnimal(Animal animal, AttackEnum attackName){
         switch (attackName){
-            case DEFEND -> new Defend(animal);
+            case DEFEND -> new Attack(animal, "Defend", 1f, new DoNoDamageBehavior(), new SimpleDefendBehavior());
 
             case BITE -> new Attack(animal, "Bite", 1f, new SimpleDoDamageBehavior(15));
 
@@ -49,6 +50,9 @@ public class AttackFactory {
 
             case DEATH_BITE -> new Attack(animal, "Death Bite", 1f, new SimpleDoDamageBehavior(15),
                         new HealFixAmountBehavior(15/2));
+
+            case SHIELD_ATTACK -> new Attack(animal, "Shield Attack", 1f, new SimpleDoDamageBehavior(10),
+                    new SimpleDefendBehavior());
 
             case HYPNOSIS -> new Attack(animal, "Hypnosis", 0.6f, new DoNoDamageBehavior(),
                     new InflictStatusBehavior(StatusID.SLEEP));

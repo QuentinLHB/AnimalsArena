@@ -14,6 +14,7 @@ public enum AttackEnum {
     STOMP,
     INTIMIDATION,
     HEADBUTT,
+    SHIELD_ATTACK,
 
     //Status attacks
     HYPNOSIS,

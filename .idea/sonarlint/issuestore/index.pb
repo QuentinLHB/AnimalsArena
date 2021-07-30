@@ -25,8 +25,6 @@ W
 'src/playerAI/Concrete/ScoredAttack.java,b\c\bc206d8e15526cb23266c0b6b4e9fee687cbdf46
 m
 =src/Animal/Behaviors/DefendBehavior/Concrete/Defend_Base.java,b\3\b30dfd134f911c965b654c62854647bbd41a94f5
-|
-Lsrc/Animal/Behaviors/PeformAttackBehavior/Concrete/SimpleAttackBehavior.java,f\8\f85c6527371065f0b015f4061174b2191e0d0f47
 p
 @src/Animal/Behaviors/DieBehavior/Concrete/UndeadDieBehavior.java,e\3\e3d3d8d6ca0155fcbd8f62d74030310b4c947937
 t
@@ -51,8 +49,6 @@ k
 Nsrc/Animal/Behaviors/PeformAttackBehavior/Abstract/IPerformAttackBehavior.java,2\1\21da31679adf4be9d2c53b11559f85176b3abcbd
 \
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
-Z
-*src/Action/Attack/Concrete/AttackEnum.java,a\5\a5a6bb62118013fda24f53f1067340e8538b18ca
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
@@ -60,8 +56,6 @@ Y
 )src/Animal/Creation/Abstract/IAnimal.java,3\2\32ec240740e32ad4e858d9a3456e453d760d9541
 W
 'src/Action/Status/Abstract/IStatus.java,3\9\39c7b014caab35023a0765e005ba0c6ceecd6bf7
-K
-src/game/Serialization.java,a\5\a597d71098222338ab466e911a20ca122be56144
 ^
 .src/Action/AlterStats/AlterNoStatBehavior.java,9\1\917d8580418cfb62832b77b6ced14f8a8514d96e
 X
@@ -70,8 +64,6 @@ X
 ,src/Animal/Creation/Concrete/AnimalKind.java,1\2\1264bcffc3b3d92bb98ad5dbffe7be6e137999c6
 V
 &src/Action/Attack/Concrete/Attack.java,a\9\a926df1deca4732b976794d376e38e5cfc4a8a86
-V
-&src/Action/Attack/Concrete/Defend.java,1\d\1d57d90ea5f22df0cacdf167dfe8d09605cc627a
 [
 +src/Action/DoDamage/DoNoDamageBehavior.java,d\1\d19b3cf300f97d5b1524b906d10af08f8d86e7e6
 W
@@ -116,5 +108,19 @@ g
 +src/Action/Status/Concrete/SleepStatus.java,1\9\19e20a4c1d5d0d5921846346ead02922206044a5
 [
 +src/Action/Status/Concrete/Status_Base.java,2\0\2071c0257de91b7961aa79ffbcee779e351cdd0e
-W
-'src/playerAI/Concrete/WiseStrategy.java,4\b\4b482d71cc96e88af39b2587143138334b347739
+a
+1src/Action/AlterStats/AlterAllyStatsBehavior.java,f\a\fa87b896a7d3d3350b4416bd737bde8213b47740
+a
+1src/Action/AlterStats/AlterFoesStatsBehavior.java,7\6\76747468864820151816ac71cd1431501ad25da5
+L
+src/game/AnimalCreation.java,5\8\587e3624e3eda10b97a467d255de28ce103961e7
+_
+/src/Animal/Creation/Concrete/AnimalFactory.java,d\9\d9dff358a5f8e229264b23ee5d0fa3e29a3a8101
+D
+src/game/Battle.java,5\9\59a14fdd8c03f64c092466a372c4bb4ae14d9764
+J
+src/game/DisplayTools.java,6\5\6513293b7f9beae52fae6681c1ad0f9fa95dec91
+S
+#src/playerAI/Concrete/PlayerAI.java,7\4\744d9542afe41882b072dcd21ee53702d55c7a8d
+_
+/src/Action/DoDamage/SimpleDoDamageBehavior.java,e\8\e8d0c7706ca380a85dda196290166274976c7aaf

@@ -1,5 +1,7 @@
 package game;
 import Animal.Creation.Concrete.*;
+import game.GUI.Controler;
+import game.GUI.MenuFrame;
 import playerAI.Concrete.PlayerAI;
 
 import javax.lang.model.element.TypeElement;
@@ -18,7 +20,8 @@ public class Main {
     static Animal animalB;
 
     public static void main(String[] args) {
-        mainMenu();
+//        mainMenu();
+        Controler controler = new Controler();
     }
 
     public static void mainMenu(){

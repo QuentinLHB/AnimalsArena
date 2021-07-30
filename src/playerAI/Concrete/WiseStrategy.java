@@ -130,8 +130,6 @@ public class WiseStrategy implements IStrategy {
             score += 1000;
         }
 
-        System.out.printf("Score %s : %d%n", attack.getAttackName(), score);
-
         return score;
     }
 }
