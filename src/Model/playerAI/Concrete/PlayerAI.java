@@ -3,35 +3,45 @@ package Model.playerAI.Concrete;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.playerAI.Abstract.IStrategy;
+import Model.Util.Position;
 
-public class PlayerAI {
+public class PlayerAI extends Player {
 
     private IStrategy currentStrategy;
 
-    public IAnimal getAllyAnimal() {
-        return allyAnimal;
-    }
+    public static int cpuId;
 
-    private IAnimal allyAnimal;
+
+    public IAnimal getAllyAnimal() {
+        return ally;
+    }
 
     public IAnimal getFoesAnimal() {
-        return foesAnimal;
+        return foe;
     }
 
-    private IAnimal foesAnimal;
 
-    public PlayerAI(IAnimal ally, IAnimal foe){
-        this.allyAnimal = ally;
-        this.foesAnimal = foe;
+    public PlayerAI(Position position) {
+        super(position);
+    }
+
+    public PlayerAI(Position position, IAnimal ally, IAnimal foe){
+        super(position, ally, foe);
         this.currentStrategy = new WiseStrategy(this);
     }
 
     public void performMove(){
         IAttack chosenAttack = currentStrategy.chooseAttack();
-        allyAnimal.attack(foesAnimal, chosenAttack);
+        ally.attack(foe, chosenAttack);
     }
 
+    @Override
+    public boolean isBot() {
+        return true;
+    }
 
-
-
+    @Override
+    public String toString() {
+        return super.toString() + " (CPU)";
+    }
 }

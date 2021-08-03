@@ -1,8 +1,0 @@
-
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¢‰›øÿÿÿÿ
-W
-java:S1128"<Remove this unused import 'Animal.Creation.Concrete.StatID'.(¸ê¹üÿÿÿÿ
-]
-java:S1128";Remove this unused import 'Action.Attack.Abstract.IAttack'.(«ğÎ‰ùÿÿÿÿ8„‘É¨/
-n
-java:S1128"SRemove this unused import 'Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode'.(§ùè‹ÿÿÿÿÿ

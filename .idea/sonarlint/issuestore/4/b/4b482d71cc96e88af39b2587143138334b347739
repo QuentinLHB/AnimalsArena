@@ -1,24 +1,0 @@
-
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Áº Û
-Q
-java:S1128"4Remove this unused import 'java.lang.reflect.Array'.(‡¡É˜8ï›À¬/
-e
-java:S1128"HRemove this unused import 'Action.InflictStatus.IInflictStatusBehavior'.(Ã­êÆ8—Ïñ˜®/
-a
-java:S1128"?Remove this unused import 'Action.Status.Concrete.Status_Base'.(®ğ¯Ÿşÿÿÿÿ8˜Ïñ˜®/
-Q	java:S125"<This block of commented-out lines of code should be removed.(Ä§â‹
-V	java:S125"<This block of commented-out lines of code should be removed.(†¢Ğşÿÿÿÿ
-E
-java:S6212'"/Declare this local variable with "var" instead.(¸™ı
-t
-java:S3776,"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(›òò€ÿÿÿÿÿ8ÿ›À¬/
-L
-java:S62121"/Declare this local variable with "var" instead.(Ä“í«8ÿ›À¬/
-Q
-java:S62122"/Declare this local variable with "var" instead.(Íªäúÿÿÿÿ8ÿ›À¬/
-L
-java:S62123"/Declare this local variable with "var" instead.(àşäı8»Ïñ˜®/
-Q
-java:S6212E"/Declare this local variable with "var" instead.(Íªäúÿÿÿÿ8ÿ›À¬/
-E
-java:S6212|"/Declare this local variable with "var" instead.(²ùŸÇ

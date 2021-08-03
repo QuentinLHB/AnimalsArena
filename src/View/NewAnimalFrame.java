@@ -4,6 +4,7 @@ import Controler.c_Menu;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.AnimalKind;
 import Model.Animal.Creation.Concrete.ElementType;
+import Model.playerAI.Concrete.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +12,10 @@ import java.util.ArrayList;
 
 public class NewAnimalFrame extends JDialog {
     private c_Menu controler;
-    private PlayersEnum playerA;
-    private PlayersEnum playerB;
+    private Player playerA;
+    private Player playerB;
 
-    private PlayersEnum currentPlayer;
+    private Player currentPlayer;
     private ArrayList<JComponent> components = new ArrayList<>();
 
     JComboBox cboAnimalKind;
@@ -25,10 +26,11 @@ public class NewAnimalFrame extends JDialog {
 
     IAnimal animal;
 
-    public NewAnimalFrame(c_Menu controler, JDialog owner, PlayersEnum player){
+    public NewAnimalFrame(c_Menu controler, JDialog owner, Player player, Player foe){
         super(owner, true);
         this.controler = controler;
         this.playerA = player;
+        this.playerB = foe;
         currentPlayer = playerA;
         initComponents();
         initEvents();
@@ -114,6 +116,7 @@ public class NewAnimalFrame extends JDialog {
     private void btnOk_click(){
         IAnimal animal = controler.createAnimal(
                 currentPlayer,
+                controler.getFoe(currentPlayer),
                 (AnimalKind)cboAnimalKind.getSelectedItem(),
                 txtNickname.getText(),
                 (ElementType)cboType1.getSelectedItem(),

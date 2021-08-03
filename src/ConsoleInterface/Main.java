@@ -2,6 +2,7 @@ package ConsoleInterface;
 import Model.Animal.Creation.Concrete.*;
 import Controler.c_Menu;
 import Model.playerAI.Concrete.PlayerAI;
+import Model.Util.Position;
 
 import static ConsoleInterface.AnimalCreation.*;
 import static ConsoleInterface.Battle.*;
@@ -55,8 +56,8 @@ public class Main {
         animalB = chooseMethodCreationMenu("AI 2");
         System.out.printf("%s VS %s%n", animalA, animalB);
 
-        PlayerAI playerA = new PlayerAI(animalA, animalB);
-        PlayerAI playerB = new PlayerAI(animalB, animalA);
+        PlayerAI playerA = new PlayerAI(Position.BOTTOM, animalA, animalB);
+        PlayerAI playerB = new PlayerAI(Position.TOP, animalB, animalA);
         battle(playerA, playerB);
     }
 
@@ -124,7 +125,7 @@ public class Main {
         animalB = chooseMethodCreationMenu("the AI");
         animalB.printStats();
 
-        PlayerAI playerAI = new PlayerAI(animalB, animalA);
+        PlayerAI playerAI = new PlayerAI(Position.TOP, animalB, animalA);
         battle(null, playerAI);
     }
 

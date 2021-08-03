@@ -1,5 +1,8 @@
 package View;
 import Controler.c_Menu;
+import Model.playerAI.Concrete.Player;
+import Model.playerAI.Concrete.PlayerAI;
+import Model.Util.Position;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -75,22 +78,35 @@ public class MenuFrame extends JFrame  {
     }
 
     private void btnPve_click() {
-        pickAnimalAndStartBattle(PlayersEnum.playerA, PlayersEnum.CPUA);
+        Player p1 = new Player(Position.BOTTOM);
+        controler.addPlayer(p1);
+        PlayerAI p2 = new PlayerAI(Position.TOP);
+        controler.addPlayer(p2);
+        pickAnimalAndStartBattle(p1, p2);
     }
 
     private void btnAIvAI_click() {
-        pickAnimalAndStartBattle(PlayersEnum.CPUA, PlayersEnum.CPUB);
+        PlayerAI p1 = new PlayerAI(Position.BOTTOM);
+        controler.addPlayer(p1);
+        PlayerAI p2 = new PlayerAI(Position.TOP);
+        controler.addPlayer(p2);
+
+        pickAnimalAndStartBattle(p1, p2);
     }
 
     private void btnPvp_click() {
-        pickAnimalAndStartBattle(PlayersEnum.playerA, PlayersEnum.playerB);
+        Player p1 = new Player(Position.BOTTOM);
+        controler.addPlayer(p1);
+        Player p2 = new Player(Position.TOP);
+        controler.addPlayer(p2);
+        pickAnimalAndStartBattle(p1, p2);
     }
 
-    private void pickAnimalAndStartBattle(PlayersEnum p1, PlayersEnum p2){
+    private void pickAnimalAndStartBattle(Player p1, Player p2){
         new CreationMenuFrame(controler, this, p1, p2);
 
         if(controler.areAnimalsInitiated()){
-            new BattleFrame(controler, p1, p2);
+            new BattleFrame(controler);
             Util.exit(this);
         }
     }
