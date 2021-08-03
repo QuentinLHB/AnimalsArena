@@ -6,7 +6,7 @@ Il simule des combats d'animaux élémentaires (Fire Dog, Poison Unicorn...), en
 Il est également possible de créer ses propres animaux, en définissant leurs statistiques et leurs attaques.
 
 Inclut :
-* Strategy Pattern +Composition over inheritance (Une seule classe Animal, dans laquelle on injecte des comportements issus de classes abstraites)
+* Strategy Pattern +Composition over inheritance (Une seule classe Model.Animal, dans laquelle on injecte des comportements issus de classes abstraites)
 * Factory Pattern (création d'animaux avec la classe statique AnimalFactory)
 
 EN
