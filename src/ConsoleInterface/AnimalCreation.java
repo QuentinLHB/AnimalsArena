@@ -69,7 +69,7 @@ public class AnimalCreation {
                 (float)chosenStats.get(StatID.DEFENSE)/100,
                 (float) chosenStats.get(StatID.SPEED)/100);
 
-        customAnimal.printStats();
+        customAnimal.getStatDisplay();
 
         //2. Add 4 attacks
         AttackFactory.addAttackToAnimal(customAnimal, AttackEnum.DEFEND);

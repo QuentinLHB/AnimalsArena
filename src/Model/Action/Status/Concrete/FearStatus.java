@@ -3,6 +3,7 @@ package Model.Action.Status.Concrete;
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 /**
  * Concrete of the abstract Status
@@ -70,7 +71,7 @@ public class FearStatus extends Status_Base implements IStatus {
         animal.alterStat(StatID.ATTACK, 1);
         animal.alterStat(StatID.DEFENSE, 1);
         animal.canDefend();
-        System.out.printf("%s is no longer frightened%n", animal.getName());
+        BufferedText.addBufferedText(String.format("%s is no longer frightened%n", animal.getName()));
     }
 
     @Override

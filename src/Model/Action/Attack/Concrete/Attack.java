@@ -8,6 +8,7 @@ import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Concrete.StatID;
 import Model.Util.RNG;
+import View.BufferedText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import java.util.Objects;
  */
 public class Attack implements IAttack {
 
+    protected boolean enabled = true;
     protected final String name;
     protected float accuracy;
     protected IAnimal attackOwner;
@@ -40,6 +42,17 @@ public class Attack implements IAttack {
         attackOwner.addAttack(this);
     }
 
+
+    @Override
+    public void enable(boolean enable) {
+        this.enabled = enable;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     @Override
     public IAnimal getAttackOwner() {
         return attackOwner;
@@ -52,6 +65,7 @@ public class Attack implements IAttack {
 
     @Override
     public void performAttack(IAnimal foe) {
+        BufferedText.addBufferedText(String.format("%s performs %s.%n", attackOwner.getName(), name));
         if(accuracyTest()){
             doDamage.execute(foe);
             for(IActionBehavior behavior : behaviors){
@@ -59,7 +73,7 @@ public class Attack implements IAttack {
             }
         }
         else{
-            System.out.println("The attack missed.");
+            BufferedText.addBufferedText("The attack missed.");
         }
     }
 

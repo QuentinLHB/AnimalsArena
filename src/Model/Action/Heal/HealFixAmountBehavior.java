@@ -3,6 +3,7 @@ package Model.Action.Heal;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 public class HealFixAmountBehavior implements IHealBehavior{
 
@@ -19,11 +20,6 @@ public class HealFixAmountBehavior implements IHealBehavior{
     }
 
     @Override
-    public void execute() {
-        attack.getAttackOwner().heal(amount);
-    }
-
-    @Override
     public String getDescription() {
         return String.format("Heals %dHP to the user.", amount);
     }
@@ -35,7 +31,9 @@ public class HealFixAmountBehavior implements IHealBehavior{
 
     @Override
     public void execute(IAnimal target) {
-        execute();
+        IAnimal attackOwner = attack.getAttackOwner();
+        attackOwner.heal(amount);
+        BufferedText.addBufferedText(String.format("%d HP were restored to %s.%n", amount, attackOwner));
     }
 
     @Override

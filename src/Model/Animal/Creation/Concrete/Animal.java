@@ -10,11 +10,11 @@ import Model.Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
+import View.BufferedText;
 
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class Animal implements IAnimal {
@@ -97,11 +97,16 @@ public class Animal implements IAnimal {
      * @param amount Percentage of HP to restore (1.2 = 20%)
      */
     @Override
-    public void heal(float amount) {
-        if(amount <=1) return;
+    public float heal(float amount) {
+        if(amount <=1) return 0;
         int maxHealth = getMaxHealth();
-        health += maxHealth * (1-amount);
-        if(health > maxHealth) health = maxHealth;
+        float hpRestored = maxHealth * (1-amount);
+        health += hpRestored;
+        if(health > maxHealth) {
+            hpRestored = maxHealth - health;
+            health = maxHealth;
+        }
+        return hpRestored;
     }
 
     /**
@@ -109,11 +114,16 @@ public class Animal implements IAnimal {
      * @param amount Amount of HP to add to the current health.
      */
     @Override
-    public void heal(int amount) {
-        if(amount <=0) return;
+    public int heal(int amount) {
+        if(amount <=0) return 0;
         int maxHealth = getMaxHealth();
         health += amount;
-        if(health > maxHealth) health = maxHealth;
+        if(health > maxHealth) {
+            amount = Math.round(maxHealth - health);
+            health = maxHealth;
+            return amount;
+        }
+        return amount;
     }
 
     public int getMaxHealth() {
@@ -275,7 +285,7 @@ public class Animal implements IAnimal {
     @Override
     public void defend() {
         if(canDefend()) currentMode = ActMode.DEFENSE;
-        else System.out.printf("%s couldn't defend.%n", name);
+        else BufferedText.addBufferedText(String.format("%s couldn't defend.%n", name));
     }
 
 
@@ -297,7 +307,7 @@ public class Animal implements IAnimal {
     public void hurt(int damage){
         if(damage > health) health = 0;
         else health -= damage;
-        System.out.printf("%s lost %d HP.%n", name, damage);
+        BufferedText.addBufferedText(String.format("%s lost %d HP.%n", name, damage));
         checkIfDead();
     }
 
@@ -329,13 +339,10 @@ public class Animal implements IAnimal {
     public void alterStat(StatID statID, float amount) {
         if(amount == 1){
             statAlterations.put(statID, amount);
-            System.out.printf("%s's %s was restored.%n", name, statID.name().toLowerCase(Locale.ROOT));
         }
         else{
             statAlterations.put(statID, statAlterations.get(statID)*amount);
             if(statAlterations.get(statID) > 2f) statAlterations.put(statID, 2f);
-            String change = amount > 1 ? "raised" : "lowered";
-            System.out.printf("%s's %s was %s%n", name, statID.name().toLowerCase(Locale.ROOT), change);
         }
     }
 
@@ -355,8 +362,8 @@ public class Animal implements IAnimal {
         }
     }
 
-    public void printStats(){
-        System.out.printf("%s's stats :%n" +
+    public String getStatDisplay(){
+        return String.format("%s's stats :%n" +
                         "Health : %d/%d%n" +
                         "Attack : %d%n" +
                         "Defense : %d%n" +

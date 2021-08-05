@@ -79,32 +79,25 @@ public class MenuFrame extends JFrame  {
 
     private void btnPve_click() {
         Player p1 = new Player(Position.BOTTOM);
-        controler.addPlayer(p1);
         PlayerAI p2 = new PlayerAI(Position.TOP);
-        controler.addPlayer(p2);
         pickAnimalAndStartBattle(p1, p2);
     }
 
     private void btnAIvAI_click() {
         PlayerAI p1 = new PlayerAI(Position.BOTTOM);
-        controler.addPlayer(p1);
         PlayerAI p2 = new PlayerAI(Position.TOP);
-        controler.addPlayer(p2);
-
         pickAnimalAndStartBattle(p1, p2);
     }
 
     private void btnPvp_click() {
         Player p1 = new Player(Position.BOTTOM);
-        controler.addPlayer(p1);
         Player p2 = new Player(Position.TOP);
-        controler.addPlayer(p2);
         pickAnimalAndStartBattle(p1, p2);
     }
 
     private void pickAnimalAndStartBattle(Player p1, Player p2){
+        controler.initiatePlayers(p1, p2);
         new CreationMenuFrame(controler, this, p1, p2);
-
         if(controler.areAnimalsInitiated()){
             new BattleFrame(controler);
             Util.exit(this);

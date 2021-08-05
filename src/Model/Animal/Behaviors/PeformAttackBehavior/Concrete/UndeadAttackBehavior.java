@@ -4,6 +4,7 @@ import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 /**
  * Concrete class of the abstract Attack Behavior interface.
@@ -24,6 +25,7 @@ public class UndeadAttackBehavior extends SimpleAttackBehavior implements IPerfo
             if(attackingAnimal.getHealth() > attackingAnimal.getMaxHealth()){
                 attackingAnimal.setHealth(attackingAnimal.getMaxHealth());
             }
+            BufferedText.addBufferedText(String.format("%s's max HP was lowered.%n", attackingAnimal));
         }
     }
 }

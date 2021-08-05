@@ -17,7 +17,6 @@ public class AlterNoStatBehavior implements IAlterStatsBehavior {
 
     @Override
     public void execute(IAnimal target) {
-
     }
 
     @Override

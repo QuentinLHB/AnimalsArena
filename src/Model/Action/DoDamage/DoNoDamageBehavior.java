@@ -16,7 +16,6 @@ public class DoNoDamageBehavior implements IDoDamageBehavior{
 
     @Override
     public void execute(IAnimal foe) {
-
     }
 
     @Override

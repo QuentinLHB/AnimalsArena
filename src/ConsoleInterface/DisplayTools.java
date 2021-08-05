@@ -22,8 +22,8 @@ public class DisplayTools {
     }
 
     static void printStats(Animal animal, Animal target) {
-        animal.printStats();
-        target.printStats();
+        System.out.println(animal.getStatDisplay());
+        System.out.println(target.getStatDisplay());
         pressKeyToGoBack();
     }
 

@@ -19,8 +19,8 @@ public interface IAnimal extends Serializable {
 
     int getHealth();
     void setHealth(float health);
-    void heal(float amount);
-    void heal(int amount);
+    float heal(float amount);
+    int heal(int amount);
 
     void canAct(boolean allow);
     boolean canAct();

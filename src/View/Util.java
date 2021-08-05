@@ -6,6 +6,8 @@ import java.awt.event.WindowEvent;
 
 public class Util {
 
+    private static String bufferedText;
+
     public static JPanel setContentPane(JFrame frame){
         JPanel contentPanel = createPanel();
         frame.setContentPane(contentPanel);
@@ -48,4 +50,10 @@ public class Util {
     public static void exit(JDialog frame) {
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
+
+    public static String toHtml(String plainText){
+        return "<html>" + plainText + "</html>";
+    }
+
+
 }

@@ -21,7 +21,6 @@ public class InflictNoStatusBehavior implements IInflictStatusBehavior {
 
     @Override
     public void execute(IAnimal target) {
-
     }
 
     @Override

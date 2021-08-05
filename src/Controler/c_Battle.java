@@ -5,6 +5,7 @@ import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
+import View.BufferedText;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,13 @@ public class c_Battle {
         return null;
     }
 
+    public Player getOpponent(Player player){
+        if(players.size() == 2){
+            return getPlayer(player.getOppositePosition());
+        }
+        return null;
+    }
+
     public void executeAttack(IAttack attack, IAnimal animalB) {
         //...
     }
@@ -59,5 +67,43 @@ public class c_Battle {
             }
         }
         return fasterPlayer;
+    }
+
+    public void turnEnding() {
+        for(Player player : players){
+            player.getAlly().endOfTurn();
+        }
+    }
+
+    public boolean isGameFinished() {
+        for(Player player : players){
+            if(!player.getAlly().isAlive()) return true;
+        }
+        return false;
+    }
+
+    public Player getWinner(){
+        if(isGameFinished()){
+            for(Player player : players){
+                if(!player.getAlly().isAlive()) return getOpponent(player);
+            }
+        }
+        return null;
+    }
+
+    public String getTextToDisplay() {
+        return BufferedText.getBufferedText();
+    }
+
+    public boolean canPlayerAct(Player player) {
+        if(player.getAlly().canAct())return  true;
+        else{
+            BufferedText.addBufferedText(String.format("%s can't act.", player.getAlly()));
+            return false;
+        }
+    }
+
+    public boolean hasTextToDisplay() {
+        return BufferedText.hasChanged();
     }
 }

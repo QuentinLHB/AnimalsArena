@@ -4,6 +4,7 @@ import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
+import View.BufferedText;
 
 public class SimpleAttackBehavior implements IPerformAttackBehavior {
 
@@ -24,10 +25,9 @@ public class SimpleAttackBehavior implements IPerformAttackBehavior {
         if(attackingAnimal.canAct()){
             attackingAnimal.setActMode(ActMode.ATTACK);
             if(target.isAlive()){
-                System.out.printf("%s performs %s%n", attackingAnimal.getName(), attack.getAttackName());
                 attack.performAttack(target);
             }
         }
-        else System.out.printf("%s can't act.%n", attackingAnimal.getName());
+        else BufferedText.addBufferedText(String.format("%s can't act.%n", attackingAnimal.getName()));
     }
 }

@@ -3,6 +3,7 @@ package Model.Action.InflictStatus;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Status.Concrete.*;
 import Model.Animal.Creation.Abstract.IAnimal;
+import View.BufferedText;
 
 /**
  * Concrete of the InflictStatus abstract?
@@ -55,8 +56,9 @@ public class InflictStatusBehavior implements IInflictStatusBehavior {
 
                 default -> target.addStatus(new NoStatus(target));
             }
+            BufferedText.addBufferedText(String.format("%s status was applied to %s.%n", statusID.normalCase(), target));
         }
-        else System.out.printf("%s is already under %s status%n", target.getName(), statusID.lowerCaseName());
+        else BufferedText.addBufferedText(String.format("%s is already under %s status.%n", target, statusID.normalCase()));
     }
 
     @Override

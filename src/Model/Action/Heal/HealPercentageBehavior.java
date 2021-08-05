@@ -3,6 +3,7 @@ package Model.Action.Heal;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 public class HealPercentageBehavior implements IHealBehavior{
 
@@ -18,13 +19,10 @@ public class HealPercentageBehavior implements IHealBehavior{
     }
 
     @Override
-    public void execute() {
-        attack.getAttackOwner().heal(amount);
-    }
-
-    @Override
     public void execute(IAnimal animal) {
-        execute();
+        IAnimal attackOwner = attack.getAttackOwner();
+        float hpRestored = attack.getAttackOwner().heal(amount);
+        BufferedText.addBufferedText(String.format("%f were restored to %s.%n", hpRestored, attackOwner));
     }
 
     @Override
@@ -38,7 +36,7 @@ public class HealPercentageBehavior implements IHealBehavior{
 
     @Override
     public String getDescription() {
-        return String.format("Restores %d%s HP to the user", Math.round(amount*100), "%");
+        return String.format("Restores %d%s HP to the user.", Math.round(amount*100), "%");
     }
 
     @Override

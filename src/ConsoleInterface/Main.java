@@ -118,12 +118,12 @@ public class Main {
     private static void startPVE() {
         System.out.println("Player :\n");
         animalA = chooseMethodCreationMenu("Player 1");
-        animalA.printStats();
+        animalA.getStatDisplay();
 
 
         System.out.println("AI's animal :");
         animalB = chooseMethodCreationMenu("the AI");
-        animalB.printStats();
+        animalB.getStatDisplay();
 
         PlayerAI playerAI = new PlayerAI(Position.TOP, animalB, animalA);
         battle(null, playerAI);
@@ -134,14 +134,14 @@ public class Main {
         String playerName = "Player 1";
         System.out.printf("%s:%n%n", playerName);
         animalA = chooseMethodCreationMenu(playerName);
-        animalA.printStats();
+        animalA.getStatDisplay();
 
         clearConsole();
 
         playerName = "Player 2";
         System.out.printf("%s:%n%n", playerName);
         animalB = chooseMethodCreationMenu(playerName);
-        animalB.printStats();
+        animalB.getStatDisplay();
 
         clearConsole();
 

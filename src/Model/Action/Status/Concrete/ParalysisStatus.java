@@ -4,6 +4,7 @@ import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Util.RNG;
+import View.BufferedText;
 
 import java.util.ArrayList;
 
@@ -34,10 +35,14 @@ public class ParalysisStatus extends Status_Base implements IStatus {
 
         for (int i = 0; i <amountOfAttacksToDisable; i++) {
             ArrayList<IAttack> attacks = animal.getAttacks();
-            IAttack attackToDisable = attacks.get(RNG.GenerateNumber(0, attacks.size()-1));
+            IAttack attackToDisable;
+            do{
+               attackToDisable = attacks.get(RNG.GenerateNumber(0, attacks.size()-1));
+            }while (disabledAttacks.contains(attackToDisable));
+
             disabledAttacks.add(attackToDisable);
-            animal.removeAttack(attackToDisable);
-            System.out.printf("%s was disabled.%n", attackToDisable.getAttackName());
+            attackToDisable.enable(false);
+            BufferedText.addBufferedText(String.format("%s was disabled.%n", attackToDisable.getAttackName()));
         }
     }
 
@@ -62,10 +67,11 @@ public class ParalysisStatus extends Status_Base implements IStatus {
     @Override
     public void disappear() {
         super.disappear(this);
-        System.out.printf("%s is no longer paralysed, all attacks are usable again.%n", animal.getName());
+        BufferedText.addBufferedText(String.format(
+                "%s is no longer paralysed, all attacks are usable again.%n", animal.getName()));
         for (IAttack attack :
                 disabledAttacks) {
-            animal.addAttack(attack);
+            attack.enable(true);
         }
     }
 

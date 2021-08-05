@@ -2,6 +2,7 @@ package Model.Action.AlterStats;
 
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 import java.util.Map;
 
@@ -14,9 +15,12 @@ public class AlterFoesStatsBehavior extends AlterAllyStatsBehavior {
 
     @Override
     public void execute(IAnimal target) {
+        String effectToDisplay = "";
         for(StatID stat: statsToAlter.keySet()){
             target.alterStat(stat, statsToAlter.get(stat));
+            effectToDisplay += effectDisplay(target, stat);
         }
+        BufferedText.addBufferedText(effectToDisplay);
     }
 
     @Override

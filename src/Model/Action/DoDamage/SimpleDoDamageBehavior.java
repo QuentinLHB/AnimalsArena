@@ -4,6 +4,7 @@ import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Attack.Concrete.Attack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 public class SimpleDoDamageBehavior implements IDoDamageBehavior {
 
@@ -22,6 +23,7 @@ public class SimpleDoDamageBehavior implements IDoDamageBehavior {
     @Override
     public void execute(IAnimal target) {
         target.attacked(attack, Math.round(damageBase*(attack.getAttackOwner().getStat(StatID.ATTACK)*attack.getAttackOwner().getStatAlteration(StatID.ATTACK))));
+//        BufferedText.addBufferedText(String.format("%"));
     }
 
     @Override

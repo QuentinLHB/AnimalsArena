@@ -15,11 +15,6 @@ public class NoHealBehavior implements IHealBehavior{
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public String getDescription() {
         return "";
     }
@@ -31,7 +26,6 @@ public class NoHealBehavior implements IHealBehavior{
 
     @Override
     public void execute(IAnimal target) {
-        execute();
     }
 
     @Override

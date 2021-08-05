@@ -15,8 +15,24 @@ public class c_Menu {
 
     ArrayList<Player> players;
     ArrayList<Player> getPlayers(){return players;}
-    public void addPlayer(Player player){
-        players.add(player);
+
+    /**
+     * Adds or changes the players.
+     * @param p1
+     * @param p2
+     */
+    public void initiatePlayers(Player p1, Player p2){
+
+        if(players.size() >= 2){
+            players.set(0, p1);
+            players.set(1, p2);
+        }
+        else {
+            players.add(p1);
+            players.add(p2);
+
+        }
+
     }
 
     JFrame currentFrame;
@@ -25,19 +41,19 @@ public class c_Menu {
         players = new ArrayList<>();
     }
 
-    public IAnimal createAnimal(Player player, Player foe, AnimalKind animalKind, String nickname, ElementType... elementType) {
+    public Animal createAnimal(Player player, Player foe, AnimalKind animalKind, String nickname, ElementType... elementType) {
         Animal animal;
         if(nickname.equals("") || nickname == null) animal = AnimalFactory.CreateAnimal(animalKind, elementType);
         else  animal = AnimalFactory.CreateAnimal(animalKind, nickname, elementType);
 
         player.setAlly(animal);
         foe.setFoe(animal);
-        players.add(player);
+//        players.add(player);
         return animal;
     }
 
-    public IAnimal createRandomAnimal(Player player, Player foe){
-        IAnimal animal = AnimalFactory.CreateRandomAnimal();
+    public Animal createRandomAnimal(Player player, Player foe){
+        Animal animal = AnimalFactory.CreateRandomAnimal();
         player.setAlly(animal);
         foe.setFoe(animal);
         return animal;

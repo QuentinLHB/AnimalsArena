@@ -2,6 +2,7 @@ package Model.Action.Status.Concrete;
 
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
+import View.BufferedText;
 
 public class PoisonStatus extends Status_Base implements IStatus {
 
@@ -32,7 +33,7 @@ public class PoisonStatus extends Status_Base implements IStatus {
     @Override
     public void consumeEffect() {
         if(turnsLeft > 0){
-            System.out.println("The poison hurt " + animal.getName());
+            BufferedText.addBufferedText(String.format("The poison hurt %s.", animal.getName()));
             animal.hurt(Math.round(animal.getMaxHealth() * FRACTION_OF_MAX_HEALTH));
             turnsLeft--;
         }
@@ -44,7 +45,7 @@ public class PoisonStatus extends Status_Base implements IStatus {
     @Override
     public void disappear() {
         super.disappear(this);
-        System.out.println("The poison fades out.");
+        BufferedText.addBufferedText(String.format("%s is no longer poisoned.", animal));
     }
 
     @Override

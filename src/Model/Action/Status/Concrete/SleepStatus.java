@@ -3,6 +3,7 @@ package Model.Action.Status.Concrete;
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Util.RNG;
+import View.BufferedText;
 
 public class SleepStatus extends Status_Base implements IStatus {
 
@@ -57,7 +58,7 @@ public class SleepStatus extends Status_Base implements IStatus {
 
     @Override
     protected void printEffect(String effect) {
-        System.out.printf("%s falls asleep. zZzZ", animal);
+        BufferedText.addBufferedText(String.format("%s falls asleep.", animal));
     }
 
     private void printStatusApplication(){

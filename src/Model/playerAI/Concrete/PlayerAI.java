@@ -2,6 +2,7 @@ package Model.playerAI.Concrete;
 
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
+import Model.Animal.Creation.Concrete.Animal;
 import Model.playerAI.Abstract.IStrategy;
 import Model.Util.Position;
 
@@ -25,7 +26,7 @@ public class PlayerAI extends Player {
         super(position);
     }
 
-    public PlayerAI(Position position, IAnimal ally, IAnimal foe){
+    public PlayerAI(Position position, Animal ally, Animal foe){
         super(position, ally, foe);
         this.currentStrategy = new WiseStrategy(this);
     }

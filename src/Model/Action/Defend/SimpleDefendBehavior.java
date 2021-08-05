@@ -3,6 +3,7 @@ package Model.Action.Defend;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Creation.Abstract.IAnimal;
+import View.BufferedText;
 
 public class SimpleDefendBehavior implements IDefendBehavior {
     private IAttack attack;
@@ -23,7 +24,9 @@ public class SimpleDefendBehavior implements IDefendBehavior {
 
     @Override
     public void execute(IAnimal target) {
-        attack.getAttackOwner().setActMode(ActMode.DEFENSE);
+        IAnimal attackingAnimal = attack.getAttackOwner();
+        attackingAnimal.setActMode(ActMode.DEFENSE);
+        BufferedText.addBufferedText(attackingAnimal + " is now in Defense Mode.");
     }
 
     @Override

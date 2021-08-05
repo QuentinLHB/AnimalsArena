@@ -2,7 +2,9 @@ package Model.Action.Status.Concrete;
 
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
+import View.BufferedText;
 
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 public abstract class Status_Base implements IStatus {
@@ -47,6 +49,6 @@ public abstract class Status_Base implements IStatus {
     }
 
     protected void printEffect(String effect){
-        System.out.printf("%s is %s for %d turns.%n", animal, effect, duration);
+        BufferedText.addBufferedText(String.format("%s is %s for %d turns.%n", animal, effect, duration));
     }
 }

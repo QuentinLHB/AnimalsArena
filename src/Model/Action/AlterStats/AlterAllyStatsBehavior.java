@@ -3,7 +3,9 @@ package Model.Action.AlterStats;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
+import java.util.Locale;
 import java.util.Map;
 
 public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
@@ -21,9 +23,21 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
 
     @Override
     public void execute(IAnimal target) {
+        String effectToDisplay = "";
         target = attack.getAttackOwner();
-        for(StatID stat: statsToAlter.keySet()){
+        for (StatID stat : statsToAlter.keySet()) {
             target.alterStat(stat, statsToAlter.get(stat));
+            effectToDisplay += effectDisplay(target, stat);
+        }
+        BufferedText.addBufferedText(effectToDisplay);
+    }
+
+    protected String effectDisplay(IAnimal target, StatID stat){
+        if (statsToAlter.get(stat) == 1) {
+            return String.format("%s's %s was restored.%n", target, stat.name().toLowerCase(Locale.ROOT));
+        } else {
+            String change = statsToAlter.get(stat) > 1 ? "raised" : "lowered";
+            return String.format("%s's %s was %s.%n", target, stat.name().toLowerCase(Locale.ROOT), change);
         }
     }
 

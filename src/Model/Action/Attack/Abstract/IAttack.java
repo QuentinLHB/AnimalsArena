@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public interface IAttack extends Serializable {
+
+    void enable(boolean enable);
+    boolean isEnabled();
+
     /**
      *
      * @return the Model.Animal possessing the attack.

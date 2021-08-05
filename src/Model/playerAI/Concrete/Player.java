@@ -1,6 +1,5 @@
 package Model.playerAI.Concrete;
-
-import Model.Animal.Creation.Abstract.IAnimal;
+import Model.Animal.Creation.Concrete.Animal;
 import Model.Util.Position;
 
 public class Player {
@@ -16,12 +15,16 @@ public class Player {
      */
     protected Position position;
     public Position getPosition(){return position;}
+    
+    public Position getOppositePosition(){
+        return position.equals(Position.TOP) ? Position.BOTTOM : Position.TOP;
+    }
 
-    protected IAnimal ally;
+    protected Animal ally;
 
-    protected IAnimal foe;
+    protected Animal foe;
 
-    public Player(Position position, IAnimal ally, IAnimal foe){
+    public Player(Position position, Animal ally, Animal foe){
         this(position);
         this.ally = ally;
         this.foe = foe;
@@ -33,23 +36,25 @@ public class Player {
         if(++Id > 2) Id = 1;
     }
 
+//    public void performAttack()
+
     public boolean isBot(){
         return false;
     }
 
-    public IAnimal getAlly() {
+    public Animal getAlly() {
         return ally;
     }
 
-    public void setAlly(IAnimal ally) {
+    public void setAlly(Animal ally) {
         this.ally = ally;
     }
 
-    public IAnimal getFoe() {
+    public Animal getFoe() {
         return foe;
     }
 
-    public void setFoe(IAnimal foe) {
+    public void setFoe(Animal foe) {
         this.foe = foe;
     }
 
