@@ -48,7 +48,7 @@ public class SleepStatus extends Status_Base implements IStatus {
     public void disappear() {
         super.disappear(this);
         animal.canAct(true);
-        System.out.printf("%s wakes up !%n", animal);
+        BufferedText.addBufferedText(String.format("%s wakes up !%n", animal));
     }
 
     @Override

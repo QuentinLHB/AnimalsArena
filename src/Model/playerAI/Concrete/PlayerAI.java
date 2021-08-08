@@ -23,7 +23,7 @@ public class PlayerAI extends Player {
 
 
     public PlayerAI(Position position) {
-        super(position);
+        super(position, null, null);
     }
 
     public PlayerAI(Position position, Animal ally, Animal foe){
@@ -34,6 +34,13 @@ public class PlayerAI extends Player {
     public void performMove(){
         IAttack chosenAttack = currentStrategy.chooseAttack();
         ally.attack(foe, chosenAttack);
+    }
+
+    public IAttack chooseAttack(){
+        if(currentStrategy == null){
+            currentStrategy = new WiseStrategy(this); //todo mauvaise pratique : changer la façon d'initialier PlayerAI dans la view
+        }
+        return currentStrategy.chooseAttack();
     }
 
     @Override

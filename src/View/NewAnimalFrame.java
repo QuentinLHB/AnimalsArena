@@ -4,6 +4,7 @@ import Controler.c_Menu;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.AnimalKind;
 import Model.Animal.Creation.Concrete.ElementType;
+import Model.Util.Position;
 import Model.playerAI.Concrete.Player;
 
 import javax.swing.*;
@@ -12,8 +13,8 @@ import java.util.ArrayList;
 
 public class NewAnimalFrame extends JDialog {
     private c_Menu controler;
-    private Player playerA;
-    private Player playerB;
+//    private Player playerA;
+//    private Player playerB;
 
     private Player currentPlayer;
     private ArrayList<JComponent> components = new ArrayList<>();
@@ -26,12 +27,10 @@ public class NewAnimalFrame extends JDialog {
 
     IAnimal animal;
 
-    public NewAnimalFrame(c_Menu controler, JDialog owner, Player player, Player foe){
+    public NewAnimalFrame(c_Menu controler, JDialog owner, Player currentPlayer){
         super(owner, true);
         this.controler = controler;
-        this.playerA = player;
-        this.playerB = foe;
-        currentPlayer = playerA;
+        this.currentPlayer = currentPlayer;
         initComponents();
         initEvents();
         Util.initFrame(this, "Create new animal", 500, 500);

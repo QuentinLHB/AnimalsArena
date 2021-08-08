@@ -25,7 +25,7 @@ public class MenuFrame extends JFrame  {
         this.controler = controler;
         initComponents();
         initEvent();
-        Util.initFrame(this, "Model.Animal Arena", 500, 600);
+        Util.initFrame(this, "Animal Arena - Main Menu", 500, 600);
     }
 
     private void initComponents(){
@@ -99,8 +99,7 @@ public class MenuFrame extends JFrame  {
         controler.initiatePlayers(p1, p2);
         new CreationMenuFrame(controler, this, p1, p2);
         if(controler.areAnimalsInitiated()){
-            new BattleFrame(controler);
-            Util.exit(this);
+            controler.openBattleFrame();
         }
     }
 

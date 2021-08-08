@@ -78,24 +78,19 @@ public class WiseStrategy implements IStrategy {
 
     }
 
+    /**
+     * Choose an attack based on a score system for every attack available.
+     * @return The chosen attack.
+     */
     @Override
     public IAttack chooseAttack() {
-        refreshAttackList();
-        for (ScoredAttack scoredAttack :
-                scoredAttacks) {
-            IAttack attack = scoredAttack.getAttack();
-
-            int score = calculateScore(attack, player.getFoesAnimal());
-
-            scoredAttack.setScore(score);
-        }
-
-        Collections.sort(scoredAttacks, Collections.reverseOrder());
+//        refreshAttackList();
+        refreshScore();
 
         IAttack chosenAttack = scoredAttacks.get(0).getAttack();
         int scoreMax = ScoredAttack.getMaxProba(scoredAttacks);
         for(ScoredAttack scoredAttack : scoredAttacks){
-            if (RNG.RNGsuccess(scoreMax, scoredAttack.getProba())) {
+            if (scoredAttack.isEnabled() && RNG.RNGsuccess(scoreMax, scoredAttack.getProba())) {
                 chosenAttack = scoredAttack.getAttack();
                 // Probability for the attack to be chosen again next time is lowered.
                 scoredAttack.setProba(scoredAttack.getProba() / 3);
@@ -105,6 +100,18 @@ public class WiseStrategy implements IStrategy {
         return chosenAttack;
     }
 
+    /**
+     * Recalculate the score of every attack, and order the list (greatest to lowest)
+     */
+    private void refreshScore() {
+        for (ScoredAttack scoredAttack :
+                scoredAttacks) {
+            IAttack attack = scoredAttack.getAttack();
+            int score = calculateScore(attack, player.getFoesAnimal());
+            scoredAttack.setScore(score);
+        }
+        Collections.sort(scoredAttacks, Collections.reverseOrder());
+    }
 
 
     @Override
@@ -116,17 +123,20 @@ public class WiseStrategy implements IStrategy {
         return Attack.simulateDamage(player.getAllyAnimal(), target, attack) >= target.getHealth();
     }
 
+    /**
+     * Calculate the score of an attack.
+     * @param attack Attack to score.
+     * @param target Target of the attack.
+     * @return Score of the attack.
+     */
     private int calculateScore(IAttack attack, IAnimal target){
-
         int score = 0;
         for(IActionBehavior behavior : attack.getBehaviors()){
             score += behavior.score(target);
         }
-
         if(canKill(attack, target)) {
             score += 1000;
         }
-
         return score;
     }
 }

@@ -2,6 +2,7 @@ package View;
 
 public class BufferedText {
 
+    private static String log = "";
     private static String bufferedText = "";
     private static boolean change;
 
@@ -12,6 +13,7 @@ public class BufferedText {
 
     public static String getBufferedText() {
         String t = bufferedText;
+        log += bufferedText;
         resetBufferedText();
         return t;
 
@@ -26,5 +28,12 @@ public class BufferedText {
         return change;
     }
 
+    public static String getLog(){
+        return log;
+    }
+
+    public static void addTurnToLog(int turnNumber){
+        log += String.format("<br>Turn %d:<br>",turnNumber);
+    }
 
 }

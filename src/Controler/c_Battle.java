@@ -1,21 +1,28 @@
 package Controler;
 
 import Model.Action.Attack.Abstract.IAttack;
+import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
+import Model.playerAI.Concrete.PlayerAI;
+import View.BattleFrame;
 import View.BufferedText;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
-public class c_Battle {
+public class c_Battle extends controler_Base {
 
-    ArrayList<Player> players;
+    c_Menu menuControler;
+    JFrame battleFrame;
 
 
     public c_Battle(c_Menu menuControler){
-        players = menuControler.getPlayers();
+        this.menuControler = menuControler;
+        players = menuControler.players;
+        battleFrame = new BattleFrame(this);
     }
 
     public String getHP(IAnimal animal){
@@ -41,10 +48,6 @@ public class c_Battle {
             return getPlayer(player.getOppositePosition());
         }
         return null;
-    }
-
-    public void executeAttack(IAttack attack, IAnimal animalB) {
-        //...
     }
 
     public Player whichIsFaster() {
@@ -105,5 +108,36 @@ public class c_Battle {
 
     public boolean hasTextToDisplay() {
         return BufferedText.hasChanged();
+    }
+
+    public IAttack chooseAIMove(Player player) {
+        PlayerAI AI;
+        try{
+            AI = (PlayerAI)player;
+        }catch (Exception e){
+            e.printStackTrace();
+            return player.getAlly().chooseAttack(0);
+        }
+        return AI.chooseAttack();
+    }
+
+    public boolean isBot(Player player){
+        return player.isBot();
+    }
+
+    public String getStatus(IAnimal animal) {
+        String statuses = "";
+
+        for (IStatus status :
+                animal.getStatuses()) {
+            statuses += status.getStatusID().initials() + " ";
+        }
+        return statuses;
+    }
+
+    public void endGame() {
+        menuControler.reopenMainMenu();
+        battleFrame.dispose();
+
     }
 }

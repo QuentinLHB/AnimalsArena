@@ -3,6 +3,7 @@ package Model.Animal.Behaviors.DieBehavior.Concrete;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.DieBehavior.Abstract.IDieBehavior;
 import Model.Animal.Creation.Concrete.StatID;
+import View.BufferedText;
 
 public class UndeadDieBehavior extends SimpleDieBehavior implements IDieBehavior {
     private static final int DEFAULT_LIVES = 2;
@@ -26,7 +27,7 @@ public class UndeadDieBehavior extends SimpleDieBehavior implements IDieBehavior
         if(livesLeft > 0){
             livesLeft--;
             animal.setHealth((float)animal.getStat(StatID.MAX_HEALTH)* animal.getStatAlteration(StatID.MAX_HEALTH)/fractionOfHPonRegen);
-            System.out.printf("%s was reborn with 1/%d of its HP.%n", animal.getName(), fractionOfHPonRegen);
+            BufferedText.addBufferedText(String.format("%s was reborn with 1/%d of its HP.%n", animal.getName(), fractionOfHPonRegen));
             fractionOfHPonRegen++;
         }
         else super.die();

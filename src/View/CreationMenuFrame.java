@@ -13,12 +13,12 @@ public class CreationMenuFrame extends JDialog {
     private Player p1;
     private Player p2;
     private Player currentPlayer;
-    JPanel panButtons;
-    JLabel lblTitle;
-    JButton btnRandomPick;
-    JButton btnExistingPick;
-    JButton btnCustomize;
-    JButton btnPickCustomized;
+    private JPanel panButtons;
+    private JLabel lblTitle;
+    private JButton btnRandomPick;
+    private JButton btnExistingPick;
+    private JButton btnCustomize;
+    private JButton btnPickCustomized;
 
 
     /**
@@ -83,18 +83,23 @@ public class CreationMenuFrame extends JDialog {
 
     private void initEvents(){
         btnRandomPick.addActionListener(e-> btnRandomPick_click());
-
         btnExistingPick.addActionListener(e-> btnPickExistingAnimal_click());
+        btnCustomize.addActionListener(e-> btnCustomize_click());
     }
 
     private void btnPickExistingAnimal_click(){
-        new NewAnimalFrame(controler, this, currentPlayer, controler.getFoe(currentPlayer));
+        new NewAnimalFrame(controler, this, currentPlayer);
         endPickOption();
     }
 
     private void btnRandomPick_click(){
         IAnimal animal = controler.createRandomAnimal(currentPlayer, controler.getFoe(currentPlayer));
         JOptionPane.showMessageDialog(null, String.format("New animal created : %s", animal.getName()));
+        endPickOption();
+    }
+
+    private void btnCustomize_click(){
+        new CustomizeFrame(controler, this, currentPlayer);
         endPickOption();
     }
 

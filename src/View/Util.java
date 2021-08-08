@@ -41,18 +41,42 @@ public class Util {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
     }
 
-    public static void exit(JFrame frame) {
+    public static void exit(Window frame) {
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
-    public static void exit(JDialog frame) {
-        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    public static void hide(JFrame frame) {
+        frame.setVisible(false);
     }
 
     public static String toHtml(String plainText){
-        return "<html>" + plainText + "</html>";
+        return "<html>" + plainText.replace(".", ".<br>") + "</html>";
+    }
+
+    /**
+     * Creates a GridBagConstraint with common property :
+     * @param column position in the columns (1 : column 1).
+     * @param row position in the rows (1 : row 1).
+     * @return GridBagConstraint.
+     */
+    public static GridBagConstraints setGridBagConstraints(int column, int row, double weightClmn, double weightRow){
+        var gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.insets = new Insets(5, 10, 5, 10);
+        gc.ipady = 5;
+        gc.ipadx = 5;
+        gc.weightx = weightClmn;
+        gc.weighty = weightRow;
+
+        gc.anchor = GridBagConstraints.NORTH;
+        gc.gridx = column;
+        gc.gridy = row;
+
+        return gc;
     }
 
 

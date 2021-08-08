@@ -54,6 +54,10 @@ public class ScoredAttack implements Comparable {
         return max;
     }
 
+    public boolean isEnabled(){
+        return attack.isEnabled();
+    }
+
     public static void printAllProbas(ArrayList<ScoredAttack> scoredAttacks){
 //        for (ScoredAttack scoredAttack :
 //                scoredAttacks) {

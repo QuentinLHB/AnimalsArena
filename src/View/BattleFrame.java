@@ -10,8 +10,7 @@ import Model.Util.Position;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,7 +29,6 @@ public class BattleFrame extends JFrame {
     HashMap<animalComponents, JComponent> bottomPanel = new HashMap<>();
     ArrayList<JButtonAttack> bottomAttacks = new ArrayList<>();
 
-
     private int turn = 1;
     private int subturn = 0;
 
@@ -39,143 +37,201 @@ public class BattleFrame extends JFrame {
     JLabel lblHeader;
     JLabel lblFooter;
 
-    String footerText;
-    String textSoFar;
-    int i = 0;
     Timer timer = new Timer(20, new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e){
 
-            char character[] = footerText.toCharArray();
+            char[] character = footerText.toCharArray();
             int arrayNumber = character.length;
 
             String s = String.valueOf(character[i]);
             textSoFar += s;
-            if(s.equals(".")){
+            if(s.equals(".") && i < character.length -3){ // 2nd instruction is meant to avoid having a carriage return on the last period.
                 textSoFar += "<br>";
             }
             lblFooter.setText(textSoFar + "</html>");
             i++;
             if(i == arrayNumber){
                 i = 0;
+              try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+              lblFooter.setText("");
                 timer.stop();
+                resume();
             }
         }
     });
 
+//    DisplayThread displayThread = new DisplayThread(timer);
+
+    String footerText;
+    String textSoFar;
+    int i = 0;
+
+
     public enum animalComponents{
         NAME,
         HP,
+        STATUS,
         INFO,
         ATTACK;
     }
     
-    public BattleFrame(c_Menu controler){
-        this.controler = new c_Battle(controler);
+    public BattleFrame(c_Battle controler){
+        this.controler = controler;
         Util.initFrame(this, "Battle scene", 600, 600);
+        setOnClose();
         setLayout(new BorderLayout(30, 30));
         initComponents();
-        turn();
-        setVisible(true);
+        newTurn();
 
+    }
+
+    private void setOnClose() {
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                controler.endGame();
+
+            }
+        };
+        addWindowListener(exitListener);
     }
 
     private void initComponents() {
         // Panels and their layouts
         JPanel contentPanel = Util.setContentPane(this);
 
-        JPanel grdBottomInfo = new JPanel();
-        grdBottomInfo.setLayout(new GridBagLayout());
+        JPanel pnlBottom = new JPanel();
+        pnlBottom.setLayout(new GridBagLayout());
 
-        JPanel grdTopInfo = new JPanel();
-        grdTopInfo.setLayout(new GridBagLayout());
+        JPanel pnlTop = new JPanel();
+        pnlTop.setLayout(new GridBagLayout());
 
         lblHeader = new JLabel();
         updateHeader();
-        var gc = setAllyGridConstraints(0, 0, 1, 1);
+        var gc = Util.setGridBagConstraints(0, 0, 1, 1);
         gc.gridwidth = 3;
-        grdTopInfo.add(lblHeader, gc);
+        pnlTop.add(lblHeader, gc);
 
 
+        // ***** South Panel *****
+        contentPanel.add(pnlBottom, BorderLayout.SOUTH);
+            // Bottom Player info
+        createPlayerPanel(pnlBottom, controler.getPlayer(Position.BOTTOM), 2, 0);
 
-        contentPanel.add(grdBottomInfo, BorderLayout.SOUTH);
-        createPlayerPanel(grdBottomInfo, controler.getPlayer(Position.BOTTOM), 1, 2, 0);
-        grdBottomInfo.add(new JLabel(""), setAllyGridConstraints(0, 0, 0.5, 0.5)); //empty label to split the grid
+            // Attack Buttons
+        setAttackButtons(pnlBottom, controler.getPlayer(Position.BOTTOM), 1, 0);
+
+            // Empty label (for future .png)
+        pnlBottom.add(new JLabel(""), Util.setGridBagConstraints(0, 0, 0.3, 1)); //empty label to split the grid
+
+            // Event log Panel
+        JPanel pnlLog = new JPanel();
+        pnlLog.setLayout(new GridBagLayout());
+        pnlLog.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        var gcLog = Util.setGridBagConstraints(0, 6, 0.3, 1);
+        gcLog.gridwidth = 3;
+        gcLog.ipady = 20;
+        pnlBottom.add(pnlLog, gcLog);
+
+                // Battle events label
         lblFooter = new JLabel();
-        gc = setAllyGridConstraints(0, 10, 1, 1);
-        gc.gridwidth = 3;
-        grdBottomInfo.add(lblFooter, gc);
+        pnlLog.add(lblFooter, Util.setGridBagConstraints(0, 0, 0.95, 0.5));
 
-        // North (foe - playerB/IA ) panel
-        contentPanel.add(grdTopInfo, BorderLayout.NORTH);
-        createPlayerPanel(grdTopInfo, controler.getPlayer(Position.TOP), 1, 0, 1);
-        grdTopInfo.add(new JLabel(""), setAllyGridConstraints(2, 1, 0.5, 0.5));
+               // Events log button
+        JButton btnEventLog;
+        btnEventLog = new JButton("i");
+        btnEventLog.setSize(40, 50);
+//        btnEventLog.setPreferredSize(new Dimension(3, 7));
+        btnEventLog.addActionListener(e-> btnEventLog_click());
+        gc = Util.setGridBagConstraints(1, 0, 0.05, 0.5);
+        gc.anchor = GridBagConstraints.CENTER;
+        pnlLog.add(btnEventLog, gc);
+
+
+
+        // ***** North (foe - playerB/IA ) panel *****
+        contentPanel.add(pnlTop, BorderLayout.NORTH);
+
+        createPlayerPanel(pnlTop, controler.getPlayer(Position.TOP), 0, 1);
+
+            // Attack buttons
+        setAttackButtons(pnlTop, controler.getPlayer(Position.TOP), 2, 1);
+
+            // Empty label : image of the animal goes here
+        pnlTop.add(new JLabel(""), Util.setGridBagConstraints(3, 1, 0.5, 0.5));
+
+    }
+
+    private void btnEventLog_click() {
+        new LogFrame();
     }
 
     private void updateHeader() {
         lblHeader.setText(String.format("Turn n°%d - %s's move", turn, currentPlayer));
     }
 
-    private void createPlayerPanel(JPanel panel, Player player, int columnAtk, int columnInfo, int startAtRow) {
+    private void createPlayerPanel(JPanel panel, Player player, int columnInfo, int startAtRow) {
         IAnimal animal = player.getAlly();
-
         HashMap<animalComponents, JComponent> components = getPanelComponents(player.getPosition());
-        ArrayList<JButtonAttack> attackList = getAttackList(player.getPosition());
 
         // Name
         JLabel lblName = new JLabel(animal.getName());
-        panel.add(lblName, setAllyGridConstraints(columnInfo,startAtRow, 0.5, 1));
+        panel.add(lblName, Util.setGridBagConstraints(columnInfo,startAtRow, 0.25, 1));
         components.put(animalComponents.NAME, lblName);
+
+        //Status
+        JLabel lblStatus = new JLabel();
+        panel.add(lblStatus, Util.setGridBagConstraints(columnInfo, startAtRow+1, 0.25, 1));
+        components.put(animalComponents.STATUS, lblStatus);
 
         // HP
         JLabel lblHP = new JLabel(controler.getHP(animal));
-        panel.add(lblHP, setAllyGridConstraints(columnInfo, startAtRow+1, 0.5, 1));
+        panel.add(lblHP, Util.setGridBagConstraints(columnInfo, startAtRow+2, 0.25, 1));
         components.put(animalComponents.HP, lblHP);
 
-
-        // Info button
+        //Info
         JButton btnInfo = new JButton("Info");
-        panel.add(btnInfo, setAllyGridConstraints(columnInfo, startAtRow+2, 0.5, 1));
+        btnInfo.setSize(30, 15);
+        var gcInfo = Util.setGridBagConstraints(columnInfo, startAtRow+3, 0.25, 1);
+        gcInfo.fill = GridBagConstraints.NONE;
+        gcInfo.anchor = GridBagConstraints.WEST;
+        panel.add(btnInfo, gcInfo);
         components.put(animalComponents.INFO, btnInfo);
         btnInfo.addActionListener(e-> btnInfo_click(player));
 
-        // Attacks
+    }
+
+    private void setAttackButtons(JPanel panel, Player player, int column, int row){
+
+        IAnimal animal = player.getAlly();
+        ArrayList<JButtonAttack> attackList = getAttackList(player.getPosition());
+
         JPanel attackPanel = new JPanel();
         attackPanel.setLayout(new GridLayout(animal.getAttacks().size(), 1));
-        GridBagConstraints gc = setAllyGridConstraints(columnAtk, startAtRow, 0.75, 1);
-        gc.gridheight = 3;
+        GridBagConstraints gc = Util.setGridBagConstraints(column, row, 0.35, 1);
+//        gc.gridheight = getPanelComponents(player.getPosition()).size();
+        gc.gridheight = 5;
+
         panel.add(attackPanel, gc);
 
-        for (IAttack attack: animal.getAttacks()) {
-            JButtonAttack btn = new JButtonAttack(attack);
-            attackPanel.add(btn);
-            attackList.add(btn);
-            btn.addActionListener(e -> btnAttack_click(player, attack));
-            btn.setToolTipText(attack.getDescription());
+        if(!player.isBot()){
+            for (IAttack attack: animal.getAttacks()) {
+                JButtonAttack btn = new JButtonAttack(attack);
+                attackPanel.add(btn);
+                attackList.add(btn);
+                btn.addActionListener(e -> btnAttack_click(player, attack));
+                btn.setToolTipText(attack.getDescription());
+            }
         }
     }
 
-    /**
-     * Creates a GridBagConstraint with common property :
-     * @param column position in the columns (1 : column 1).
-     * @param row position in the rows (1 : row 1).
-     * @return GridBagConstraint.
-     */
-    private GridBagConstraints setAllyGridConstraints(int column, int row, double weightClmn, double weightRow){
-        var gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);
-        gc.ipady = 5;
-        gc.ipadx = 30;
-        gc.weightx = weightClmn;
-        gc.weighty = weightRow;
 
-        gc.anchor = GridBagConstraints.NORTH;
-        gc.gridx = column;
-        gc.gridy = row;
-
-        return gc;
-    }
 
     private HashMap<animalComponents, JComponent> getPanelComponents(Position position) {
         return position.equals(Position.BOTTOM) ? bottomPanel : topPanel;
@@ -194,10 +250,11 @@ public class BattleFrame extends JFrame {
     private void btnAttack_click(Player player, IAttack attack) {
         Animal animal = player.getAlly();
         animal.attack(player.getFoe(), attack);
-        updateHP();
+        updateAnimalsState();
         updateFooterDisplay();
-        if(controler.isGameFinished()) endGame(controler.getWinner());
-        else subTurn(controler.getOpponent(player));
+//        turnHandler(controler.getOpponent(player));
+//        if(controler.isGameFinished()) endGame(controler.getWinner());
+//        else ;
     }
 
     /**
@@ -205,54 +262,78 @@ public class BattleFrame extends JFrame {
      */
     private void updateFooterDisplay() {
         if(controler.hasTextToDisplay()){
+            pause();
             footerText = controler.getTextToDisplay();
             textSoFar = "<html>";
             timer.start();
+//            displayThread.run();
         }
-
+        else turnHandler(controler.getOpponent(currentPlayer));
     }
 
-    private void turn(){
-        currentPlayer = controler.whichIsFaster();
-        updateHeader();
+    private void pause(){
+        enablePanel(Position.TOP, false);
+        enablePanel(Position.BOTTOM, false);
+    }
 
-        if(controler.canPlayerAct(currentPlayer)){
-            enablePanel(currentPlayer);
-        }
-        else{
-            updateFooterDisplay();
-            subTurn(controler.getOpponent(currentPlayer));
-        }
+    private void resume(){
+        turnHandler(controler.getOpponent(currentPlayer));
     }
 
     /**
      * Initiation phase of a player's turn to play : Update the turn, enable the appropriate components.
      * @param player Player to initiate.
      */
-    private void subTurn(Player player){
+    private void turnHandler(Player player){
+        if(controler.isGameFinished()) {
+            endGame(controler.getWinner());
+            return;
+        }
         subturn++;
+
         // New turn if both players have played
         if(subturn == 2){
             subturn = 0;
             turn++;
             controler.turnEnding();
-            updateFooterDisplay();
-            updateHP();
-            turn();
+//            updateFooterDisplay();
+            updateAnimalsState();
+            newTurn();
         }
 
         // Second part of the turn if only one has played
         else {
             currentPlayer = player;
-            updateHeader();
+            playTurn();
+        }
+    }
+
+    private void newTurn(){
+        BufferedText.addTurnToLog(turn);
+        currentPlayer = controler.whichIsFaster();
+        playTurn();
+    }
+
+    private void playTurn(){
+        updateHeader();
+
+        if(controler.canPlayerAct(currentPlayer)){
             enablePanel(currentPlayer);
+            if(currentPlayer.isBot()){
+                btnAttack_click(currentPlayer, controler.chooseAIMove(currentPlayer));
+            }
+        }
+        else{
+//            updateFooterDisplay();
+            turnHandler(controler.getOpponent(currentPlayer));
         }
     }
 
     private void endGame(Player winner) {
         enablePanel(Position.TOP, false);
         enablePanel(Position.BOTTOM, false);
-        JOptionPane.showMessageDialog(null, String.format(""));
+        JOptionPane.showMessageDialog(null, String.format("%s wins !", winner.getAlly()));
+        controler.endGame();
 
     }
 
@@ -268,9 +349,15 @@ public class BattleFrame extends JFrame {
         enablePanel(player.getOppositePosition(), false);
     }
 
-    private void updateHP(){
+    /**
+     * Updates the display of HP and statuses.
+     */
+    private void updateAnimalsState(){
         ((JLabel)topPanel.get(animalComponents.HP)).setText(controler.getHP(controler.getAnimal(Position.TOP)));
         ((JLabel)bottomPanel.get(animalComponents.HP)).setText(controler.getHP(controler.getAnimal(Position.BOTTOM)));
+
+        ((JLabel)topPanel.get(animalComponents.STATUS)).setText(controler.getStatus(controler.getAnimal(Position.TOP)));
+        ((JLabel)bottomPanel.get(animalComponents.STATUS)).setText(controler.getStatus(controler.getAnimal(Position.BOTTOM)));
     }
 }
 
