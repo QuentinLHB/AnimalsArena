@@ -1,8 +1,10 @@
 package Model.Animal.Behaviors.PeformAttackBehavior.Concrete;
 
+import View.Util;
+
 public enum AttackBehaviorEnum {
     SIMPLE_BEHAVIOR("Simple attack", "Inflict damage to the opponent."),
-    UNDEAD_BEHAVIOR("Undead attack", "Inflict damage both the opponent and itself (half of it)");
+    SELFHARMING_BEHAVIOR("Self-harming attack", "Self-inflict half of the damage dealt.");
 
     AttackBehaviorEnum(final String name, final String description){
         this.name = name;
@@ -20,4 +22,8 @@ public enum AttackBehaviorEnum {
         return description;
     }
 
+    @Override
+    public String toString() {
+        return Util.toHtml(String.format("%s: %s", name, description));
+    }
 }

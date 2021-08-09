@@ -1,4 +1,7 @@
-package View;
+package View.Frames;
+
+import View.BufferedText;
+import View.Util;
 
 import javax.swing.*;
 import java.awt.*;

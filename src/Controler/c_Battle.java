@@ -7,11 +7,10 @@ import Model.Animal.Creation.Concrete.StatID;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
 import Model.playerAI.Concrete.PlayerAI;
-import View.BattleFrame;
+import View.Frames.BattleFrame;
 import View.BufferedText;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class c_Battle extends controler_Base {
 

@@ -1,8 +1,9 @@
-package View;
+package View.Frames;
 import Controler.c_Menu;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Util.Serialization;
 import Model.playerAI.Concrete.Player;
+import View.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -94,12 +95,12 @@ public class CreationMenuFrame extends JDialog {
 
     private void btnRandomPick_click(){
         IAnimal animal = controler.createRandomAnimal(currentPlayer, controler.getFoe(currentPlayer));
-        JOptionPane.showMessageDialog(null, String.format("New animal created : %s", animal.getName()));
+        Util.printCreationConfirmation(animal);
         endPickOption();
     }
 
     private void btnCustomize_click(){
-        new CustomizeFrame(controler, this, currentPlayer);
+        new CustomizationMenu(controler, this, currentPlayer);
         endPickOption();
     }
 

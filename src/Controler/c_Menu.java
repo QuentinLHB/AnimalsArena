@@ -1,26 +1,25 @@
 package Controler;
 
-import Model.Animal.Creation.Abstract.IAnimal;
-import Model.Animal.Creation.Concrete.Animal;
-import Model.Animal.Creation.Concrete.AnimalFactory;
-import Model.Animal.Creation.Concrete.AnimalKind;
-import Model.Animal.Creation.Concrete.ElementType;
+import Model.Action.Attack.Concrete.AttackFactory;
+import Model.Animal.Creation.Concrete.*;
 import Model.Util.Position;
 import Model.playerAI.Concrete.Player;
-import View.BattleFrame;
-import View.MenuFrame;
+import View.Frames.CreationMenuFrame;
+import View.Frames.CustomizationMenu;
+import View.Frames.MenuFrame;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class c_Menu extends controler_Base{
 
     ArrayList<Player> getPlayers(){return players;}
-    JFrame mainMenu;
+    MenuFrame frmMainMenu;
+    CreationMenuFrame frmCreationMenu;
+    CustomizationMenu frmCustomizationMenu;
 
 //    JFrame currentFrame;
     public c_Menu(){
-        mainMenu = new MenuFrame(this);
+        frmMainMenu = new MenuFrame(this);
     }
     /**
      * Adds or changes the players.
@@ -42,11 +41,32 @@ public class c_Menu extends controler_Base{
         if(nickname.equals("") || nickname == null) animal = AnimalFactory.CreateAnimal(animalKind, elementType);
         else  animal = AnimalFactory.CreateAnimal(animalKind, nickname, elementType);
 
-        player.setAlly(animal);
-        foe.setFoe(animal);
-//        players.add(player);
+        addAnimaltoPlayers(animal, player, foe);
         return animal;
     }
+
+    public Animal createAnimal(Player player) {
+        Animal animal = new Animal(frmCustomizationMenu.lblNickname.getText(),
+                (float)frmCustomizationMenu.sliders.get(StatID.MAX_HEALTH).getValue(),
+                (float)frmCustomizationMenu.sliders.get(StatID.ATTACK).getValue()/100,
+                (float)frmCustomizationMenu.sliders.get(StatID.DEFENSE).getValue()/100,
+                (float)frmCustomizationMenu.sliders.get(StatID.SPEED).getValue()/100
+        );
+
+        for (int i = 0; i <frmCustomizationMenu.lstChosenAttacks.getModel().getSize(); i++) {
+            AttackFactory.addAttackToAnimal(animal, frmCustomizationMenu.listModel.getElementAt(i));
+        }
+
+        addAnimaltoPlayers(animal, player, getFoe(player));
+        return animal;
+    }
+
+    private void addAnimaltoPlayers(Animal animal, Player player, Player foe){
+        player.setAlly(animal);
+        foe.setFoe(animal);
+    }
+
+
 
     public Animal createRandomAnimal(Player player, Player foe){
         Animal animal = AnimalFactory.CreateRandomAnimal();
@@ -64,12 +84,12 @@ public class c_Menu extends controler_Base{
 
 
     public void closeMainMenu(){
-        mainMenu.setVisible(false);
+        frmMainMenu.setVisible(false);
     }
 
     public void reopenMainMenu(){
-        if(!mainMenu.isVisible()){
-            mainMenu.setVisible(true);
+        if(!frmMainMenu.isVisible()){
+            frmMainMenu.setVisible(true);
         }
 
     }
@@ -77,5 +97,10 @@ public class c_Menu extends controler_Base{
     public void openBattleFrame() {
         closeMainMenu();
         new c_Battle(this);
+    }
+
+
+    public void openCreationMenuFrame() {
+        frmCreationMenu = new CreationMenuFrame(this, frmMainMenu, getPlayer(Position.BOTTOM), getPlayer(Position.TOP));
     }
 }

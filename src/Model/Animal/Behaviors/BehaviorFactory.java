@@ -14,7 +14,7 @@ public class BehaviorFactory {
 
     public static void addBehaviors(Animal animal, AttackBehaviorEnum attackBehavior, DefendBehaviorEnum defendBehavior, DieBehaviorEnum dieBehavior){
         switch (attackBehavior){
-            case UNDEAD_BEHAVIOR -> animal.setAttackBehavior(new UndeadAttackBehavior(animal));
+            case SELFHARMING_BEHAVIOR -> animal.setAttackBehavior(new UndeadAttackBehavior(animal));
             default -> animal.setAttackBehavior(new SimpleAttackBehavior(animal));
         }
         switch (defendBehavior){

@@ -1,4 +1,4 @@
-package View;
+package View.Frames;
 
 import Controler.c_Menu;
 import Model.Animal.Creation.Abstract.IAnimal;
@@ -6,6 +6,7 @@ import Model.Animal.Creation.Concrete.AnimalKind;
 import Model.Animal.Creation.Concrete.ElementType;
 import Model.Util.Position;
 import Model.playerAI.Concrete.Player;
+import View.Util;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,8 +25,6 @@ public class NewAnimalFrame extends JDialog {
     JComboBox cboType2;
     JTextField txtNickname;
     JButton btnOK;
-
-    IAnimal animal;
 
     public NewAnimalFrame(c_Menu controler, JDialog owner, Player currentPlayer){
         super(owner, true);
@@ -123,7 +122,7 @@ public class NewAnimalFrame extends JDialog {
 
         );
 
-        JOptionPane.showMessageDialog(null, String.format("New animal created : %s", animal.getName()));
+        Util.printCreationConfirmation(animal);
 
         Util.exit(this);
     }

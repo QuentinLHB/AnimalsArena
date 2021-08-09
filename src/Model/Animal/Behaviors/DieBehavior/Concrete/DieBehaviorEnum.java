@@ -20,4 +20,8 @@ public enum DieBehaviorEnum {
         return description;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s: %s", name, description);
+    }
 }

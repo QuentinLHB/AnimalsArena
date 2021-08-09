@@ -1,5 +1,7 @@
 package View;
 
+import Model.Animal.Creation.Abstract.IAnimal;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -80,4 +82,7 @@ public class Util {
     }
 
 
+    public static void printCreationConfirmation(IAnimal animal) {
+        JOptionPane.showMessageDialog(null, String.format("New animal created : %s", animal.getName()));
+    }
 }

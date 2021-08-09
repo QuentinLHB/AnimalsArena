@@ -1,8 +1,9 @@
-package View;
+package View.Frames;
 import Controler.c_Menu;
 import Model.playerAI.Concrete.Player;
 import Model.playerAI.Concrete.PlayerAI;
 import Model.Util.Position;
+import View.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -97,7 +98,8 @@ public class MenuFrame extends JFrame  {
 
     private void pickAnimalAndStartBattle(Player p1, Player p2){
         controler.initiatePlayers(p1, p2);
-        new CreationMenuFrame(controler, this, p1, p2);
+        controler.openCreationMenuFrame();
+
         if(controler.areAnimalsInitiated()){
             controler.openBattleFrame();
         }

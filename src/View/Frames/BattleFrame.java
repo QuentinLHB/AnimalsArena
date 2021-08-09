@@ -1,12 +1,14 @@
-package View;
+package View.Frames;
 
 import Controler.c_Battle;
-import Controler.c_Menu;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.Animal;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
+import View.BufferedText;
+import View.JButtonAttack;
+import View.Util;
 
 import javax.swing.*;
 import java.awt.*;
