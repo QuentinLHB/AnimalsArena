@@ -1,6 +1,6 @@
 package View.Frames;
 
-import Controler.c_Battle;
+import Controllers.c_Battle;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.Animal;
@@ -17,28 +17,71 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BattleFrame extends JFrame {
+    /**
+     * Controler of the battle frame.
+     */
     c_Battle controler;
 
-//    Player p1;
-//    Player p2;
+    /**
+     * Current player
+     */
     Player currentPlayer;
-//    PlayerAI CPUA;
-//    PlayerAI CPUB;
 
+    /**
+     * Panel containing the components of the player playing on top the screen.
+     */
     HashMap<animalComponents, JComponent> topPanel = new HashMap<>();
+    /**
+     * List of the attack buttons of the player playing on top of the screen, if it's not an AI.
+     */
     ArrayList<JButtonAttack> topAttacks = new ArrayList<>();
 
+    /**
+     * Panel containing the components of the player playing on bottom the screen.
+     */
     HashMap<animalComponents, JComponent> bottomPanel = new HashMap<>();
+    /**
+     * List of the attack buttons of the player playing on bottom of the screen, if it's not an AI.
+     */
     ArrayList<JButtonAttack> bottomAttacks = new ArrayList<>();
 
+    /**
+     * Current turn, starting at 1 at the beginning of the battle.
+     * <br>
+     *     A turn is constituted of a move for each player, so two "subturns".
+     */
     private int turn = 1;
+    /**
+     * Subturn number, 0 or 1, allowing to decide if it is the next turn or if it's the other player's move.
+     */
     private int subturn = 0;
 
-//    IAnimal currentAnimalPlaying;
+    /**
+     * Label containing the current player and turn.
+     */
+    private JLabel lblHeader;
+    /**
+     * Label displaying all the information needed during a turn.
+     */
+    private JLabel lblFooter;
 
-    JLabel lblHeader;
-    JLabel lblFooter;
+    /**
+     * Used for iteration of the {@link #timer timer}.
+     */
+    int i = 0;
 
+    /**
+     * Text to display in the footer label.
+     */
+    String footerText;
+    /**
+     * Member used in the {@link #timer timer} member to display the text letter by letter.
+     * Represents the text that has been displayed so far in the execution of the timer.
+     */
+    String textSoFar;
+    /**
+     * Timer displaying a text letter by letter, and then pauses after going to the next subturn.
+     */
     Timer timer = new Timer(20, new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e){
@@ -67,13 +110,10 @@ public class BattleFrame extends JFrame {
         }
     });
 
-//    DisplayThread displayThread = new DisplayThread(timer);
-
-    String footerText;
-    String textSoFar;
-    int i = 0;
-
-
+    /**
+     * Enumerator of the type of components displayed in a player's label. <br>
+     *     Used to find a component easily in a hashmap.
+     */
     public enum animalComponents{
         NAME,
         HP,
@@ -81,9 +121,16 @@ public class BattleFrame extends JFrame {
         INFO,
         ATTACK;
     }
-    
-    public BattleFrame(c_Battle controler){
-        this.controler = controler;
+
+    /**
+     * Constructor of the Battle Frame, opposing two players and their animal.
+     * <br>
+     *     Players and animals must be initialized in the controller beforehand.
+     * @param controller Controller of the app
+     * @see c_Battle
+     */
+    public BattleFrame(c_Battle controller){
+        this.controler = controller;
         Util.initFrame(this, "Battle scene", 600, 600);
         setOnClose();
         setLayout(new BorderLayout(30, 30));
@@ -92,6 +139,11 @@ public class BattleFrame extends JFrame {
 
     }
 
+    // *********** INIT ******************
+
+    /**
+     * Defines how the frame reacts when it is asked to close.
+     */
     private void setOnClose() {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         WindowListener exitListener = new WindowAdapter() {
@@ -104,6 +156,9 @@ public class BattleFrame extends JFrame {
         addWindowListener(exitListener);
     }
 
+    /**
+     * Initializes the JComponents of the frame.
+     */
     private void initComponents() {
         // Panels and their layouts
         JPanel contentPanel = Util.setContentPane(this);
@@ -124,10 +179,10 @@ public class BattleFrame extends JFrame {
         // ***** South Panel *****
         contentPanel.add(pnlBottom, BorderLayout.SOUTH);
             // Bottom Player info
-        createPlayerPanel(pnlBottom, controler.getPlayer(Position.BOTTOM), 2, 0);
+        initPlayerPanel(pnlBottom, controler.getPlayer(Position.BOTTOM), 2, 0);
 
             // Attack Buttons
-        setAttackButtons(pnlBottom, controler.getPlayer(Position.BOTTOM), 1, 0);
+        initAttackButtons(pnlBottom, controler.getPlayer(Position.BOTTOM), 1, 0);
 
             // Empty label (for future .png)
         pnlBottom.add(new JLabel(""), Util.setGridBagConstraints(0, 0, 0.3, 1)); //empty label to split the grid
@@ -160,25 +215,24 @@ public class BattleFrame extends JFrame {
         // ***** North (foe - playerB/IA ) panel *****
         contentPanel.add(pnlTop, BorderLayout.NORTH);
 
-        createPlayerPanel(pnlTop, controler.getPlayer(Position.TOP), 0, 1);
+        initPlayerPanel(pnlTop, controler.getPlayer(Position.TOP), 0, 1);
 
             // Attack buttons
-        setAttackButtons(pnlTop, controler.getPlayer(Position.TOP), 2, 1);
+        initAttackButtons(pnlTop, controler.getPlayer(Position.TOP), 2, 1);
 
             // Empty label : image of the animal goes here
         pnlTop.add(new JLabel(""), Util.setGridBagConstraints(3, 1, 0.5, 0.5));
 
     }
 
-    private void btnEventLog_click() {
-        new LogFrame();
-    }
-
-    private void updateHeader() {
-        lblHeader.setText(String.format("Turn n°%d - %s's move", turn, currentPlayer));
-    }
-
-    private void createPlayerPanel(JPanel panel, Player player, int columnInfo, int startAtRow) {
+    /**
+     * Initializes the components of a player's panel : Animal's infos, attacks...
+     * @param panel Panel in which to initialize the components.
+     * @param player Player to initialize.
+     * @param columnInfo Column number of the panel in which to display the info (HP, statuses...)
+     * @param startAtRow First row number. ex: '2' will display the name on row 2 and other info bellow, in the next rows.
+     */
+    private void initPlayerPanel(JPanel panel, Player player, int columnInfo, int startAtRow) {
         IAnimal animal = player.getAlly();
         HashMap<animalComponents, JComponent> components = getPanelComponents(player.getPosition());
 
@@ -209,7 +263,14 @@ public class BattleFrame extends JFrame {
 
     }
 
-    private void setAttackButtons(JPanel panel, Player player, int column, int row){
+    /**
+     * Initiates the attack buttons of a player.
+     * @param panel Panel on which to display the buttons
+     * @param player Player concerned
+     * @param column Column on which to display the buttons.
+     * @param row Row on which to display the buttons.
+     */
+    private void initAttackButtons(JPanel panel, Player player, int column, int row){
 
         IAnimal animal = player.getAlly();
         ArrayList<JButtonAttack> attackList = getAttackList(player.getPosition());
@@ -233,30 +294,65 @@ public class BattleFrame extends JFrame {
         }
     }
 
+    // ************** EVENTS ******************
 
-
-    private HashMap<animalComponents, JComponent> getPanelComponents(Position position) {
-        return position.equals(Position.BOTTOM) ? bottomPanel : topPanel;
+    /**
+     * Displays the log when the button is clicked.
+     */
+    private void btnEventLog_click() {
+        new LogFrame();
     }
 
-    private ArrayList<JButtonAttack> getAttackList(Position position) {
-        return position.equals(Position.BOTTOM) ? bottomAttacks : topAttacks;
-    }
-
+    /**
+     * Displays the animal's info (stats) when the button is clicked.
+     * @param player
+     */
     private void btnInfo_click(Player player) {
         String infos = String.format(player.getAlly().getStatDisplay());
         JOptionPane.showMessageDialog(null, infos);
 
     }
 
+    /**
+     * Performs the attack on the foe when the attack button is clicked.
+     * @param player Player owning the attack
+     * @param attack Attack concerned
+     */
     private void btnAttack_click(Player player, IAttack attack) {
         Animal animal = player.getAlly();
         animal.attack(player.getFoe(), attack);
         updateAnimalsState();
         updateFooterDisplay();
-//        turnHandler(controler.getOpponent(player));
-//        if(controler.isGameFinished()) endGame(controler.getWinner());
-//        else ;
+    }
+
+    // ***************** DISPLAY *******************
+
+    /**
+     * Refreshes the header with the current turn and player.
+     */
+    private void updateHeader() {
+        lblHeader.setText(String.format("Turn n°%d - %s's move", turn, currentPlayer));
+    }
+
+    /**
+     * Returns the components positionned on one side or the other
+     * @param position Position of the components to get.
+     * <br>
+     *     Valid positions : {@link Model.Util.Position#BOTTOM} or {@link Model.Util.Position#BOTTOM}
+     * @return a dictionnary, keys being the {@link BattleFrame.animalComponents} enum, values being the components.
+     */
+    private HashMap<animalComponents, JComponent> getPanelComponents(Position position) {
+        return position.equals(Position.BOTTOM) ? bottomPanel : topPanel;
+    }
+
+    /**
+     * Get the list of attack buttons of a position.
+     * @param position position Position of the components to get. <br>
+     * Valid positions : {@link Model.Util.Position#BOTTOM} or {@link Model.Util.Position#BOTTOM}
+     * @return ArrayList of buttons for each attack.
+     */
+    private ArrayList<JButtonAttack> getAttackList(Position position) {
+        return position.equals(Position.BOTTOM) ? bottomAttacks : topAttacks;
     }
 
     /**
@@ -270,23 +366,28 @@ public class BattleFrame extends JFrame {
             timer.start();
 //            displayThread.run();
         }
-        else turnHandler(controler.getOpponent(currentPlayer));
+        else turnHandler();
     }
 
+    /**
+     * Disables all the components that could be used by the user to "pause" the program.
+     */
     private void pause(){
         enablePanel(Position.TOP, false);
         enablePanel(Position.BOTTOM, false);
     }
 
+    /**
+     * Resumes the program after a pause.
+     */
     private void resume(){
-        turnHandler(controler.getOpponent(currentPlayer));
+        turnHandler();
     }
 
     /**
-     * Initiation phase of a player's turn to play : Update the turn, enable the appropriate components.
-     * @param player Player to initiate.
+     * Handles the turns and hence, the components to enable.
      */
-    private void turnHandler(Player player){
+    private void turnHandler(){
         if(controler.isGameFinished()) {
             endGame(controler.getWinner());
             return;
@@ -298,24 +399,29 @@ public class BattleFrame extends JFrame {
             subturn = 0;
             turn++;
             controler.turnEnding();
-//            updateFooterDisplay();
             updateAnimalsState();
             newTurn();
         }
 
         // Second part of the turn if only one has played
         else {
-            currentPlayer = player;
+            currentPlayer = controler.getOpponent(currentPlayer);
             playTurn();
         }
     }
 
+    /**
+     * Initiates a new turn, enables the components of the fastest animal.
+     */
     private void newTurn(){
         BufferedText.addTurnToLog(turn);
         currentPlayer = controler.whichIsFaster();
         playTurn();
     }
 
+    /**
+     * Handles the turn of a player : Checks if the player can act, and handles the turn if the current player is an AI.
+     */
     private void playTurn(){
         updateHeader();
 
@@ -326,11 +432,14 @@ public class BattleFrame extends JFrame {
             }
         }
         else{
-//            updateFooterDisplay();
-            turnHandler(controler.getOpponent(currentPlayer));
+            turnHandler();
         }
     }
 
+    /**
+     * Displays a winning message.
+     * @param winner Winner of the game.
+     */
     private void endGame(Player winner) {
         enablePanel(Position.TOP, false);
         enablePanel(Position.BOTTOM, false);
@@ -339,6 +448,12 @@ public class BattleFrame extends JFrame {
 
     }
 
+    /**
+     * Enables a player's panel, based on its position.
+     * @param position {@link Model.Util.Position} enumerator value.
+     * @param enable boolean indicating it it has to be enabled (true) or disabled (false).
+     * @see #enablePanel(Player) enablePanel based on playr
+     */
     private void enablePanel(Position position, boolean enable) {
         ArrayList<JButtonAttack> attackList = getAttackList(position);
         for(JButtonAttack btnAttack : attackList){
@@ -346,6 +461,10 @@ public class BattleFrame extends JFrame {
         }
     }
 
+    /**
+     * Enable a player's panel.
+     * @param player Player for whom to enable the panel.
+     */
     private void enablePanel(Player player){
         enablePanel(player.getPosition(), true);
         enablePanel(player.getOppositePosition(), false);

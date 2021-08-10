@@ -4,7 +4,6 @@ import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Attack.Concrete.Attack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.StatID;
-import View.BufferedText;
 
 public class SimpleDoDamageBehavior implements IDoDamageBehavior {
 
@@ -28,7 +27,7 @@ public class SimpleDoDamageBehavior implements IDoDamageBehavior {
 
     @Override
     public int score(IAnimal target) {
-        return Attack.simulateDamage(attack.getAttackOwner(), target, attack);
+        return Attack.simulateAttack(attack.getAttackOwner(), target, attack);
     }
 
     @Override

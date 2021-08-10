@@ -27,4 +27,9 @@ public class FullDefendBehavior extends Defend_Base implements IDefendBehavior {
             super.defend(attack, damage);
         }
     }
+
+    @Override
+    public String getDescription() {
+        return DefendBehaviorEnum.FULLDEFEND_BEHAVIOR.getDescription();
+    }
 }

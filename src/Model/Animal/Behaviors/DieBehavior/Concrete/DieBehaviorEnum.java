@@ -1,7 +1,9 @@
 package Model.Animal.Behaviors.DieBehavior.Concrete;
 
+import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
+
 public enum DieBehaviorEnum {
-    SIMPLE_BEHAVIOR("Simple death", "Dies when has no remaining HP."),
+    SIMPLEDIE_BEHAVIOR("Simple death", "Dies when has no remaining HP."),
     UNDEADDIE_BEHAVIOR("Undead death", "Is reborn with half HP.");
 
     DieBehaviorEnum(final String name, final String description){

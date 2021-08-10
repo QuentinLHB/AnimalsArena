@@ -1,6 +1,6 @@
 package ConsoleInterface;
 import Model.Animal.Creation.Concrete.*;
-import Controler.c_Menu;
+import Controllers.c_Menu;
 import Model.playerAI.Concrete.PlayerAI;
 import Model.Util.Position;
 

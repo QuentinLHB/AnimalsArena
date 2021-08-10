@@ -36,7 +36,7 @@ public class DoRandomDamage implements IDoDamageBehavior{
 
     @Override
     public int score(IAnimal target) {
-        return Attack.simulateDamage(attack.getAttackOwner(), target, attack);
+        return Attack.simulateAttack(attack.getAttackOwner(), target, attack);
     }
 
     @Override

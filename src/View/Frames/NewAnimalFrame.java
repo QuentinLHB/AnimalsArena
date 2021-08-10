@@ -1,10 +1,9 @@
 package View.Frames;
 
-import Controler.c_Menu;
+import Controllers.c_Menu;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.AnimalKind;
 import Model.Animal.Creation.Concrete.ElementType;
-import Model.Util.Position;
 import Model.playerAI.Concrete.Player;
 import View.Util;
 
@@ -13,7 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class NewAnimalFrame extends JDialog {
-    private c_Menu controler;
+    private c_Menu controller;
 //    private Player playerA;
 //    private Player playerB;
 
@@ -26,9 +25,9 @@ public class NewAnimalFrame extends JDialog {
     JTextField txtNickname;
     JButton btnOK;
 
-    public NewAnimalFrame(c_Menu controler, JDialog owner, Player currentPlayer){
+    public NewAnimalFrame(c_Menu controller, JDialog owner, Player currentPlayer){
         super(owner, true);
-        this.controler = controler;
+        this.controller = controller;
         this.currentPlayer = currentPlayer;
         initComponents();
         initEvents();
@@ -51,19 +50,19 @@ public class NewAnimalFrame extends JDialog {
 
         // Model.Animal Kind
         grdQuestion.add(new JLabel("<html>Model.Animal (*) : </html>"), setGridBagConstraint(0,0));
-        cboAnimalKind = new JComboBox(AnimalKind.values());
+        cboAnimalKind = new JComboBox<>(AnimalKind.values());
         grdQuestion.add(cboAnimalKind, setGridBagConstraint(1, 0));
         components.add(cboAnimalKind);
 
         // Elemental Type
         grdQuestion.add(new JLabel("<html>Elemental Type 1 (*): </html>"), setGridBagConstraint(0, 1));
-        cboType1 = new JComboBox(ElementType.values());
+        cboType1 = new JComboBox<>(ElementType.values());
         grdQuestion.add(cboType1, setGridBagConstraint(1, 1));
         components.add(cboType1);
 
         // Element Type 2
         grdQuestion.add(new JLabel("<html>Elemental Type 2 (opt.): </html>"), setGridBagConstraint(0, 2));
-        cboType2 = new JComboBox(ElementType.values());
+        cboType2 = new JComboBox<>(ElementType.values());
         grdQuestion.add(cboType2, setGridBagConstraint(1, 2));
         components.add(cboType2);
 
@@ -112,9 +111,9 @@ public class NewAnimalFrame extends JDialog {
     }
 
     private void btnOk_click(){
-        IAnimal animal = controler.createAnimal(
+        IAnimal animal = controller.createAnimal(
                 currentPlayer,
-                controler.getFoe(currentPlayer),
+                controller.getFoe(currentPlayer),
                 (AnimalKind)cboAnimalKind.getSelectedItem(),
                 txtNickname.getText(),
                 (ElementType)cboType1.getSelectedItem(),

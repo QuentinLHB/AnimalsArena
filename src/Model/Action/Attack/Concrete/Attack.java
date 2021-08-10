@@ -153,8 +153,12 @@ public class Attack implements IAttack {
      * @param attack Attack used by the attacking animal.
      * @return Integer representing the amount of damages taken by the foe.
      */
-    public static int simulateDamage(IAnimal attackingAnimal, IAnimal target, IAttack attack){
-        if(attack.getDamageBase() == 0) return 0;
+    public static int simulateAttack(IAnimal attackingAnimal, IAnimal target, IAttack attack){
+        return simulateDamage(attackingAnimal, target, attack.getDamageBase());
+    }
+
+    public static int simulateDamage(IAnimal attackingAnimal, IAnimal target, int dmg){
+        if(dmg == 0) return 0;
         float atkStat = attackingAnimal.getStat(StatID.ATTACK);
         float atkVar = attackingAnimal.getStatAlteration(StatID.ATTACK);
 
@@ -164,7 +168,7 @@ public class Attack implements IAttack {
         double defMode = target.getActMode() == ActMode.DEFENSE ? Defend_Base.ON_DEFENSE_REDUCTION : 1;
 
         //DmgBase*Atk*AtkVar*(1+(1-Def*DefVar))*DefenseMode
-        return Math.round((float)(attack.getDamageBase()
+        return Math.round((float)(dmg
                 *atkStat*atkVar
                 *(1+(1-targetsDef*targetsDefVar)
                 * defMode)));

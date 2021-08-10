@@ -30,4 +30,9 @@ public class SimpleDieBehavior implements IDieBehavior {
     public boolean isAlive() {
         return isAlive;
     }
+
+    @Override
+    public String getDescription() {
+        return DieBehaviorEnum.SIMPLEDIE_BEHAVIOR.getDescription();
+    }
 }

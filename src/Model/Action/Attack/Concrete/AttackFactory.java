@@ -8,6 +8,7 @@ import Model.Action.DoDamage.DoNoDamageBehavior;
 import Model.Action.DoDamage.DoRandomDamage;
 import Model.Action.DoDamage.SimpleDoDamageBehavior;
 import Model.Action.Heal.HealFixAmountBehavior;
+import Model.Action.Heal.HealPartOfDmgDealt;
 import Model.Action.Heal.HealPercentageBehavior;
 import Model.Action.InflictStatus.InflictStatusBehavior;
 import Model.Action.InflictStatus.SelfInflictStatusBehavior;
@@ -42,7 +43,7 @@ public class AttackFactory {
                         new InflictStatusBehavior(StatusID.POISON));
 
             case DEATH_BITE -> new Attack(animal, attackName.toString(), 1f, new SimpleDoDamageBehavior(15),
-                        new HealFixAmountBehavior(15/2));
+                        new HealPartOfDmgDealt(0.5f));
 
             case SHIELD_ATTACK -> new Attack(animal, attackName.toString(), 1f, new SimpleDoDamageBehavior(10),
                     new SimpleDefendBehavior());

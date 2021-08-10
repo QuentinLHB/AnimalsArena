@@ -36,4 +36,9 @@ public class Defend_Base implements IDefendBehavior {
     public void canDefend(boolean allow) {
         canDefend = allow;
     }
+
+    @Override
+    public String getDescription() {
+        return "";
+    }
 }

@@ -18,4 +18,8 @@ public class HealDefendBehavior extends Defend_Base implements IDefendBehavior {
             System.out.printf("%s recovered some HP due to its Healing Defense ability%n", animal.getName());
         }
     }
+    @Override
+    public String getDescription() {
+        return DefendBehaviorEnum.HEALDEFND_BEHAVIOR.getDescription();
+    }
 }

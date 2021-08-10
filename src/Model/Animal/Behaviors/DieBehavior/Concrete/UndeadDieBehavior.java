@@ -37,4 +37,9 @@ public class UndeadDieBehavior extends SimpleDieBehavior implements IDieBehavior
     public boolean isAlive() {
         return super.isAlive();
     }
+
+    @Override
+    public String getDescription() {
+        return DieBehaviorEnum.UNDEADDIE_BEHAVIOR.getDescription();
+    }
 }

@@ -1,6 +1,8 @@
 package Model.Animal.Behaviors.PeformAttackBehavior.Concrete;
 
 import Model.Action.Attack.Abstract.IAttack;
+import Model.Action.Attack.Concrete.Attack;
+import Model.Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
@@ -29,5 +31,10 @@ public class SimpleAttackBehavior implements IPerformAttackBehavior {
             }
         }
         else BufferedText.addBufferedText(String.format("%s can't act.%n", attackingAnimal.getName()));
+    }
+
+    @Override
+    public String getDescription() {
+        return AttackBehaviorEnum.SIMPLE_BEHAVIOR.getDescription();
     }
 }

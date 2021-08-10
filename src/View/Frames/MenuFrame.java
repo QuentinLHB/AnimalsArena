@@ -1,5 +1,5 @@
 package View.Frames;
-import Controler.c_Menu;
+import Controllers.c_Menu;
 import Model.playerAI.Concrete.Player;
 import Model.playerAI.Concrete.PlayerAI;
 import Model.Util.Position;

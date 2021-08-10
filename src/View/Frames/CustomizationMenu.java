@@ -1,10 +1,7 @@
 package View.Frames;
 
-import Controler.c_Menu;
-import Model.Action.Attack.Abstract.IAttack;
-import Model.Action.Attack.Concrete.Attack;
+import Controllers.c_Menu;
 import Model.Action.Attack.Concrete.AttackEnum;
-import Model.Action.Attack.Concrete.AttackFactory;
 import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Model.Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
@@ -19,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
-import java.util.List;
 
 public class CustomizationMenu extends JDialog {
     private c_Menu controler;
@@ -30,16 +26,31 @@ public class CustomizationMenu extends JDialog {
     public EnumMap<StatID, JSlider> sliders;
     public JList lstChosenAttacks;
     public DefaultListModel<AttackEnum> listModel = new DefaultListModel<>();
-    JComboBox<AttackEnum> cboAttacks;
+    public JComboBox<AttackEnum> cboAttacks;
+    public JComboBox<AttackBehaviorEnum> cboAtkBhv;
+    public JComboBox<DieBehaviorEnum> cboDieBhv;
+    public JComboBox<DefendBehaviorEnum> cboDefBhv;
 
+
+    /**
+     * Constructor of the customization frame, that allows the user to create an animal.
+     * @param controler {@link Controllers.c_Menu Menu Controller}
+     * @param owner Frame that needs to stay open while this frame is active.
+     * @param currentPlayer Player creating its custom animal
+     */
     public CustomizationMenu(c_Menu controler, JDialog owner, Player currentPlayer){
         super(owner, true);
         this.controler = controler;
         this.currentPlayer = currentPlayer;
         initComponents();
+        controler.setCustomizationFrame(this);
         Util.initFrame(this, "Customization", 500, 700);
+
     }
 
+    /**
+     * Initializes the frame's components.
+     */
     private void initComponents(){
         JPanel contentPanel = Util.setContentPane(this);
 
@@ -77,122 +88,35 @@ public class CustomizationMenu extends JDialog {
         JPanel pnlStat = new JPanel();
         pnlStat.setLayout(new GridBagLayout());
         pnlCenter.add(pnlStat, Util.setGridBagConstraints(0, 1, 1, 0.3));
-        setStatSliders(pnlStat);
+        initStatSliders(pnlStat);
 
             // Attacks : Un panel
         JPanel pnlAttacks = new JPanel();
         pnlAttacks.setLayout(new GridBagLayout());
         pnlCenter.add(pnlAttacks, Util.setGridBagConstraints(0, 2, 1, 0.3));
-        setAttackSelectionComponents(pnlAttacks);
+        initAttackSelectionComponents(pnlAttacks);
 
             // Behaviors : un Panel
         JPanel pnlBehaviors = new JPanel();
         pnlBehaviors.setLayout(new GridBagLayout());
         pnlCenter.add(pnlBehaviors, Util.setGridBagConstraints(0, 3, 1, 0.3));
-        setBehaviorSelectionComponents(pnlBehaviors);
+        initBehaviorSelectionComponents(pnlBehaviors);
 
             // Creation button
         JButton btnCreateCustomAnimal = new JButton("OK");
         btnCreateCustomAnimal.addActionListener(this::btnCreateCustomAnimal_click);
         pnlCenter.add(btnCreateCustomAnimal, Util.setGridBagConstraints(0, 4, 1, 0.3));
-
-
     }
 
-    private void btnCreateCustomAnimal_click(ActionEvent e) {
-        Animal animal = controler.createAnimal(currentPlayer);
-        Util.printCreationConfirmation(animal);
-        Util.exit(this);
-
-    }
-
-    private void setBehaviorSelectionComponents(JPanel pnlBehaviors) {
-        int i = 0;
-        JLabel lblAttackBehavior = new JLabel("Attack behavior :");
-        pnlBehaviors.add(lblAttackBehavior, Util.setGridBagConstraints(0,i++, 1, 1));
-//        for(AttackBehaviorEnum)
-        JComboBox<AttackBehaviorEnum> cboAtkBhv = new JComboBox<>(AttackBehaviorEnum.values());
-        pnlBehaviors.add(cboAtkBhv, Util.setGridBagConstraints(0, i++, 1, 1));
-
-        JLabel lblDefendBehavior = new JLabel("Defend Behavior :");
-        pnlBehaviors.add(lblDefendBehavior, Util.setGridBagConstraints(0, i++, 1, 1));
-        JComboBox<DefendBehaviorEnum> cboDefBhv = new JComboBox<>(DefendBehaviorEnum.values());
-        pnlBehaviors.add(cboDefBhv, Util.setGridBagConstraints(0, i++, 1, 1));
-
-        JLabel lblDieBehavior = new JLabel("Death Behavior :");
-        pnlBehaviors.add(lblDieBehavior, Util.setGridBagConstraints(0, i++, 1, 1));
-        JComboBox<DieBehaviorEnum> cboDieBhv = new JComboBox<>(DieBehaviorEnum.values());
-        pnlBehaviors.add(cboDieBhv, Util.setGridBagConstraints(0, i, 1, 1));
-    }
-
-    private void setAttackSelectionComponents(JPanel pnlAttacks) {
-        // Combo containing all attacks
-//        List<AttackEnum> atks = Arrays.asList();
-////        IAttack defendAtk = atks.get(0);
-//        atks.remove(0);
-//        IAttack[] allAttacks = new IAttack[atks.size()];
-//        allAttacks = atks.toArray(allAttacks);
-
-        cboAttacks = new JComboBox<>(AttackEnum.values());
-        pnlAttacks.add(cboAttacks, Util.setGridBagConstraints(0, 0, 0.7, 1));
-
-        // List containing the chosen attacks
-        listModel.addElement(AttackEnum.DEFEND);
-        lstChosenAttacks = new JList(listModel);
-        lstChosenAttacks.setSize(20, 100);
-        lstChosenAttacks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstChosenAttacks.setVisibleRowCount(5);
-        lstChosenAttacks.setVisible(true);
-        var gc = Util.setGridBagConstraints(0, 1, 1, 1);
-        pnlAttacks.add(lstChosenAttacks, gc);
-
-        // Validation Button
-        JButton btnValidation = new JButton("Add");
-        btnValidation.addActionListener(this::btnValidation_click);
-        pnlAttacks.add(btnValidation, Util.setGridBagConstraints(1, 0, 0.3, 1));
-
-        // Delete Button
-        JButton btnDelete = new JButton("X");
-        gc = Util.setGridBagConstraints(1, 1,  0.1, 1);
-        btnDelete.addActionListener(this::btnDelete_click);
-        pnlAttacks.add(btnDelete, gc);
-
-    }
-
-    private void btnDelete_click(ActionEvent e) {
-        if(lstChosenAttacks.getSelectedIndex() != -1){
-            if(lstChosenAttacks.getSelectedIndex() == 0) {
-                JOptionPane.showMessageDialog(null, "Defend can't be deleted.");
-                return;
-            }
-            AttackEnum selectedItem = listModel.get(lstChosenAttacks.getSelectedIndex());
-            listModel.remove(lstChosenAttacks.getSelectedIndex());
-            cboAttacks.insertItemAt(selectedItem, 0);
-            if(!listModel.isEmpty()){
-                lstChosenAttacks.setSelectedIndex(0);
-                cboAttacks.setSelectedIndex(0);
-                cboAttacks.requestFocus();
-            }
-        }
-    }
-
-    private void btnValidation_click(ActionEvent e) {
-        if(listModel.getSize() < 5){
-            AttackEnum attack = (AttackEnum)cboAttacks.getSelectedItem();
-            listModel.addElement(attack);
-            cboAttacks.removeItem(cboAttacks.getSelectedItem());
-            cboAttacks.requestFocus();
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "The animal already reached its maximal capacity.");
-        }
-    }
-
-    private void setStatSliders(JPanel panel) {
+    /**
+     * Initializes the sliders used to create stats
+     * @param panel Panel in which to display the components
+     */
+    private void initStatSliders(JPanel panel) {
         sliders = new EnumMap<>(StatID.class);
 
-        final int MIN_SLIDERVALUE = 1;
-        final int MAX_SLIDERVALUE = 200;
+        final int MIN_SLIDERVALUE = 50;
+        final int MAX_SLIDERVALUE = 150;
         final int DEFAULT_SLIDERVALUE = 100;
 
         int row = 0;
@@ -220,7 +144,119 @@ public class CustomizationMenu extends JDialog {
         }
     }
 
+    /**
+     * Initializes the components ued to create the attacks.
+     * @param pnlAttacks Panel in which to display the components
+     */
+    private void initAttackSelectionComponents(JPanel pnlAttacks) {
+        cboAttacks = new JComboBox<>(AttackEnum.values());
+        cboAttacks.removeItem(AttackEnum.DEFEND);
+        pnlAttacks.add(cboAttacks, Util.setGridBagConstraints(0, 0, 0.7, 1));
+
+        // List containing the chosen attacks
+        listModel.addElement(AttackEnum.DEFEND);
+        lstChosenAttacks = new JList(listModel);
+        lstChosenAttacks.setSize(20, 100);
+        lstChosenAttacks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstChosenAttacks.setVisibleRowCount(5);
+        lstChosenAttacks.setVisible(true);
+        var gc = Util.setGridBagConstraints(0, 1, 1, 1);
+        pnlAttacks.add(lstChosenAttacks, gc);
+
+        // Validation Button
+        JButton btnAddAttack = new JButton("Add");
+        btnAddAttack.addActionListener(this::btnAddAtk_click);
+        pnlAttacks.add(btnAddAttack, Util.setGridBagConstraints(1, 0, 0.3, 1));
+
+        // Delete Button
+        JButton btnRemove = new JButton("X");
+        gc = Util.setGridBagConstraints(1, 1,  0.1, 1);
+        btnRemove.addActionListener(this::btnRemoveAtk_click);
+        pnlAttacks.add(btnRemove, gc);
+
+    }
+
+    /**
+     * Initializes the components used to determine the animal's behavior
+     * @param pnlBehaviors Panel in which to display the components.
+     */
+    private void initBehaviorSelectionComponents(JPanel pnlBehaviors) {
+        int i = 0;
+        JLabel lblAttackBehavior = new JLabel("Attack behavior :");
+        pnlBehaviors.add(lblAttackBehavior, Util.setGridBagConstraints(0,i++, 1, 1));
+//        for(AttackBehaviorEnum)
+
+        cboAtkBhv = new JComboBox<>(AttackBehaviorEnum.values());
+        pnlBehaviors.add(cboAtkBhv, Util.setGridBagConstraints(0, i++, 1, 1));
+
+        JLabel lblDefendBehavior = new JLabel("Defend Behavior :");
+        pnlBehaviors.add(lblDefendBehavior, Util.setGridBagConstraints(0, i++, 1, 1));
+
+        cboDefBhv = new JComboBox<>(DefendBehaviorEnum.values());
+        pnlBehaviors.add(cboDefBhv, Util.setGridBagConstraints(0, i++, 1, 1));
+
+        JLabel lblDieBehavior = new JLabel("Death Behavior :");
+        pnlBehaviors.add(lblDieBehavior, Util.setGridBagConstraints(0, i++, 1, 1));
+
+        cboDieBhv = new JComboBox<>(DieBehaviorEnum.values());
+        pnlBehaviors.add(cboDieBhv, Util.setGridBagConstraints(0, i, 1, 1));
+    }
+
+    /**
+     * Displays the new value of the slider in a label when it is slided.
+     * @param statSlider slider that was slided
+     * @param lblValue label associated with the slider.
+     */
     private void statSlider_valueChange(JSlider statSlider, JLabel lblValue) {
         lblValue.setText(String.valueOf(statSlider.getValue()));
+    }
+
+
+    /**
+     * When clicked, adds the attack selected in the {@link #cboAttacks attack combobox}.
+     * @param e Event
+     */
+    private void btnAddAtk_click(ActionEvent e) {
+        if(listModel.getSize() < 5){
+            AttackEnum attack = (AttackEnum)cboAttacks.getSelectedItem();
+            listModel.addElement(attack);
+            cboAttacks.removeItem(cboAttacks.getSelectedItem());
+            cboAttacks.setSelectedIndex(0);
+            cboAttacks.requestFocus();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "The animal already reached its maximal capacity.");
+        }
+    }
+
+    /**
+     * When clicked, removes the selected attack from the {@link #lstChosenAttacks choen attack list}.
+     * @param e Event
+     */
+    private void btnRemoveAtk_click(ActionEvent e) {
+        if(lstChosenAttacks.getSelectedIndex() != -1){
+            if(lstChosenAttacks.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(null, "Defend can't be deleted.");
+                return;
+            }
+            AttackEnum selectedItem = listModel.get(lstChosenAttacks.getSelectedIndex());
+            listModel.remove(lstChosenAttacks.getSelectedIndex());
+            cboAttacks.insertItemAt(selectedItem, 0);
+            if(!listModel.isEmpty()){
+                lstChosenAttacks.setSelectedIndex(0);
+                cboAttacks.setSelectedIndex(0);
+                cboAttacks.requestFocus();
+            }
+        }
+    }
+
+    /**
+     * Creates the animal
+     * @param e Event
+     */
+    private void btnCreateCustomAnimal_click(ActionEvent e) {
+        Animal animal = controler.createCustomAnimal(currentPlayer);
+        Util.printCreationConfirmation(animal);
+        Util.exit(this);
     }
 }

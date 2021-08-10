@@ -1,7 +1,7 @@
 package Model.Animal.Behaviors.DefendBehavior.Concrete;
 
 public enum DefendBehaviorEnum {
-    SIMPLE_BEHAVIOR("Simple defense", "Protects itself based on the defense stat and the current mode."),
+    SIMPLEDEFEND_BEHAVIOR("Simple defense", "Protects itself based on the defense stat and the current mode."),
     FULLDEFEND_BEHAVIOR("Full defense", "Takes no damage when defending."),
     MIRRORDEFEND_BEHAVIOR("Mirror defense", "Return half of the damage to the opponent."),
     NODEFEND_BEHAVIOR("No defense", "Takes full damage."),

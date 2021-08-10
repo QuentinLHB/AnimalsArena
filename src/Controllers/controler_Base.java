@@ -1,4 +1,4 @@
-package Controler;
+package Controllers;
 
 import Model.Util.Position;
 import Model.playerAI.Concrete.Player;

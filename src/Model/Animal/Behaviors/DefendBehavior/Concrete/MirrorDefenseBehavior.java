@@ -38,4 +38,9 @@ public class MirrorDefenseBehavior extends Defend_Base implements IDefendBehavio
                             new SimpleDoDamageBehavior(attack.getDamageBase()/ fractionOfDamageMirrored)));
         }
     }
+
+    @Override
+    public String getDescription() {
+        return DefendBehaviorEnum.MIRRORDEFEND_BEHAVIOR.getDescription();
+    }
 }

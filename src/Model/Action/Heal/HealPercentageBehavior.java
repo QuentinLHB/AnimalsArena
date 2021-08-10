@@ -21,8 +21,8 @@ public class HealPercentageBehavior implements IHealBehavior{
     @Override
     public void execute(IAnimal animal) {
         IAnimal attackOwner = attack.getAttackOwner();
-        float hpRestored = attack.getAttackOwner().heal(amount);
-        BufferedText.addBufferedText(String.format("%f were restored to %s.%n", hpRestored, attackOwner));
+        float hpRestored = attackOwner.heal(amount);
+        BufferedText.addBufferedText(String.format("%d were restored to %s.%n", Math.round(hpRestored), attackOwner));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class HealPercentageBehavior implements IHealBehavior{
 
     @Override
     public String getDescription() {
-        return String.format("Restores %d%s HP to the user.", Math.round(amount*100), "%");
+        return String.format("Restores %d%s HP to the user.", Math.round((amount-1)*100), "%");
     }
 
     @Override

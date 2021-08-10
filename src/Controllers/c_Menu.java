@@ -1,13 +1,20 @@
-package Controler;
+package Controllers;
 
 import Model.Action.Attack.Concrete.AttackFactory;
+import Model.Animal.Behaviors.BehaviorFactory;
+import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
+import Model.Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
+import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
 import Model.Animal.Creation.Concrete.*;
 import Model.Util.Position;
+import Model.Util.Serialization;
 import Model.playerAI.Concrete.Player;
 import View.Frames.CreationMenuFrame;
 import View.Frames.CustomizationMenu;
 import View.Frames.MenuFrame;
+import View.Frames.PickCustomizedFrame;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class c_Menu extends controler_Base{
@@ -45,7 +52,7 @@ public class c_Menu extends controler_Base{
         return animal;
     }
 
-    public Animal createAnimal(Player player) {
+    public Animal createCustomAnimal(Player player) {
         Animal animal = new Animal(frmCustomizationMenu.lblNickname.getText(),
                 (float)frmCustomizationMenu.sliders.get(StatID.MAX_HEALTH).getValue(),
                 (float)frmCustomizationMenu.sliders.get(StatID.ATTACK).getValue()/100,
@@ -57,6 +64,14 @@ public class c_Menu extends controler_Base{
             AttackFactory.addAttackToAnimal(animal, frmCustomizationMenu.listModel.getElementAt(i));
         }
 
+        BehaviorFactory.addBehaviors(
+                animal,
+                (AttackBehaviorEnum)frmCustomizationMenu.cboAtkBhv.getSelectedItem(),
+                (DefendBehaviorEnum)frmCustomizationMenu.cboDefBhv.getSelectedItem(),
+                (DieBehaviorEnum)frmCustomizationMenu.cboDieBhv.getSelectedItem()
+                );
+
+        Serialization.addAnimalToSave(animal);
         addAnimaltoPlayers(animal, player, getFoe(player));
         return animal;
     }
@@ -102,5 +117,24 @@ public class c_Menu extends controler_Base{
 
     public void openCreationMenuFrame() {
         frmCreationMenu = new CreationMenuFrame(this, frmMainMenu, getPlayer(Position.BOTTOM), getPlayer(Position.TOP));
+    }
+
+    public void openCustomizationFrame(Player currentPlayer) {
+        new CustomizationMenu(this, frmCreationMenu, currentPlayer);
+    }
+
+    public void setCustomizationFrame(CustomizationMenu frame){
+        this.frmCustomizationMenu = frame;
+    }
+
+    public void openPickCustomizedFrame(JDialog owner, Player player) {
+        new PickCustomizedFrame(this, owner, player);
+    }
+
+    public Animal[] getSavedAnimals() {
+        ArrayList<Animal> savedAnimals = Serialization.loadAnimals();
+        Animal[] arrayAnimals = new Animal[savedAnimals.size()];
+        arrayAnimals = savedAnimals.toArray(arrayAnimals);
+        return arrayAnimals;
     }
 }

@@ -6,7 +6,7 @@ import Model.Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Model.Animal.Behaviors.DieBehavior.Concrete.UndeadDieBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
-import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.UndeadAttackBehavior;
+import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SelfHarmingAttackBehavior;
 import Model.Animal.Creation.Concrete.Animal;
 
 public class BehaviorFactory {
@@ -14,7 +14,7 @@ public class BehaviorFactory {
 
     public static void addBehaviors(Animal animal, AttackBehaviorEnum attackBehavior, DefendBehaviorEnum defendBehavior, DieBehaviorEnum dieBehavior){
         switch (attackBehavior){
-            case SELFHARMING_BEHAVIOR -> animal.setAttackBehavior(new UndeadAttackBehavior(animal));
+            case SELFHARMING_BEHAVIOR -> animal.setAttackBehavior(new SelfHarmingAttackBehavior(animal));
             default -> animal.setAttackBehavior(new SimpleAttackBehavior(animal));
         }
         switch (defendBehavior){

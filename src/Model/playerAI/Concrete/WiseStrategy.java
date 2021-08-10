@@ -120,7 +120,7 @@ public class WiseStrategy implements IStrategy {
     }
 
     private boolean canKill(IAttack attack, IAnimal target){
-        return Attack.simulateDamage(player.getAllyAnimal(), target, attack) >= target.getHealth();
+        return Attack.simulateAttack(player.getAllyAnimal(), target, attack) >= target.getHealth();
     }
 
     /**

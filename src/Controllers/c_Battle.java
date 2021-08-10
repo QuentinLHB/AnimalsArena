@@ -1,4 +1,4 @@
-package Controler;
+package Controllers;
 
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Status.Abstract.IStatus;

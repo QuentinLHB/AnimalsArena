@@ -9,7 +9,7 @@ import Model.Animal.Behaviors.DefendBehavior.Concrete.SimpleDefendBehavior;
 import Model.Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Model.Animal.Behaviors.DieBehavior.Concrete.UndeadDieBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
-import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.UndeadAttackBehavior;
+import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SelfHarmingAttackBehavior;
 import Model.Util.RNG;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ public class AnimalFactory {
 
         switch (elementType) {
             case UNDEAD -> {
-                animal.setAttackBehavior(new UndeadAttackBehavior(animal));
+                animal.setAttackBehavior(new SelfHarmingAttackBehavior(animal));
                 animal.setDieBehavior(new UndeadDieBehavior(animal));
             }
 
@@ -177,7 +177,7 @@ public class AnimalFactory {
         }
 
         if(elementType.equals(ElementType.UNDEAD)){
-            animal.setAttackBehavior(new UndeadAttackBehavior(animal));
+            animal.setAttackBehavior(new SelfHarmingAttackBehavior(animal));
             animal.setDieBehavior(new UndeadDieBehavior(animal));
         }
         else{

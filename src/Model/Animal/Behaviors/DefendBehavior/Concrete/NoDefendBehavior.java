@@ -14,4 +14,9 @@ public class NoDefendBehavior extends Defend_Base implements IDefendBehavior {
     public void defend(IAttack attack, int damage){
         animal.hurt(damage);
     }
+
+    @Override
+    public String getDescription() {
+        return DefendBehaviorEnum.NODEFEND_BEHAVIOR.getDescription();
+    }
 }

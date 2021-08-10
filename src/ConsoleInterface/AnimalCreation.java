@@ -121,7 +121,7 @@ public class AnimalCreation {
             BehaviorFactory.addBehaviors(customAnimal, chosenAttackBehavior, chosenDefendBehavior, chosenDieBehavior);
         }
         else{
-            BehaviorFactory.addBehaviors(customAnimal, AttackBehaviorEnum.SIMPLE_BEHAVIOR, DefendBehaviorEnum.SIMPLE_BEHAVIOR, DieBehaviorEnum.SIMPLE_BEHAVIOR);
+            BehaviorFactory.addBehaviors(customAnimal, AttackBehaviorEnum.SIMPLE_BEHAVIOR, DefendBehaviorEnum.SIMPLEDEFEND_BEHAVIOR, DieBehaviorEnum.SIMPLEDIE_BEHAVIOR);
         }
         addAnimalToSave(customAnimal);
         return customAnimal;

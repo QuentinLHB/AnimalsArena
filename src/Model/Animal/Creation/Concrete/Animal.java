@@ -25,7 +25,6 @@ public class Animal implements IAnimal {
 
     // ** Behaviors **
     IPerformAttackBehavior attackBehavior;
-
     /**
      * Set the attack behavior, prioritizing any behavior that is not the standard one.
      * @param newAttackBehavior AttackBehavior to add.
@@ -37,8 +36,9 @@ public class Animal implements IAnimal {
         }
 
     }
-    IDieBehavior dieBehavior;
+    public IPerformAttackBehavior getAttackBehavior(){return attackBehavior;}
 
+    IDieBehavior dieBehavior;
     /**
      * Set the die behavior, prioritizing any behavior that is not the standard one.
      * @param newDieBehavior DieBehavior to add.
@@ -49,6 +49,7 @@ public class Animal implements IAnimal {
             this.dieBehavior = newDieBehavior;
         }
     }
+    public IDieBehavior getDieBehavior(){return dieBehavior;}
 
     IDefendBehavior defendBehavior;
     public void setDefendBehavior(IDefendBehavior newDefendBehavior){
@@ -57,6 +58,7 @@ public class Animal implements IAnimal {
             this.defendBehavior = newDefendBehavior;
         }
     }
+    public IDefendBehavior getDefendBehavior(){return defendBehavior;}
 
     //** Attacks **
     private ArrayList<IAttack> attacks = new ArrayList<>();
@@ -100,12 +102,17 @@ public class Animal implements IAnimal {
     public float heal(float amount) {
         if(amount <=1) return 0;
         int maxHealth = getMaxHealth();
-        float hpRestored = maxHealth * (1-amount);
-        health += hpRestored;
-        if(health > maxHealth) {
-            hpRestored = maxHealth - health;
+        float hpRestored = maxHealth * (amount-1);
+//
+        if(health+hpRestored >= maxHealth) {
+            hpRestored = maxHealth - health ;
             health = maxHealth;
+
         }
+        else{
+            health += hpRestored;
+        }
+
         return hpRestored;
     }
 
