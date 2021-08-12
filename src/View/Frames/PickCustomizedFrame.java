@@ -9,7 +9,6 @@ import View.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Frame displaying the previously customized animals and their information.
@@ -29,7 +28,7 @@ public class PickCustomizedFrame extends JDialog {
         this.controller = controller;
         this.currentPlayer = currentPlayer;
         initComponents();
-        Util.initFrame(this, "Pick a customized animal", 500, 500);
+        Util.initFrame(this, "Pick a customized animal", 500, 650);
     }
 
     private void initComponents() {
@@ -50,24 +49,28 @@ public class PickCustomizedFrame extends JDialog {
 
         cboAnimals = new JComboBox<>(controller.getSavedAnimals());
         pnlSelection.add(cboAnimals, Util.setGridBagConstraints(1, 0, 0.8, 1));
-        cboAnimals.addActionListener(e->cboAnimals_itemChanged(e));
+        cboAnimals.addActionListener(this::cboAnimals_itemChanged);
 
 
         // Display info panel
         JPanel pnlInfo = new JPanel(new GridBagLayout());
         pnlCenter.add(pnlInfo, Util.setGridBagConstraints(0, 1, 1, 1));
 
+        int i = 0;
             // Stat display (labels)
+        pnlInfo.add(createTitleLabel("Stats :"), Util.setGridBagConstraints(0, i++, 1, 0.2));
         lblStats = new JLabel();
-        pnlInfo.add(lblStats, Util.setGridBagConstraints(0, 0, 1, 1));
+        pnlInfo.add(lblStats, Util.setGridBagConstraints(0, i++, 1, 1));
 
             // Attack display
+        pnlInfo.add(createTitleLabel("Attacks :"), Util.setGridBagConstraints(0, i++, 1, 1));
         lblAttacks = new JLabel();
-        pnlInfo.add(lblAttacks, Util.setGridBagConstraints(0, 1, 1, 1));
+        pnlInfo.add(lblAttacks, Util.setGridBagConstraints(0, i++, 1, 1));
 
             // Behavior display
+        pnlInfo.add(createTitleLabel("Behaviors :"), Util.setGridBagConstraints(0, i++, 1, 1));
         lblBehaviors = new JLabel();
-        pnlInfo.add(lblBehaviors, Util.setGridBagConstraints(0, 2, 1, 1));
+        pnlInfo.add(lblBehaviors, Util.setGridBagConstraints(0, i++, 1, 1));
 
         // Action Panel
         JPanel pnlAction = new JPanel(new GridBagLayout());
@@ -81,24 +84,29 @@ public class PickCustomizedFrame extends JDialog {
             // Edit button
         JButton btnEdit = new JButton("Edit animal");
         btnEdit.addActionListener(this::btnEdit_click);
+
+        cboAnimals.setSelectedIndex(0);
     }
 
     private void cboAnimals_itemChanged(ActionEvent e) {
         Animal selectedAnimal = (Animal)cboAnimals.getSelectedItem();
         if(selectedAnimal == null ) return;
-        lblStats.setText(Util.toHtml(selectedAnimal.getStatDisplay()));
+        lblStats.setText(selectedAnimal.getHtmlStatDisplay());
 
 
         String attackDisplay = "";
         for(IAttack attack :selectedAnimal.getAttacks()) {
-            attackDisplay += attack.getAttackName() + ": " + attack.getDescription() + "<br>";
+            attackDisplay += Util.toBold(attack.getAttackName())+ ": "  + attack.getDescription() + "<br>";
         }
         lblAttacks.setText(Util.toHtml(attackDisplay));
 
         String behaviorDisplay = "";
-        behaviorDisplay += selectedAnimal.getAttackBehavior().getDescription();
-        behaviorDisplay += selectedAnimal.getDefendBehavior().getDescription();
-        behaviorDisplay += selectedAnimal.getDieBehavior().getDescription();
+        behaviorDisplay += Util.toBold("Attack Behavior:<br>");
+        behaviorDisplay += selectedAnimal.getAttackBehavior().getDescription() + "<br>";
+        behaviorDisplay += Util.toBold("Defense Behavior:<br>");
+        behaviorDisplay += selectedAnimal.getDefendBehavior().getDescription()+ "<br>";
+        behaviorDisplay += Util.toBold("Death Behavior:<br>");
+        behaviorDisplay += selectedAnimal.getDieBehavior().getDescription()+ "<br>";
         lblBehaviors.setText(Util.toHtml(behaviorDisplay));
 
     }
@@ -108,6 +116,13 @@ public class PickCustomizedFrame extends JDialog {
     }
 
     private void btnConfirmation_click(ActionEvent e) {
+        controller.newAnimal(currentPlayer, (Animal)cboAnimals.getSelectedItem());
+        Util.exit(this);
+    }
 
+    private JLabel createTitleLabel(String text){
+        JLabel label = new JLabel(Util.toHtml(Util.toUnderlined(text)));
+        label.setFont(new Font(label.getFont().getName(), Font.BOLD, 14));
+        return label;
     }
 }

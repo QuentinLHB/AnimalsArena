@@ -4,6 +4,7 @@ import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Creation.Abstract.IAnimal;
+import View.BufferedText;
 
 public class HealDefendBehavior extends Defend_Base implements IDefendBehavior {
     public HealDefendBehavior(IAnimal animal) {
@@ -15,7 +16,7 @@ public class HealDefendBehavior extends Defend_Base implements IDefendBehavior {
         super.defend(attack, damage);
         if(animal.getActMode().equals(ActMode.DEFENSE)) {
             animal.heal(1.05f);
-            System.out.printf("%s recovered some HP due to its Healing Defense ability%n", animal.getName());
+            BufferedText.addBufferedText(String.format("%s recovered some HP due to its Healing Defense ability%n", animal.getName()));
         }
     }
     @Override

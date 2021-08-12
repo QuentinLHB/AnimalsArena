@@ -300,7 +300,7 @@ public class BattleFrame extends JFrame {
      * Displays the log when the button is clicked.
      */
     private void btnEventLog_click() {
-        new LogFrame();
+        new LogFrame(this);
     }
 
     /**
@@ -308,7 +308,7 @@ public class BattleFrame extends JFrame {
      * @param player
      */
     private void btnInfo_click(Player player) {
-        String infos = String.format(player.getAlly().getStatDisplay());
+        String infos = String.format("%s's stats :%n%s", player.getAlly(), player.getAlly().getStatDisplay());
         JOptionPane.showMessageDialog(null, infos);
 
     }

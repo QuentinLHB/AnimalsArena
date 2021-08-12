@@ -39,7 +39,7 @@ public class HealFixAmountBehavior implements IHealBehavior{
     @Override
     public int score(IAnimal target) {
         IAnimal animal = attack.getAttackOwner();
-        float maxHealth = animal.getStat(StatID.MAX_HEALTH)+ animal.getStatAlteration(StatID.MAX_HEALTH);
+        float maxHealth = animal.getStat(StatID.MAX_HEALTH);
         if(animal.getHealth() + amount > maxHealth) return Math.round(maxHealth-animal.getHealth());
         return amount;
     }

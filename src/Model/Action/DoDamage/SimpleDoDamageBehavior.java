@@ -21,8 +21,7 @@ public class SimpleDoDamageBehavior implements IDoDamageBehavior {
 
     @Override
     public void execute(IAnimal target) {
-        target.attacked(attack, Math.round(damageBase*(attack.getAttackOwner().getStat(StatID.ATTACK)*attack.getAttackOwner().getStatAlteration(StatID.ATTACK))));
-//        BufferedText.addBufferedText(String.format("%"));
+        target.attacked(attack, Math.round(damageBase*(attack.getAttackOwner().getStat(StatID.ATTACK))));
     }
 
     @Override

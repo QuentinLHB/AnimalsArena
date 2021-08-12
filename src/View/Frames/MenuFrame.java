@@ -10,11 +10,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class MenuFrame extends JFrame  {
-    private c_Menu controler;
+    private c_Menu controller;
 
     JPanel panButtons;
 
-    private JLabel lblWelcome;
     private JButton btnPvp;
     private JButton btnPve;
     private JButton btnAIvAI;
@@ -22,8 +21,8 @@ public class MenuFrame extends JFrame  {
     private JButton btnCustomize;
 
 
-    public MenuFrame(c_Menu controler){
-        this.controler = controler;
+    public MenuFrame(c_Menu controller){
+        this.controller = controller;
         initComponents();
         initEvent();
         Util.initFrame(this, "Animal Arena - Main Menu", 500, 600);
@@ -36,7 +35,7 @@ public class MenuFrame extends JFrame  {
         // todo set look and feel
 
         // Label Welcome
-        lblWelcome = new JLabel("<html>Welcome in Animals Arena, where you can experience RPG-like fights. <br>Please select the mode you'd like :</html>",
+        JLabel lblWelcome = new JLabel("<html>Welcome in Animals Arena, where you can experience RPG-like fights. <br>Please select the mode you'd like :</html>",
                 SwingConstants.CENTER);
         lblWelcome.setBorder(new EmptyBorder(0,0,20,0));
 
@@ -75,7 +74,12 @@ public class MenuFrame extends JFrame  {
         btnPvp.addActionListener(e -> btnPvp_click());
         btnAIvAI.addActionListener(e -> btnAIvAI_click());
         btnPve.addActionListener(e -> btnPve_click());
+        btnCustomize.addActionListener(e->btnCustomize_click());
 
+    }
+
+    private void btnCustomize_click() {
+        new CustomizationMenu(controller, this);
     }
 
     private void btnPve_click() {
@@ -97,11 +101,11 @@ public class MenuFrame extends JFrame  {
     }
 
     private void pickAnimalAndStartBattle(Player p1, Player p2){
-        controler.initiatePlayers(p1, p2);
-        controler.openCreationMenuFrame();
+        controller.initiatePlayers(p1, p2);
+        controller.openCreationMenuFrame();
 
-        if(controler.areAnimalsInitiated()){
-            controler.openBattleFrame();
+        if(controller.areAnimalsInitiated()){
+            controller.openBattleFrame();
         }
     }
 

@@ -3,6 +3,11 @@ import Model.Animal.Creation.Concrete.*;
 import Controllers.c_Menu;
 import Model.playerAI.Concrete.PlayerAI;
 import Model.Util.Position;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
+import javax.swing.*;
 
 import static ConsoleInterface.AnimalCreation.*;
 import static ConsoleInterface.Battle.*;
@@ -16,6 +21,11 @@ public class Main {
 
     public static void main(String[] args) {
 //        mainMenu();
+        try {
+            UIManager.setLookAndFeel( new FlatDarculaLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
         c_Menu controler = new c_Menu();
     }
 

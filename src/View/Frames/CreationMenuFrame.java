@@ -93,6 +93,7 @@ public class CreationMenuFrame extends JDialog {
 
     private void btnPickCustomized_click() {
         controler.openPickCustomizedFrame(this, currentPlayer);
+        endPickOption();
     }
 
     /**
@@ -134,9 +135,16 @@ public class CreationMenuFrame extends JDialog {
      * or closes the window if the second player already picked its animal.
      */
     private void endPickOption() {
+        // Same player if they haven't picked an animal.
+        if(!controler.isAnimalInitialized(currentPlayer)){
+            return;
+        }
+
+        // Back to menu to open the battle frame when both players have picked their animal
         if (currentPlayer.equals(p2)) {
             Util.exit(this);
         }
+        // When 1st player has chosen, switches to the 2nd player
         else{
             currentPlayer = p2;
             updateLblTitle();

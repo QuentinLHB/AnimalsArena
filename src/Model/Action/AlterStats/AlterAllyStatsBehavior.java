@@ -84,7 +84,7 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
                 amount = Math.round((stat.getValue()-1)*100);
             }
             else{
-                effect = "Lower";
+                effect = "Lowers";
                 amount = Math.round((1-stat.getValue())*100);
             }
             description += String.format("%s the user's %s stat by %d%s | ",

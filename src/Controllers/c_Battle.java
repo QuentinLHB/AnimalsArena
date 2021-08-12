@@ -21,11 +21,12 @@ public class c_Battle extends controler_Base {
     public c_Battle(c_Menu menuControler){
         this.menuControler = menuControler;
         players = menuControler.players;
+        BufferedText.resetLog();
         battleFrame = new BattleFrame(this);
     }
 
     public String getHP(IAnimal animal){
-        return String.format("%d / %d", animal.getHealth(), Math.round(animal.getMaxHealth()*animal.getStatAlteration(StatID.MAX_HEALTH)));
+        return String.format("%d / %d", animal.getHealth(), Math.round(animal.getMaxHealth()));
     }
 
     public IAnimal getAnimal(Position position) {
@@ -62,8 +63,7 @@ public class c_Battle extends controler_Base {
 
         for(Player player : players){
             IAnimal animal = player.getAlly();
-            if(animal.getStat(StatID.SPEED)*animal.getStatAlteration(StatID.SPEED)
-                    > fasterAnimal.getStat(StatID.SPEED)*fasterAnimal.getStatAlteration(StatID.SPEED)){
+            if(animal.getStat(StatID.SPEED) > fasterAnimal.getStat(StatID.SPEED)){
                 fasterAnimal = animal;
                 fasterPlayer = player;
             }

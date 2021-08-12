@@ -8,7 +8,8 @@ import java.awt.*;
 
 public class LogFrame extends JDialog {
 
-    public LogFrame(){
+    public LogFrame(JFrame owner){
+        super(owner, true);
         Util.initFrame(this, "Event log", 300, 300);
         JPanel contentPanel = Util.setContentPane(this);
 

@@ -26,7 +26,7 @@ public class UndeadDieBehavior extends SimpleDieBehavior implements IDieBehavior
     public void die() {
         if(livesLeft > 0){
             livesLeft--;
-            animal.setHealth((float)animal.getStat(StatID.MAX_HEALTH)* animal.getStatAlteration(StatID.MAX_HEALTH)/fractionOfHPonRegen);
+            animal.setHealth((float)animal.getStat(StatID.MAX_HEALTH)/fractionOfHPonRegen);
             BufferedText.addBufferedText(String.format("%s was reborn with 1/%d of its HP.%n", animal.getName(), fractionOfHPonRegen));
             fractionOfHPonRegen++;
         }

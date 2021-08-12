@@ -8,8 +8,6 @@ import java.awt.event.WindowEvent;
 
 public class Util {
 
-    private static String bufferedText;
-
     public static JPanel setContentPane(JFrame frame){
         JPanel contentPanel = createPanel();
         frame.setContentPane(contentPanel);
@@ -56,7 +54,15 @@ public class Util {
     }
 
     public static String toHtml(String plainText){
-        return "<html>" + plainText.replace(".", ".<br>") + "</html>";
+        return "<html>" + plainText.replace("\r\n", "<br>") + "</html>";
+    }
+
+    public static String toBold(String text){
+        return "<b>" + text + "</b>";
+    }
+
+    public static String toUnderlined(String text){
+        return "<u>" + text + "</u>";
     }
 
     /**

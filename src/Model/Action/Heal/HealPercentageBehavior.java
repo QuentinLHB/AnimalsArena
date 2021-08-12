@@ -28,7 +28,7 @@ public class HealPercentageBehavior implements IHealBehavior{
     @Override
     public int score(IAnimal target) {
         IAnimal animal = attack.getAttackOwner();
-        float maxHealth = animal.getStat(StatID.MAX_HEALTH)+ animal.getStatAlteration(StatID.MAX_HEALTH);
+        float maxHealth = animal.getStat(StatID.MAX_HEALTH);
         float HPHealed = maxHealth*(amount-1);
         if(animal.getHealth() +  HPHealed > maxHealth) return Math.round(maxHealth - animal.getHealth());
         return Math.round(HPHealed);

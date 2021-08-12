@@ -11,6 +11,7 @@ import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
 import View.BufferedText;
+import View.Util;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -177,7 +178,7 @@ public class Animal implements IAnimal {
 
     @Override
     public Float getStat(StatID statID) {
-        return stats.get(statID);
+        return stats.get(statID) * statAlterations.get(statID);
     }
 
     private Map<StatID, Float> statAlterations = new HashMap<>();
@@ -370,17 +371,25 @@ public class Animal implements IAnimal {
     }
 
     public String getStatDisplay(){
-        return String.format("%s's stats :%n" +
-                        "Health : %d/%d%n" +
+        return String.format("Health : %d/%d%n" +
                         "Attack : %d%n" +
                         "Defense : %d%n" +
-                        "Speed : %d%n%n",
-                name,
+                        "Speed : %d%n",
                 Math.round(health), Math.round(stats.get(StatID.MAX_HEALTH) * statAlterations.get(StatID.MAX_HEALTH)),
                 Math.round(stats.get(StatID.ATTACK)*statAlterations.get(StatID.ATTACK)*100),
                 Math.round(stats.get(StatID.DEFENSE)*statAlterations.get(StatID.DEFENSE)*100),
                 Math.round(stats.get(StatID.SPEED)*statAlterations.get(StatID.SPEED)*100)
         );
+    }
+
+    public String getHtmlStatDisplay(){
+        String display = getStatDisplay();
+        display = display.replace("Health", Util.toBold("Health"));
+        display = display.replace("Attack", Util.toBold("Attack"));
+        display = display.replace("Speed", Util.toBold("Speed"));
+        display = display.replace("Defense", Util.toBold("Defense"));
+        return Util.toHtml(display);
+
     }
 
     @Override

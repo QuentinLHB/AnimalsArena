@@ -136,7 +136,6 @@ public class Attack implements IAttack {
      */
     protected boolean accuracyTest(){
          int accuracyAfterAlterations = Math.round(attackOwner.getStat(StatID.ACCURACY)
-                * attackOwner.getStatAlteration(StatID.ACCURACY)
                 * accuracy);
         return RNG.RNGsuccess(accuracyAfterAlterations);
     }
@@ -160,17 +159,15 @@ public class Attack implements IAttack {
     public static int simulateDamage(IAnimal attackingAnimal, IAnimal target, int dmg){
         if(dmg == 0) return 0;
         float atkStat = attackingAnimal.getStat(StatID.ATTACK);
-        float atkVar = attackingAnimal.getStatAlteration(StatID.ATTACK);
 
         float targetsDef = target.getStat(StatID.DEFENSE);
-        float targetsDefVar = target.getStatAlteration(StatID.DEFENSE);
 
         double defMode = target.getActMode() == ActMode.DEFENSE ? Defend_Base.ON_DEFENSE_REDUCTION : 1;
 
         //DmgBase*Atk*AtkVar*(1+(1-Def*DefVar))*DefenseMode
         return Math.round((float)(dmg
-                *atkStat*atkVar
-                *(1+(1-targetsDef*targetsDefVar)
+                *atkStat
+                *(1+(1-targetsDef)
                 * defMode)));
     }
 }

@@ -7,6 +7,7 @@ import Model.Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.AttackBehaviorEnum;
 import Model.Animal.Creation.Concrete.Animal;
 import Model.Animal.Creation.Concrete.StatID;
+import Model.Util.RNG;
 import Model.playerAI.Concrete.Player;
 import View.Util;
 
@@ -23,6 +24,7 @@ public class CustomizationMenu extends JDialog {
 
     private JLabel lblTitle;
     public JTextField lblNickname;
+    public JCheckBox cbxBalanced;
     public EnumMap<StatID, JSlider> sliders;
     public JList lstChosenAttacks;
     public DefaultListModel<AttackEnum> listModel = new DefaultListModel<>();
@@ -30,6 +32,11 @@ public class CustomizationMenu extends JDialog {
     public JComboBox<AttackBehaviorEnum> cboAtkBhv;
     public JComboBox<DieBehaviorEnum> cboDieBhv;
     public JComboBox<DefendBehaviorEnum> cboDefBhv;
+
+
+    final int MIN_SLIDERVALUE = 50;
+    final int MAX_SLIDERVALUE = 150;
+    final int DEFAULT_SLIDERVALUE = 100;
 
 
     /**
@@ -40,12 +47,20 @@ public class CustomizationMenu extends JDialog {
      */
     public CustomizationMenu(c_Menu controler, JDialog owner, Player currentPlayer){
         super(owner, true);
+        init(controler, currentPlayer);
+    }
+
+    public CustomizationMenu(c_Menu controler, JFrame owner){
+        super(owner, true);
+        init(controler, null);
+    }
+
+    private void init(c_Menu controler, Player currentPlayer){
         this.controler = controler;
         this.currentPlayer = currentPlayer;
         initComponents();
         controler.setCustomizationFrame(this);
         Util.initFrame(this, "Customization", 500, 700);
-
     }
 
     /**
@@ -82,7 +97,8 @@ public class CustomizationMenu extends JDialog {
                 }
             }
         });
-        pnlCenter.add(lblNickname, Util.setGridBagConstraints(0,0,1, 0.3));
+        var gc = Util.setGridBagConstraints(0,0,1, 0.3);
+        pnlCenter.add(lblNickname, gc);
 
             // Stats : un panel
         JPanel pnlStat = new JPanel();
@@ -114,17 +130,31 @@ public class CustomizationMenu extends JDialog {
      */
     private void initStatSliders(JPanel panel) {
         sliders = new EnumMap<>(StatID.class);
-
-        final int MIN_SLIDERVALUE = 50;
-        final int MAX_SLIDERVALUE = 150;
-        final int DEFAULT_SLIDERVALUE = 100;
-
         int row = 0;
+
+        JPanel pnlStatOptions = new JPanel(new FlowLayout());
+        var gc = Util.setGridBagConstraints(0, row, 1, 1);
+        gc.gridwidth = 10;
+        panel.add(pnlStatOptions, gc);
+
+        cbxBalanced = new JCheckBox("Balanced", true);
+        pnlStatOptions.add(cbxBalanced, Util.setGridBagConstraints(0, row, 0.1, 1));
+
+        JButton btnReset = new JButton("Reset");
+        pnlStatOptions.add(btnReset, Util.setGridBagConstraints(1, row, 0.2, 1));
+        btnReset.addActionListener(this::btnReset_click);
+
+        JButton btnRandomStats = new JButton("Randomize");
+        pnlStatOptions.add(btnRandomStats, Util.setGridBagConstraints(2, row, 0.2, 1));
+        btnRandomStats.addActionListener(this::btnRandomStats_click);
+
+        row++;
+
         for(StatID statID: StatID.values()){
             if(statID.equals(StatID.ACCURACY)) continue;
             // Stat display
             JLabel lblStat = new JLabel(String.format("%s :", statID.name().toLowerCase(Locale.ROOT)));
-            var gc = Util.setGridBagConstraints(0, row, 0.1, 1);
+            gc = Util.setGridBagConstraints(0, row, 0.1, 1);
             gc.gridheight = 2;
             panel.add(lblStat, gc);
 
@@ -142,6 +172,24 @@ public class CustomizationMenu extends JDialog {
             statSlider.addChangeListener(e-> statSlider_valueChange(statSlider, lblValue));
             sliders.put(statID, statSlider);
         }
+    }
+
+    private void btnRandomStats_click(ActionEvent e) {
+        for (JSlider slider :
+                sliders.values()) {
+            slider.setValue(RNG.GenerateNumber(MIN_SLIDERVALUE, MAX_SLIDERVALUE));
+        }
+    }
+
+    private void btnReset_click(ActionEvent e) {
+        /* Changing the sliders' values triggers the event :
+        * if the box is checked, values are not reseted to 100.
+        * Hence the uncheck of the box during the method. Not ideal, but hey, don't judge me.
+         */
+        boolean isCbxChecked = cbxBalanced.isSelected();
+        if(isCbxChecked) cbxBalanced.setSelected(false); //
+        for (JSlider slider : sliders.values()) { slider.setValue(100);}
+        if(isCbxChecked) cbxBalanced.setSelected(true);
     }
 
     /**
@@ -208,9 +256,28 @@ public class CustomizationMenu extends JDialog {
      * @param lblValue label associated with the slider.
      */
     private void statSlider_valueChange(JSlider statSlider, JLabel lblValue) {
+        // Not balanced
+        if(!cbxBalanced.isSelected()){
+            lblValue.setText(String.valueOf(statSlider.getValue()));
+            return;
+        }
+
+        // Balanced
+        int value = statSlider.getValue();
+        int valueToAdd = 0;
+
+        if(value % (StatID.values().length-1) == 0){
+            if(value > Integer.parseInt(lblValue.getText())) valueToAdd = -1; // User raised the slider : Other stats are lowered
+            else if(value < Integer.parseInt(lblValue.getText())) valueToAdd = 1;
+            for (JSlider slider : sliders.values()) {
+                if(slider.equals(statSlider)) continue;
+                slider.setValue(slider.getValue()+valueToAdd);
+            }
+        }
+
+
         lblValue.setText(String.valueOf(statSlider.getValue()));
     }
-
 
     /**
      * When clicked, adds the attack selected in the {@link #cboAttacks attack combobox}.
@@ -255,8 +322,15 @@ public class CustomizationMenu extends JDialog {
      * @param e Event
      */
     private void btnCreateCustomAnimal_click(ActionEvent e) {
-        Animal animal = controler.createCustomAnimal(currentPlayer);
-        Util.printCreationConfirmation(animal);
-        Util.exit(this);
+        Animal animal;
+        if(currentPlayer != null){
+            animal = controler.newCustomAnimal(currentPlayer);
+            Util.printCreationConfirmation(animal);
+            Util.exit(this);
+        }
+        else{
+            animal = controler.newCustomAnimal();
+            Util.printCreationConfirmation(animal);
+        }
     }
 }

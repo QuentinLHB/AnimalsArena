@@ -30,8 +30,7 @@ public class DoRandomDamage implements IDoDamageBehavior{
     public void execute(IAnimal target) {
         target.attacked(attack,
                 Math.round(RNG.GenerateNumber(minDmg, maxDmg)
-                        *(attack.getAttackOwner().getStat(StatID.ATTACK)
-                        *attack.getAttackOwner().getStatAlteration(StatID.ATTACK))));
+                        *(attack.getAttackOwner().getStat(StatID.ATTACK))));
     }
 
     @Override

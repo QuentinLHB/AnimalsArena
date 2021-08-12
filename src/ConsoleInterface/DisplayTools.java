@@ -127,7 +127,7 @@ public class DisplayTools {
 
     }
     static float getSpeed(Animal animal){
-        return (animal.getStats().get(StatID.SPEED) * animal.getStatAlteration(StatID.SPEED));
+        return (animal.getStats().get(StatID.SPEED));
     }
 
     static void clearConsole(){

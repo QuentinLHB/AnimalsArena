@@ -111,11 +111,10 @@ public class NewAnimalFrame extends JDialog {
     }
 
     private void btnOk_click(){
-        IAnimal animal = controller.createAnimal(
+        IAnimal animal = controller.newAnimal(
                 currentPlayer,
-                controller.getFoe(currentPlayer),
-                (AnimalKind)cboAnimalKind.getSelectedItem(),
                 txtNickname.getText(),
+                (AnimalKind)cboAnimalKind.getSelectedItem(),
                 (ElementType)cboType1.getSelectedItem(),
                 (ElementType)cboType2.getSelectedItem()
 

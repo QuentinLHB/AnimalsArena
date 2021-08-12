@@ -63,7 +63,7 @@ public class AttackFactory {
             case TORNADO -> new Attack(animal, attackName.toString(), 0.8f, new SimpleDoDamageBehavior(10),
                     new InflictStatusBehavior(StatusID.FEAR));
 
-            case FLAMETHROWER -> new Attack(animal, attackName.toString(), 0.8f, new SimpleDoDamageBehavior(20));
+            case FLAMETHROWER -> new Attack(animal, attackName.toString(), 0.8f, new SimpleDoDamageBehavior(25));
 
             case SPIT -> new Attack(animal, attackName.toString(), 1f, new SimpleDoDamageBehavior(10),
                     new InflictStatusBehavior(StatusID.FEAR, 3));
@@ -106,7 +106,7 @@ public class AttackFactory {
                     new InflictStatusBehavior(StatusID.PARALYSIS, 2));
 
             case FRY ->  new Attack(animal, attackName.toString(), 1f, new SimpleDoDamageBehavior(5),
-                    new InflictStatusBehavior(StatusID.PARALYSIS, 5));
+                    new InflictStatusBehavior(StatusID.PARALYSIS, 3));
 
             case BONFIRE -> {
                 Map<StatID, Float> stats = new HashMap<>();

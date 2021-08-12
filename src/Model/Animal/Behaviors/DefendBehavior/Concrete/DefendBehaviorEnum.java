@@ -2,7 +2,7 @@ package Model.Animal.Behaviors.DefendBehavior.Concrete;
 
 public enum DefendBehaviorEnum {
     SIMPLEDEFEND_BEHAVIOR("Simple defense", "Protects itself based on the defense stat and the current mode."),
-    FULLDEFEND_BEHAVIOR("Full defense", "Takes no damage when defending."),
+    FULLDEFEND_BEHAVIOR("Full defense", String.format("%d%s chance to take no damage when defending.", FullDefendBehavior.SUCCESS_RATE, "%")),
     MIRRORDEFEND_BEHAVIOR("Mirror defense", "Return half of the damage to the opponent."),
     NODEFEND_BEHAVIOR("No defense", "Takes full damage."),
     HEALDEFND_BEHAVIOR("Healing defense", "Heals some HP when defending.")
