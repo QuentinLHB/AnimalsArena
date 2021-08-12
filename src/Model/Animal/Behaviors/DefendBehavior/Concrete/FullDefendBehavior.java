@@ -30,6 +30,11 @@ public class FullDefendBehavior extends Defend_Base implements IDefendBehavior {
     }
 
     @Override
+    public DefendBehaviorEnum getDefendBhvEnum() {
+        return DefendBehaviorEnum.FULLDEFEND_BEHAVIOR;
+    }
+
+    @Override
     public String getDescription() {
         return DefendBehaviorEnum.FULLDEFEND_BEHAVIOR.getDescription();
     }

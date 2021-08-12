@@ -34,9 +34,14 @@ public class MirrorDefenseBehavior extends Defend_Base implements IDefendBehavio
         super.defend(attack, damage);
         if(animal.getActMode().equals(ActMode.DEFENSE) && !attack.getAttackName().equals(MIROR_MOVE_NAME)) {
             animal.attack(attack.getAttackOwner(),
-                    new Attack(animal, MIROR_MOVE_NAME, 1f,
+                    new Attack(animal, null, 1f,
                             new SimpleDoDamageBehavior(attack.getDamageBase()/ fractionOfDamageMirrored)));
         }
+    }
+
+    @Override
+    public DefendBehaviorEnum getDefendBhvEnum() {
+        return DefendBehaviorEnum.MIRRORDEFEND_BEHAVIOR;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package Model.Action.Attack.Abstract;
 
+import Model.Action.Attack.Concrete.AttackEnum;
 import Model.Action.IActionBehavior;
 import Model.Animal.Creation.Abstract.IAnimal;
 
@@ -24,6 +25,8 @@ public interface IAttack extends Serializable {
      * @param target Target of the attack.
      */
     void performAttack(IAnimal target);
+
+    AttackEnum getAttackEnum();
 
     /**
      * Get the attack's name.

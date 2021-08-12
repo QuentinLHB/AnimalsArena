@@ -1,5 +1,6 @@
 package Model.Animal.Behaviors.DieBehavior.Concrete;
 
+import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.DieBehavior.Abstract.IDieBehavior;
 import Model.Animal.Creation.Concrete.StatID;
@@ -41,5 +42,10 @@ public class UndeadDieBehavior extends SimpleDieBehavior implements IDieBehavior
     @Override
     public String getDescription() {
         return DieBehaviorEnum.UNDEADDIE_BEHAVIOR.getDescription();
+    }
+
+    @Override
+    public DieBehaviorEnum getDieBhvEnum() {
+        return DieBehaviorEnum.UNDEADDIE_BEHAVIOR;
     }
 }

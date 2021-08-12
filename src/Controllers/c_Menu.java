@@ -67,14 +67,15 @@ public class c_Menu extends controler_Base{
      * @param player Player for whom to create an animal.
      * @return The created animal.
      */
-    public Animal newCustomAnimal(Player player) {
-        Animal animal = newCustomAnimal();
-        addAnimaltoPlayers(player, animal);
+    public Animal validateCustomAnimal(Player player, Animal oldAnimal) {
+        if(oldAnimal != null)
+            Serialization.removeAnimalFromSave(oldAnimal);
+        Animal animal = createCustomAnimal();
+        if(player != null)
+            addAnimaltoPlayers(player, animal);
         return animal;
-
     }
-
-    public Animal newCustomAnimal(){
+    private Animal createCustomAnimal(){
         Animal animal;
         try{
 
@@ -188,5 +189,7 @@ public class c_Menu extends controler_Base{
         return arrayAnimals;
     }
 
-
+    public void openEditCustomAnimalFrame(JDialog owner, Animal animal, Player currentPlayer) {
+        new CustomizationMenu(this, owner, animal, currentPlayer);
+    }
 }

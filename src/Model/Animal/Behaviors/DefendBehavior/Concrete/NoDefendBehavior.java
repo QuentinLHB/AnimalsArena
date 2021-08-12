@@ -16,6 +16,11 @@ public class NoDefendBehavior extends Defend_Base implements IDefendBehavior {
     }
 
     @Override
+    public DefendBehaviorEnum getDefendBhvEnum() {
+        return DefendBehaviorEnum.NODEFEND_BEHAVIOR;
+    }
+
+    @Override
     public String getDescription() {
         return DefendBehaviorEnum.NODEFEND_BEHAVIOR.getDescription();
     }

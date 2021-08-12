@@ -31,6 +31,11 @@ public class SelfHarmingAttackBehavior extends SimpleAttackBehavior implements I
     }
 
     @Override
+    public AttackBehaviorEnum getAttackBhvEnum() {
+        return AttackBehaviorEnum.SELFHARMING_BEHAVIOR;
+    }
+
+    @Override
     public String getDescription() {
         return AttackBehaviorEnum.SELFHARMING_BEHAVIOR.getDescription();
     }

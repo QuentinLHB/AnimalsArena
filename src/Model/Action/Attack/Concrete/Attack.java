@@ -21,15 +21,15 @@ import java.util.Objects;
 public class Attack implements IAttack {
 
     protected boolean enabled = true;
-    protected final String name;
+    protected final AttackEnum attackEnum;
     protected float accuracy;
     protected IAnimal attackOwner;
     private IDoDamageBehavior doDamage;
     private IActionBehavior[] behaviors;
 
-    public Attack(IAnimal attackOwner, String name, float accuracy, IDoDamageBehavior doDamage, IActionBehavior... behaviors) {
+    public Attack(IAnimal attackOwner, AttackEnum attackEnum, float accuracy, IDoDamageBehavior doDamage, IActionBehavior... behaviors) {
         this.attackOwner = attackOwner;
-        this.name = name;
+        this.attackEnum = attackEnum;
         this.accuracy = accuracy;
         this.doDamage = doDamage;
         this.behaviors = behaviors;
@@ -65,7 +65,7 @@ public class Attack implements IAttack {
 
     @Override
     public void performAttack(IAnimal foe) {
-        BufferedText.addBufferedText(String.format("%s performs %s.%n", attackOwner.getName(), name));
+        BufferedText.addBufferedText(String.format("%s performs %s.%n", attackOwner.getName(), attackEnum));
         if(accuracyTest()){
             doDamage.execute(foe);
             for(IActionBehavior behavior : behaviors){
@@ -78,8 +78,13 @@ public class Attack implements IAttack {
     }
 
     @Override
+    public AttackEnum getAttackEnum() {
+        return attackEnum;
+    }
+
+    @Override
     public String getAttackName() {
-        return name;
+        return attackEnum.toString();
     }
 
 
@@ -121,12 +126,12 @@ public class Attack implements IAttack {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Attack attack = (Attack) o;
-        return name.equals(attack.name);
+        return attackEnum.equals(attack.attackEnum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(attackEnum);
     }
 
     /**
@@ -142,7 +147,7 @@ public class Attack implements IAttack {
 
     @Override
     public String toString() {
-        return name;
+        return getAttackName();
     }
 
     /**

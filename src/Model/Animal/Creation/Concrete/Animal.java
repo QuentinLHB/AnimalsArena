@@ -10,6 +10,7 @@ import Model.Animal.Behaviors.DieBehavior.Concrete.SimpleDieBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.IPerformAttackBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Concrete.SimpleAttackBehavior;
+import Model.Util.Serialization;
 import View.BufferedText;
 import View.Util;
 
@@ -17,9 +18,15 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Animal implements IAnimal {
 
+
+    private final int id;
+    public int getId() {
+        return id;
+    }
 
     @Serial
     private static final long serialVersionUID = 3492485037626697204L;
@@ -239,7 +246,7 @@ public class Animal implements IAnimal {
      * @param defenseStat Base defense of the animal.
      */
     public Animal(int maxHealth, float attackStat, float defenseStat, float speed) {
-        this("Unamed Model.Animal", maxHealth, attackStat, defenseStat, speed);
+        this("Unnamed Animal", maxHealth, attackStat, defenseStat, speed);
     }
 
     /**
@@ -263,6 +270,8 @@ public class Animal implements IAnimal {
         statAlterations.put(StatID.DEFENSE, 1f);
         statAlterations.put(StatID.ACCURACY, 1f);
         statAlterations.put(StatID.SPEED, 1f);
+
+        this.id = Serialization.generateNewID();
 
         this.name = name;
     }
@@ -395,5 +404,18 @@ public class Animal implements IAnimal {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return id == animal.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

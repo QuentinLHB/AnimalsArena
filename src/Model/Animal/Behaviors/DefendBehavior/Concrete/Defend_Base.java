@@ -6,7 +6,7 @@ import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
 import Model.Animal.Creation.Concrete.StatID;
 
-public class Defend_Base implements IDefendBehavior {
+public abstract class Defend_Base implements IDefendBehavior {
     protected IAnimal animal;
     protected boolean canDefend = true;
     public static final double ON_DEFENSE_REDUCTION = 0.5;

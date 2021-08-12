@@ -84,6 +84,7 @@ public class PickCustomizedFrame extends JDialog {
             // Edit button
         JButton btnEdit = new JButton("Edit animal");
         btnEdit.addActionListener(this::btnEdit_click);
+        pnlAction.add(btnEdit, Util.setGridBagConstraints(1, 0, 0.5, 1));
 
         cboAnimals.setSelectedIndex(0);
     }
@@ -113,6 +114,10 @@ public class PickCustomizedFrame extends JDialog {
 
 
     private void btnEdit_click(ActionEvent e) {
+        controller.openEditCustomAnimalFrame(this, (Animal) cboAnimals.getSelectedItem(), currentPlayer);
+        this.invalidate();
+        this.validate();
+        this.repaint();
     }
 
     private void btnConfirmation_click(ActionEvent e) {

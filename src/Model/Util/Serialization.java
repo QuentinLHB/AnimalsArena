@@ -67,7 +67,7 @@ public class Serialization {
     public static void removeAnimalFromSave(Animal animal){
         ArrayList<Animal> animals = loadAnimals();
         try{
-            animals.remove(animals);
+            animals.remove(animal);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -82,5 +82,14 @@ public class Serialization {
 
     public static boolean isSaveEmpty(){
         return loadAnimals().isEmpty();
+    }
+
+    public static int generateNewID() {
+        int maxID = 0;
+        ArrayList<Animal> animals = loadAnimals();
+        for (Animal animal: animals) {
+            if(animal.getId() > maxID) maxID = animal.getId();
+        }
+        return ++maxID;
     }
 }

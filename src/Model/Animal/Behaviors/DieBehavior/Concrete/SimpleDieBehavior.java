@@ -1,6 +1,7 @@
 package Model.Animal.Behaviors.DieBehavior.Concrete;
 
 import Model.Action.Status.Abstract.IStatus;
+import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.DieBehavior.Abstract.IDieBehavior;
 
@@ -29,6 +30,11 @@ public class SimpleDieBehavior implements IDieBehavior {
     @Override
     public boolean isAlive() {
         return isAlive;
+    }
+
+    @Override
+    public DieBehaviorEnum getDieBhvEnum() {
+        return DieBehaviorEnum.SIMPLEDIE_BEHAVIOR;
     }
 
     @Override

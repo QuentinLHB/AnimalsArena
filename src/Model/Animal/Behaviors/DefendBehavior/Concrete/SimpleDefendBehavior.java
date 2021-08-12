@@ -14,4 +14,9 @@ public class SimpleDefendBehavior extends Defend_Base implements IDefendBehavior
     public String getDescription() {
         return DefendBehaviorEnum.SIMPLEDEFEND_BEHAVIOR.getDescription();
     }
+
+    @Override
+    public DefendBehaviorEnum getDefendBhvEnum() {
+        return DefendBehaviorEnum.SIMPLEDEFEND_BEHAVIOR;
+    }
 }

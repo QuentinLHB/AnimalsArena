@@ -1,6 +1,7 @@
 package View.Frames;
 
 import Controllers.c_Menu;
+import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Attack.Concrete.AttackEnum;
 import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
 import Model.Animal.Behaviors.DieBehavior.Concrete.DieBehaviorEnum;
@@ -12,15 +13,18 @@ import Model.playerAI.Concrete.Player;
 import View.Util;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
+import java.util.List;
 
 public class CustomizationMenu extends JDialog {
-    private c_Menu controler;
+    private c_Menu controller;
     private Player currentPlayer;
+    private Animal animalToLoad;
 
     private JLabel lblTitle;
     public JTextField lblNickname;
@@ -41,26 +45,60 @@ public class CustomizationMenu extends JDialog {
 
     /**
      * Constructor of the customization frame, that allows the user to create an animal.
-     * @param controler {@link Controllers.c_Menu Menu Controller}
+     * @param controller {@link Controllers.c_Menu Menu Controller}
      * @param owner Frame that needs to stay open while this frame is active.
      * @param currentPlayer Player creating its custom animal
      */
-    public CustomizationMenu(c_Menu controler, JDialog owner, Player currentPlayer){
+    public CustomizationMenu(c_Menu controller, JDialog owner, Player currentPlayer){
         super(owner, true);
-        init(controler, currentPlayer);
+        init(controller, currentPlayer);
     }
 
-    public CustomizationMenu(c_Menu controler, JFrame owner){
+    public CustomizationMenu(c_Menu controller, JFrame owner){
         super(owner, true);
-        init(controler, null);
+        init(controller, null);
+    }
+
+    public CustomizationMenu(c_Menu controller, JDialog owner, Animal animal, Player currentPlayer){
+        super(owner, true);
+        animalToLoad = animal;
+        this.currentPlayer = currentPlayer;
+        init(controller, currentPlayer);
     }
 
     private void init(c_Menu controler, Player currentPlayer){
-        this.controler = controler;
+        this.controller = controler;
         this.currentPlayer = currentPlayer;
         initComponents();
         controler.setCustomizationFrame(this);
-        Util.initFrame(this, "Customization", 500, 700);
+        loadAnimal();
+        Util.initFrame(this, "Customization", 650, 700);
+    }
+
+    private void loadAnimal() {
+        if(animalToLoad == null) return;
+
+        lblNickname.setText(animalToLoad.getName());
+
+        cbxBalanced.setSelected(false);
+        for(Map.Entry<StatID, JSlider> statSlider : sliders.entrySet()){
+            JSlider slider = statSlider.getValue();
+            StatID statID = statSlider.getKey();
+            int stat = statID.equals(StatID.MAX_HEALTH) ?
+                    Math.round(animalToLoad.getStat(statID)) : // Max health is on base 100
+                    Math.round(animalToLoad.getStat(statID)*100); // Other stats on base 1
+            slider.setValue(stat);
+        }
+
+        listModel.clear(); // Removes pre-loaded Defend
+        for(IAttack attack : animalToLoad.getAttacks()){
+            listModel.addElement(attack.getAttackEnum());
+        }
+
+        cboAtkBhv.setSelectedItem(animalToLoad.getAttackBehavior().getAttackBhvEnum());
+        cboDefBhv.setSelectedItem(animalToLoad.getDefendBehavior().getDefendBhvEnum());
+        cboDieBhv.setSelectedItem(animalToLoad.getDieBehavior().getDieBhvEnum());
+
     }
 
     /**
@@ -75,7 +113,9 @@ public class CustomizationMenu extends JDialog {
         // Center panel : owns all the other Panels
         JPanel pnlCenter = new JPanel();
         pnlCenter.setLayout(new GridBagLayout());
-        contentPanel.add(pnlCenter);
+        JScrollPane scrollPane = new JScrollPane(pnlCenter, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
 
             // Nickname
         final String TEXT = "Name";
@@ -86,7 +126,7 @@ public class CustomizationMenu extends JDialog {
             public void focusGained(FocusEvent e) {
                 if (lblNickname.getText().equals(TEXT)) {
                     lblNickname.setText("");
-                    lblNickname.setForeground(Color.BLACK);
+                    lblNickname.setForeground(UIManager.getDefaults().getColor("FormattedTextField.foreground"));
                 }
             }
             @Override
@@ -142,7 +182,7 @@ public class CustomizationMenu extends JDialog {
 
         JButton btnReset = new JButton("Reset");
         pnlStatOptions.add(btnReset, Util.setGridBagConstraints(1, row, 0.2, 1));
-        btnReset.addActionListener(this::btnReset_click);
+        btnReset.addActionListener(this::btnResetStats_click);
 
         JButton btnRandomStats = new JButton("Randomize");
         pnlStatOptions.add(btnRandomStats, Util.setGridBagConstraints(2, row, 0.2, 1));
@@ -181,7 +221,7 @@ public class CustomizationMenu extends JDialog {
         }
     }
 
-    private void btnReset_click(ActionEvent e) {
+    private void btnResetStats_click(ActionEvent e) {
         /* Changing the sliders' values triggers the event :
         * if the box is checked, values are not reseted to 100.
         * Hence the uncheck of the box during the method. Not ideal, but hey, don't judge me.
@@ -262,6 +302,7 @@ public class CustomizationMenu extends JDialog {
             return;
         }
 
+        cbxBalanced.setSelected(false); // Avoid the snowball effect of the triggered events
         // Balanced
         int value = statSlider.getValue();
         int valueToAdd = 0;
@@ -277,6 +318,7 @@ public class CustomizationMenu extends JDialog {
 
 
         lblValue.setText(String.valueOf(statSlider.getValue()));
+        cbxBalanced.setSelected(true);
     }
 
     /**
@@ -322,15 +364,8 @@ public class CustomizationMenu extends JDialog {
      * @param e Event
      */
     private void btnCreateCustomAnimal_click(ActionEvent e) {
-        Animal animal;
-        if(currentPlayer != null){
-            animal = controler.newCustomAnimal(currentPlayer);
-            Util.printCreationConfirmation(animal);
-            Util.exit(this);
-        }
-        else{
-            animal = controler.newCustomAnimal();
-            Util.printCreationConfirmation(animal);
-        }
+        Animal animal = controller.validateCustomAnimal(currentPlayer, animalToLoad);
+        Util.printCreationConfirmation(animal);
+        Util.exit(this);
     }
 }

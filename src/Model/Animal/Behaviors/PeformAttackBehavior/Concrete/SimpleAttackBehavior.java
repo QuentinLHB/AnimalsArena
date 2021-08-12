@@ -34,6 +34,11 @@ public class SimpleAttackBehavior implements IPerformAttackBehavior {
     }
 
     @Override
+    public AttackBehaviorEnum getAttackBhvEnum() {
+        return AttackBehaviorEnum.SIMPLE_BEHAVIOR;
+    }
+
+    @Override
     public String getDescription() {
         return AttackBehaviorEnum.SIMPLE_BEHAVIOR.getDescription();
     }
