@@ -1,6 +1,6 @@
 # AnimalsArena
 
-*FR (EN below):*
+*Fançais (English bellow):*
 
 Animals Arena est un jeu permettant d'opposer deux animaux élémentaires en **combat au tour par tour** à la façon d'un RPG. 
 Les joueurs composent leur animaux, soit avec des espèces et types existants, soit en les **customisant** complètement.
@@ -11,7 +11,7 @@ Les animaux customisés sont sauvegardés localement pour être réutilisés fac
 Développé en Java sous Java SWING.
 
 
-*EN:*
+*Egnlish:*
 
 Animals Arena is a game opposing two elemental animals in a **turn-based RPG-like battle**.
 Both players create their animal, either by using existing animals and types, or by **customizing** them entierly.
