@@ -6,6 +6,7 @@ import Model.Animal.Behaviors.DefendBehavior.Concrete.Defend_Base;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Action.Attack.Abstract.IAttack;
+import Model.Animal.Creation.Concrete.ElementType;
 import Model.Animal.Creation.Concrete.StatID;
 import Model.Util.RNG;
 import View.BufferedText;
@@ -26,6 +27,7 @@ public class Attack implements IAttack {
     protected IAnimal attackOwner;
     private IDoDamageBehavior doDamage;
     private IActionBehavior[] behaviors;
+    private ElementType type;
 
     public Attack(IAnimal attackOwner, AttackEnum attackEnum, float accuracy, IDoDamageBehavior doDamage, IActionBehavior... behaviors) {
         this.attackOwner = attackOwner;
@@ -119,6 +121,16 @@ public class Attack implements IAttack {
         allBehaviors.add(doDamage);
         Collections.addAll(allBehaviors, behaviors);
         return allBehaviors;
+    }
+
+    @Override
+    public void setType(ElementType type) {
+        this.type = type;
+    }
+
+    @Override
+    public ElementType getType() {
+        return type;
     }
 
     @Override

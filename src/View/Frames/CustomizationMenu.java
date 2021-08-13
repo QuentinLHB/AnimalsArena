@@ -10,6 +10,7 @@ import Model.Animal.Creation.Concrete.Animal;
 import Model.Animal.Creation.Concrete.StatID;
 import Model.Util.RNG;
 import Model.playerAI.Concrete.Player;
+import View.ButtonColors;
 import View.Util;
 
 import javax.swing.*;
@@ -19,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
-import java.util.List;
 
 public class CustomizationMenu extends JDialog {
     private c_Menu controller;
@@ -27,7 +27,7 @@ public class CustomizationMenu extends JDialog {
     private Animal animalToLoad;
 
     private JLabel lblTitle;
-    public JTextField lblNickname;
+    public JTextField txtName;
     public JCheckBox cbxBalanced;
     public EnumMap<StatID, JSlider> sliders;
     public JList lstChosenAttacks;
@@ -37,7 +37,7 @@ public class CustomizationMenu extends JDialog {
     public JComboBox<DieBehaviorEnum> cboDieBhv;
     public JComboBox<DefendBehaviorEnum> cboDefBhv;
 
-
+    final String DEFAULT_NICKNAME = "Name";
     final int MIN_SLIDERVALUE = 50;
     final int MAX_SLIDERVALUE = 150;
     final int DEFAULT_SLIDERVALUE = 100;
@@ -78,7 +78,7 @@ public class CustomizationMenu extends JDialog {
     private void loadAnimal() {
         if(animalToLoad == null) return;
 
-        lblNickname.setText(animalToLoad.getName());
+        txtName.setText(animalToLoad.getName());
 
         cbxBalanced.setSelected(false);
         for(Map.Entry<StatID, JSlider> statSlider : sliders.entrySet()){
@@ -114,31 +114,32 @@ public class CustomizationMenu extends JDialog {
         JPanel pnlCenter = new JPanel();
         pnlCenter.setLayout(new GridBagLayout());
         JScrollPane scrollPane = new JScrollPane(pnlCenter, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
         contentPanel.add(scrollPane, BorderLayout.CENTER);
 
             // Nickname
-        final String TEXT = "Name";
-        lblNickname = new JTextField(TEXT);
-        lblNickname.setForeground(Color.GRAY);
-        lblNickname.addFocusListener(new FocusListener() {
+
+        txtName = new JTextField(DEFAULT_NICKNAME);
+        txtName.setForeground(Color.GRAY);
+        txtName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (lblNickname.getText().equals(TEXT)) {
-                    lblNickname.setText("");
-                    lblNickname.setForeground(UIManager.getDefaults().getColor("FormattedTextField.foreground"));
+                if (txtName.getText().equals(DEFAULT_NICKNAME)) {
+                    txtName.setText("");
+                    txtName.setForeground(UIManager.getDefaults().getColor("FormattedTextField.foreground"));
                 }
             }
             @Override
             public void focusLost(FocusEvent e) {
-                if (lblNickname.getText().isEmpty()) {
-                    lblNickname.setForeground(Color.GRAY);
-                    lblNickname.setText(TEXT);
+                if (txtName.getText().isEmpty()) {
+                    txtName.setForeground(Color.GRAY);
+                    txtName.setText(DEFAULT_NICKNAME);
                 }
             }
         });
         var gc = Util.setGridBagConstraints(0,0,1, 0.3);
-        pnlCenter.add(lblNickname, gc);
+        pnlCenter.add(txtName, gc);
 
             // Stats : un panel
         JPanel pnlStat = new JPanel();
@@ -160,8 +161,13 @@ public class CustomizationMenu extends JDialog {
 
             // Creation button
         JButton btnCreateCustomAnimal = new JButton("OK");
+        ButtonColors.setValidationBtnColor(btnCreateCustomAnimal);
         btnCreateCustomAnimal.addActionListener(this::btnCreateCustomAnimal_click);
-        pnlCenter.add(btnCreateCustomAnimal, Util.setGridBagConstraints(0, 4, 1, 0.3));
+        gc = Util.setGridBagConstraints(0, 4, 1, 0.3);
+        gc.fill = GridBagConstraints.NONE;
+        gc.ipady = 10;
+        gc.ipadx = 10;
+        pnlCenter.add(btnCreateCustomAnimal, gc);
     }
 
     /**
@@ -243,7 +249,7 @@ public class CustomizationMenu extends JDialog {
 
         // List containing the chosen attacks
         listModel.addElement(AttackEnum.DEFEND);
-        lstChosenAttacks = new JList(listModel);
+        lstChosenAttacks = new JList<>(listModel);
         lstChosenAttacks.setSize(20, 100);
         lstChosenAttacks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstChosenAttacks.setVisibleRowCount(5);
@@ -254,10 +260,12 @@ public class CustomizationMenu extends JDialog {
         // Validation Button
         JButton btnAddAttack = new JButton("Add");
         btnAddAttack.addActionListener(this::btnAddAtk_click);
+        ButtonColors.setValidationBtnColor(btnAddAttack);
         pnlAttacks.add(btnAddAttack, Util.setGridBagConstraints(1, 0, 0.3, 1));
 
         // Delete Button
         JButton btnRemove = new JButton("X");
+        ButtonColors.setDeleteBtnColor(btnRemove);
         gc = Util.setGridBagConstraints(1, 1,  0.1, 1);
         btnRemove.addActionListener(this::btnRemoveAtk_click);
         pnlAttacks.add(btnRemove, gc);
@@ -364,8 +372,53 @@ public class CustomizationMenu extends JDialog {
      * @param e Event
      */
     private void btnCreateCustomAnimal_click(ActionEvent e) {
-        Animal animal = controller.validateCustomAnimal(currentPlayer, animalToLoad);
-        Util.printCreationConfirmation(animal);
-        Util.exit(this);
+        if(checkIfFormFilled()){
+            Animal animal = controller.validateCustomAnimal(currentPlayer, animalToLoad);
+            Util.printCreationConfirmation(animal);
+            Util.closeFrame(this);
+        }
+
+    }
+
+    /**
+     * Verifies that all the information is filled :
+     * <br>Nickname MUST be filled
+     * <br> stats can stay on their default value but a confirmation is asked if so.
+     * <br> Confirmation is asked if less than 5 attacks are added.
+     * @return
+     */
+    private boolean checkIfFormFilled() {
+        if(txtName.getText().equals(DEFAULT_NICKNAME)){
+            JOptionPane.showMessageDialog(this, "Please name your animal.");
+            return false;
+        }
+
+        boolean ok = false;
+        for (JSlider slider :
+                sliders.values()) {
+            if(slider.getValue() != 100){
+                ok = true;
+                break;
+            }
+        }
+        if(!ok){
+            var pane = JOptionPane.showConfirmDialog(this, "Keep all the stats on their default value ?",
+                    "Default stats", JOptionPane.YES_NO_OPTION);
+
+            if(pane == JOptionPane.NO_OPTION){
+                return false;
+            }
+        }
+
+        if(listModel.getSize() != 5){
+            int room = 5-listModel.getSize();
+            var pane = JOptionPane.showConfirmDialog(this, String.format("You can still add %d attack%s. Create animal nonetheless ?", room, room == 1 ? "":"s"),
+                    "Default stats", JOptionPane.YES_NO_OPTION);
+
+            if(pane == JOptionPane.NO_OPTION){
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -30,6 +30,8 @@ public class CreationMenuFrame extends JDialog {
      */
     private JLabel lblTitle;
 
+    private JButton btnPickCustomized;
+
 
     /**
      * Creates the method creation dialog frame (blocks usage of the owner frame)
@@ -59,9 +61,7 @@ public class CreationMenuFrame extends JDialog {
         contentPanel.add(lblTitle, BorderLayout.NORTH);
 
         // Buttons
-        int nRows = 3;
-        if(!Serialization.isSaveEmpty()) nRows++;
-        JPanel panButtons = new JPanel(new GridLayout(nRows, 1, 10, 10));
+        JPanel panButtons = new JPanel(new GridLayout(4, 1, 10, 10));
         initButtons(panButtons);
         contentPanel.add(panButtons, BorderLayout.CENTER);
 
@@ -84,11 +84,10 @@ public class CreationMenuFrame extends JDialog {
         panButtons.add(btnCustomize);
         btnCustomize.addActionListener(e-> btnCustomize_click());
 
-        if(!Serialization.isSaveEmpty()){
-            JButton btnPickCustomized = new JButton("<html>Choose one of the customized animals</html>");
-            panButtons.add(btnPickCustomized);
-            btnPickCustomized.addActionListener(e -> btnPickCustomized_click());
-        }
+        btnPickCustomized = new JButton("<html>Choose one of the customized animals</html>");
+        panButtons.add(btnPickCustomized);
+        btnPickCustomized.addActionListener(e -> btnPickCustomized_click());
+        tryEnablePickCustomButton();
     }
 
     private void btnPickCustomized_click() {
@@ -126,7 +125,7 @@ public class CreationMenuFrame extends JDialog {
      * Updates the title label with the current player.
      */
     private void updateLblTitle() {
-        String title = String.format("<html>How will %s fight ?</html>", currentPlayer);
+        String title = String.format("<html>How will <b>%s</b> fight ?</html>", currentPlayer);
         lblTitle.setText(title);
     }
 
@@ -135,6 +134,7 @@ public class CreationMenuFrame extends JDialog {
      * or closes the window if the second player already picked its animal.
      */
     private void endPickOption() {
+        tryEnablePickCustomButton();
         // Same player if they haven't picked an animal.
         if(!controler.isAnimalInitialized(currentPlayer)){
             return;
@@ -142,13 +142,17 @@ public class CreationMenuFrame extends JDialog {
 
         // Back to menu to open the battle frame when both players have picked their animal
         if (currentPlayer.equals(p2)) {
-            Util.exit(this);
+            Util.closeFrame(this);
         }
         // When 1st player has chosen, switches to the 2nd player
         else{
             currentPlayer = p2;
             updateLblTitle();
         }
+    }
+
+    private void tryEnablePickCustomButton() {
+        btnPickCustomized.setEnabled(!Serialization.isSaveEmpty());
     }
 
 }

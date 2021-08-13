@@ -122,6 +122,6 @@ public class NewAnimalFrame extends JDialog {
 
         Util.printCreationConfirmation(animal);
 
-        Util.exit(this);
+        Util.closeFrame(this);
     }
 }

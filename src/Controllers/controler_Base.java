@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class controler_Base {
 
     protected ArrayList<Player> players ;
+    protected static String theme;
 
     protected controler_Base(){
         players = new ArrayList<>();
@@ -22,6 +23,10 @@ public class controler_Base {
 
     public Player getFoe(Player player) {
         return player.equals(players.get(0)) ? players.get(1):players.get(0);
+    }
+
+    public String getTheme(){
+        return theme;
     }
 
 }

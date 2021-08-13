@@ -13,6 +13,9 @@ import View.Frames.CreationMenuFrame;
 import View.Frames.CustomizationMenu;
 import View.Frames.MenuFrame;
 import View.Frames.PickCustomizedFrame;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class c_Menu extends controler_Base{
 
 //    JFrame currentFrame;
     public c_Menu(){
+        setTheme("Dark");
         frmMainMenu = new MenuFrame(this);
     }
     /**
@@ -79,7 +83,7 @@ public class c_Menu extends controler_Base{
         Animal animal;
         try{
 
-            animal = new Animal(frmCustomizationMenu.lblNickname.getText(),
+            animal = new Animal(frmCustomizationMenu.txtName.getText(),
                     (float)frmCustomizationMenu.sliders.get(StatID.MAX_HEALTH).getValue(),
                     (float)frmCustomizationMenu.sliders.get(StatID.ATTACK).getValue()/100,
                     (float)frmCustomizationMenu.sliders.get(StatID.DEFENSE).getValue()/100,
@@ -191,5 +195,26 @@ public class c_Menu extends controler_Base{
 
     public void openEditCustomAnimalFrame(JDialog owner, Animal animal, Player currentPlayer) {
         new CustomizationMenu(this, owner, animal, currentPlayer);
+    }
+
+    public void setTheme(String theme) {
+        controler_Base.theme = theme;
+        LookAndFeel laf;
+        switch (theme){
+            case "Dark" -> laf = new FlatDarculaLaf();
+            case "Light" -> laf = new FlatLightLaf();
+            default -> laf = new FlatIntelliJLaf();
+        }
+
+        try {
+            UIManager.setLookAndFeel(laf);
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
+
+    }
+
+    public void deleteAnimal(Animal animalToDelete) {
+        Serialization.removeAnimalFromSave(animalToDelete);
     }
 }

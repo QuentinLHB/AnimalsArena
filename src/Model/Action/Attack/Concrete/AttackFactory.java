@@ -14,6 +14,7 @@ import Model.Action.InflictStatus.InflictStatusBehavior;
 import Model.Action.InflictStatus.SelfInflictStatusBehavior;
 import Model.Action.Status.Concrete.StatusID;
 import Model.Animal.Creation.Concrete.Animal;
+import Model.Animal.Creation.Concrete.ElementType;
 import Model.Animal.Creation.Concrete.StatID;
 
 import java.util.*;
@@ -31,110 +32,116 @@ public class AttackFactory {
      * @param animal Model.Animal on which the attack must be added.
      * @param attackName Attack to add, from the AttackEnum enumerator class.
      */
-    public static void addAttackToAnimal(Animal animal, AttackEnum attackName){
+    public static Attack addAttackToAnimal(Animal animal, AttackEnum attackName){
+        Attack attack;
         switch (attackName){
-            case DEFEND -> new Attack(animal, attackName, 1f, new DoNoDamageBehavior(), new SimpleDefendBehavior());
+            case DEFEND -> attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(), new SimpleDefendBehavior());
 
-            case BITE -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15));
+            case BITE -> attack =new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15));
 
-            case FIRE_BITE -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(20));
+            case FIRE_BITE -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(20));
 
-            case POISON_BITE -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15),
+            case POISON_BITE -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15),
                         new InflictStatusBehavior(StatusID.POISON));
 
-            case DEATH_BITE -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15),
+            case DEATH_BITE -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15),
                         new HealPartOfDmgDealt(0.5f));
 
-            case SHIELD_ATTACK -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(10),
+            case SHIELD_ATTACK -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(10),
                     new SimpleDefendBehavior());
 
-            case HYPNOSIS -> new Attack(animal, attackName, 0.6f, new DoNoDamageBehavior(),
+            case HYPNOSIS -> attack = new Attack(animal, attackName, 0.6f, new DoNoDamageBehavior(),
                     new InflictStatusBehavior(StatusID.SLEEP));
 
-            case GROWL -> new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
+            case GROWL -> attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                     new InflictStatusBehavior(StatusID.FEAR, 2));
 
-            case PEWK -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(5),
+            case PEWK -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(5),
                     new InflictStatusBehavior(StatusID.POISON, 3));
 
-            case HEALING_POWER -> new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
+            case HEALING_POWER -> attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                     new HealPercentageBehavior(1.2f));
 
-            case TORNADO -> new Attack(animal, attackName, 0.8f, new SimpleDoDamageBehavior(10),
+            case TORNADO -> attack = new Attack(animal, attackName, 0.8f, new SimpleDoDamageBehavior(10),
                     new InflictStatusBehavior(StatusID.FEAR));
 
-            case FLAMETHROWER -> new Attack(animal, attackName, 0.8f, new SimpleDoDamageBehavior(25));
+            case FLAMETHROWER -> attack = new Attack(animal, attackName, 0.8f, new SimpleDoDamageBehavior(25));
 
-            case SPIT -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(10),
+            case SPIT -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(10),
                     new InflictStatusBehavior(StatusID.FEAR, 3));
 
-            case TSUNAMI -> new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15));
+            case TSUNAMI -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15));
 
             case RAGE -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.ATTACK, 1.25f);
                 stats.put(StatID.DEFENSE, 0.9f);
-                new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
+                attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
             case FURY -> {
-                new Attack(animal, attackName, 0.7f, new SimpleDoDamageBehavior(30),
+                attack = new Attack(animal, attackName, 0.7f, new SimpleDoDamageBehavior(30),
                         new SelfInflictStatusBehavior(StatusID.PARALYSIS, 3));
             }
 
-            case HEADBUTT -> new Attack(animal, attackName, 1f, new DoRandomDamage(1, 30));
+            case HEADBUTT -> attack = new Attack(animal, attackName, 1f, new DoRandomDamage(1, 30));
 
             case PURR -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.ATTACK, 0.9f);
                 stats.put(StatID.DEFENSE, 0.9f);
-                new Attack(animal, attackName,1f, new DoNoDamageBehavior(),
+                attack = new Attack(animal, attackName,1f, new DoNoDamageBehavior(),
                         new AlterFoesStatsBehavior(stats));
             }
 
-            case STOMP -> new Attack(animal, attackName, 0.5f, new SimpleDoDamageBehavior(35),
+            case STOMP -> attack = new Attack(animal, attackName, 0.5f, new SimpleDoDamageBehavior(35),
                     new InflictStatusBehavior(StatusID.FEAR, 2));
 
             case GIFT_OF_LIFE -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.MAX_HEALTH, 1.25f);
-                new Attack(animal, attackName, 0.8f, new DoNoDamageBehavior(),
+                attack = new Attack(animal, attackName, 0.8f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
 
-            case THUNDER -> new Attack(animal, attackName, 0.8f, new SimpleDoDamageBehavior(10),
+            case THUNDER -> attack = new Attack(animal, attackName, 0.8f, new SimpleDoDamageBehavior(10),
                     new InflictStatusBehavior(StatusID.PARALYSIS, 2));
 
-            case FRY ->  new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(5),
+            case FRY -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(5),
                     new InflictStatusBehavior(StatusID.PARALYSIS, 3));
 
             case BONFIRE -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.ATTACK, 1.2f);
-                new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
+                attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
 
             case ICESHIELD -> {
                 Map<StatID, Float> stats = new HashMap<>();
                 stats.put(StatID.DEFENSE, 1.2f);
-                new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
+                attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
 
-            case PERMASTINK -> new Attack(animal, attackName, 0.8f, new DoNoDamageBehavior(),
+            case PERMASTINK -> attack = new Attack(animal, attackName, 0.8f, new DoNoDamageBehavior(),
                     new InflictStatusBehavior(StatusID.POISON, 7));
 
-            case INTIMIDATION -> new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
+            case INTIMIDATION -> attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                     new InflictStatusBehavior(StatusID.PARALYSIS, 5));
 
             //add here
 
-            default -> new Attack(animal, AttackEnum.DEFEND,  1f, new DoNoDamageBehavior());
+            default -> attack = new Attack(animal, AttackEnum.DEFEND,  1f, new DoNoDamageBehavior());
         }
-
+        return attack;
     }
 
+    public static void addAttackToAnimal(Animal animal, AttackEnum attackName, ElementType type){
+        Attack attack = addAttackToAnimal(animal, attackName);
+        attack.setType(type);
+    }
+        
     /**
      * @return List of all the attacks that can be created by the factory.
      */

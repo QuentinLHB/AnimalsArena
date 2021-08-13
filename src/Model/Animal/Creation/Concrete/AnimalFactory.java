@@ -195,18 +195,18 @@ public class AnimalFactory {
     private static void addElementalBite(Animal animal, ElementType elementType){
         switch (elementType){
             case FIRE:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.FIRE_BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FIRE_BITE, elementType);
                 break;
 
             case POISON:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.POISON_BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.POISON_BITE, elementType);
                 break;
 
             case UNDEAD:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.DEATH_BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.DEATH_BITE, elementType);
 
             default:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE, elementType);
                 break;
         }
     }
@@ -215,32 +215,32 @@ public class AnimalFactory {
         switch (elementType){
 
             case NORMAL:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.HEADBUTT);
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.FURY);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.HEADBUTT, elementType);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FURY, elementType);
                 break;
 
             case FIRE:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.FLAMETHROWER);
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.BONFIRE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FLAMETHROWER, elementType);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.BONFIRE, elementType);
                 break;
 
             case POISON:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.PEWK);
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.PERMASTINK);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.PEWK, elementType);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.PERMASTINK, elementType);
 
                 break;
 
             case WATER:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.TSUNAMI);
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.ICESHIELD);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.TSUNAMI, elementType);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.ICESHIELD, elementType);
                 break;
             case UNDEAD:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.GIFT_OF_LIFE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.GIFT_OF_LIFE, elementType);
                 break;
 
             case ELETRIC:
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.THUNDER);
-                AttackFactory.addAttackToAnimal(animal, AttackEnum.FRY);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.THUNDER, elementType);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FRY, elementType);
 
             default:
                 break;

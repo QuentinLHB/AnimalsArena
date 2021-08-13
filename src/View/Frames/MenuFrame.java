@@ -4,10 +4,13 @@ import Model.playerAI.Concrete.Player;
 import Model.playerAI.Concrete.PlayerAI;
 import Model.Util.Position;
 import View.Util;
+import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class MenuFrame extends JFrame  {
     private c_Menu controller;
@@ -17,8 +20,8 @@ public class MenuFrame extends JFrame  {
     private JButton btnPvp;
     private JButton btnPve;
     private JButton btnAIvAI;
-    private JButton btnConsult;
     private JButton btnCustomize;
+    private JCheckBox cbxTheme;
 
 
     public MenuFrame(c_Menu controller){
@@ -32,8 +35,6 @@ public class MenuFrame extends JFrame  {
         //Window
         JPanel contentPanel = Util.setContentPane(this);
 
-        // todo set look and feel
-
         // Label Welcome
         JLabel lblWelcome = new JLabel("<html>Welcome in Animals Arena, where you can experience RPG-like fights. <br>Please select the mode you'd like :</html>",
                 SwingConstants.CENTER);
@@ -42,10 +43,29 @@ public class MenuFrame extends JFrame  {
         contentPanel.add(lblWelcome, BorderLayout.NORTH);
 
         // Choice buttons
-        panButtons = new JPanel(new GridLayout(6,1, 10, 10));
+        panButtons = new JPanel(new GridLayout(4,1, 10, 10));
         initButtons();
         contentPanel.add(panButtons, BorderLayout.CENTER);
 
+        // Checkbox theme
+        JPanel southPanel = new JPanel(new GridBagLayout());
+        contentPanel.add(southPanel, BorderLayout.SOUTH);
+        cbxTheme = new JCheckBox("Dark theme", true);
+        cbxTheme.addActionListener(this::cbxTheme_checkChange);
+        var gc = Util.setGridBagConstraints(0, 0, 1, 1);
+        gc.anchor = GridBagConstraints.EAST;
+        gc.fill = GridBagConstraints.NONE;
+        southPanel.add(cbxTheme, gc);
+    }
+
+    private void cbxTheme_checkChange(ActionEvent actionEvent) {
+        if(cbxTheme.isSelected()){
+            controller.setTheme("Dark");
+        }
+        else{
+            controller.setTheme("Light");
+        }
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private void initButtons(){
@@ -61,12 +81,8 @@ public class MenuFrame extends JFrame  {
         btnAIvAI = new JButton("<html>AI vs AI : Spectate a fight between two AI !</html>");
         panButtons.add(btnAIvAI);
 
-        // Button Consult
-        btnConsult = new JButton("<html>Consult animals and attacks' statistics.</html>");
-        panButtons.add(btnConsult);
-
         // Button Customize
-        btnCustomize = new JButton("<html>Create your custom animal.</html>");
+        btnCustomize = new JButton("<html>Create a fully customized animal.</html>");
         panButtons.add(btnCustomize);
     }
 

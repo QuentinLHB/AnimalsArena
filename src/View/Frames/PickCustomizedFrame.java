@@ -4,6 +4,7 @@ import Controllers.c_Menu;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Concrete.Animal;
 import Model.playerAI.Concrete.Player;
+import View.ButtonColors;
 import View.Util;
 
 import javax.swing.*;
@@ -77,17 +78,41 @@ public class PickCustomizedFrame extends JDialog {
         pnlCenter.add(pnlAction, Util.setGridBagConstraints(0, 2, 1, 1));
 
             // Confirmation button
-        JButton btnConfirmation = new JButton("Pick this animal");
-        pnlAction.add(btnConfirmation, Util.setGridBagConstraints(0, 0, 0.5, 1));
+        var gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.NONE;
+        gc.insets = new Insets(5, 2, 5, 2);
+        gc.ipady = 5;
+        gc.ipadx = 0;
+        gc.weightx = 0.7;
+        gc.weighty = 1;
+
+        gc.anchor = GridBagConstraints.NORTH;
+        gc.gridx = 0;
+        gc.gridy = 0;
+        JButton btnConfirmation = new JButton("OK");
+        ButtonColors.setValidationBtnColor(btnConfirmation);
+        pnlAction.add(btnConfirmation, gc);
         btnConfirmation.addActionListener(this::btnConfirmation_click);
 
             // Edit button
-        JButton btnEdit = new JButton("Edit animal");
+        gc.gridx = 1;
+        gc.weightx = 0.15;
+        JButton btnEdit = new JButton("Edit");
+        ButtonColors.setEditBtnColor(btnEdit);
         btnEdit.addActionListener(this::btnEdit_click);
-        pnlAction.add(btnEdit, Util.setGridBagConstraints(1, 0, 0.5, 1));
+        pnlAction.add(btnEdit, gc);
 
+            // Delete button
+        gc.gridx = 2;
+        JButton btnDelete = new JButton("Delete");
+        btnDelete.addActionListener(this::btnDelete_click);
+        ButtonColors.setDeleteBtnColor(btnDelete);
+        pnlAction.add(btnDelete, gc);
         cboAnimals.setSelectedIndex(0);
+
+
     }
+
 
     private void cboAnimals_itemChanged(ActionEvent e) {
         Animal selectedAnimal = (Animal)cboAnimals.getSelectedItem();
@@ -115,19 +140,44 @@ public class PickCustomizedFrame extends JDialog {
 
     private void btnEdit_click(ActionEvent e) {
         controller.openEditCustomAnimalFrame(this, (Animal) cboAnimals.getSelectedItem(), currentPlayer);
-        this.invalidate();
-        this.validate();
-        this.repaint();
+        refreshCustomAnimals();
+        cboAnimals.setSelectedIndex(cboAnimals.getItemCount()-1);
+
+    }
+
+    private void btnDelete_click(ActionEvent actionEvent) {
+        Animal selectedAnimal = (Animal)cboAnimals.getSelectedItem();
+        var confirm = JOptionPane.showConfirmDialog(this, String.format("Are you sure you want to delete %s permanently ?", selectedAnimal),
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
+        if(confirm == JOptionPane.YES_OPTION){
+            controller.deleteAnimal(selectedAnimal);
+            if(controller.getSavedAnimals().length > 0){
+                refreshCustomAnimals();
+                cboAnimals.setSelectedIndex(0);
+            }
+            else{
+                Util.closeFrame(this);
+            }
+        }
     }
 
     private void btnConfirmation_click(ActionEvent e) {
         controller.newAnimal(currentPlayer, (Animal)cboAnimals.getSelectedItem());
-        Util.exit(this);
+        Util.closeFrame(this);
     }
 
     private JLabel createTitleLabel(String text){
         JLabel label = new JLabel(Util.toHtml(Util.toUnderlined(text)));
         label.setFont(new Font(label.getFont().getName(), Font.BOLD, 14));
         return label;
+    }
+
+    private void refreshCustomAnimals(){
+        cboAnimals.removeAllItems();
+        Animal[] animals = controller.getSavedAnimals();
+        for(Animal animal : animals){
+            cboAnimals.addItem(animal);
+        }
     }
 }

@@ -20,12 +20,6 @@ public class Main {
     static Animal animalB;
 
     public static void main(String[] args) {
-//        mainMenu();
-        try {
-            UIManager.setLookAndFeel( new FlatDarculaLaf() );
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
-        }
         c_Menu controler = new c_Menu();
     }
 

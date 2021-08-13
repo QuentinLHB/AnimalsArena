@@ -45,7 +45,7 @@ public class Util {
 
     }
 
-    public static void exit(Window frame) {
+    public static void closeFrame(Window frame) {
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 

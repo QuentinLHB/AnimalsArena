@@ -3,6 +3,7 @@ package Model.Action.Attack.Abstract;
 import Model.Action.Attack.Concrete.AttackEnum;
 import Model.Action.IActionBehavior;
 import Model.Animal.Creation.Abstract.IAnimal;
+import Model.Animal.Creation.Concrete.ElementType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,4 +48,7 @@ public interface IAttack extends Serializable {
     String getDescription();
 
     ArrayList<IActionBehavior> getBehaviors();
+
+    void setType(ElementType type);
+    ElementType getType();
 }

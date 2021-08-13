@@ -3,6 +3,7 @@ package View;
 import Model.Action.Attack.Abstract.IAttack;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class JButtonAttack extends JButton {
     IAttack attack;
@@ -10,6 +11,7 @@ public class JButtonAttack extends JButton {
     public JButtonAttack(IAttack attack){
         super(attack.getAttackName());
         this.attack = attack;
+//        super.setFont(new Font(super.getFont().getName(), Font.BOLD, 12));
     }
 
     public IAttack getAttack(){
