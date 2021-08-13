@@ -20,7 +20,7 @@ public class AnimalCreation {
      * Make the user choose between customization or not.
      * @return the animal, whether customized or not.
      */
-    static Animal chooseMethodCreationMenu(String playerName){
+    public static Animal chooseMethodCreationMenu(String playerName){
         int choice;
         System.out.printf("How will %s fight ?%n", playerName);
         System.out.println("0: Pick a random animal");
@@ -47,7 +47,7 @@ public class AnimalCreation {
      * Create a customized animal based on the users' choices.
      * @return The created customized animal.
      */
-    static Animal createCustomAnimal(){
+    public static Animal createCustomAnimal(){
         // 1. Choose stats
         EnumMap<StatID, Integer> chosenStats = new EnumMap<>(StatID.class);
         var scanner = new Scanner(System.in);

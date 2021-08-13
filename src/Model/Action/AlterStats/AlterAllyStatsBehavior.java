@@ -23,13 +23,13 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
 
     @Override
     public void execute(IAnimal target) {
-        String effectToDisplay = "";
+        StringBuilder effectToDisplay = new StringBuilder();
         target = attack.getAttackOwner();
-        for (StatID stat : statsToAlter.keySet()) {
-            target.alterStat(stat, statsToAlter.get(stat));
-            effectToDisplay += effectDisplay(target, stat);
+        for (Map.Entry<StatID, Float> stat : statsToAlter.entrySet()) {
+            target.alterStat(stat.getKey(), stat.getValue());
+            effectToDisplay.append(effectDisplay(target, stat.getKey()));
         }
-        BufferedText.addBufferedText(effectToDisplay);
+        BufferedText.addBufferedText(effectToDisplay.toString());
     }
 
     protected String effectDisplay(IAnimal target, StatID stat){
@@ -37,7 +37,7 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
             return String.format("%s's %s was restored.%n", target, stat.name().toLowerCase(Locale.ROOT));
         } else {
             String change = statsToAlter.get(stat) > 1 ? "raised" : "lowered";
-            return String.format("%s's %s was %s.%n", target, stat.name().toLowerCase(Locale.ROOT), change);
+            return String.format("%s's %s was %s.%n", target, stat, change);
         }
     }
 
@@ -74,7 +74,7 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
 
     @Override
     public String getDescription() {
-        String description = "";
+        StringBuilder description = new StringBuilder();
         for (Map.Entry<StatID, Float> stat :
                 statsToAlter.entrySet()) {
             String effect;
@@ -87,8 +87,8 @@ public class AlterAllyStatsBehavior implements IAlterStatsBehavior {
                 effect = "Lowers";
                 amount = Math.round((1-stat.getValue())*100);
             }
-            description += String.format("%s the user's %s stat by %d%s | ",
-                    effect, stat.getKey().name(), amount, "%");
+            description.append(String.format("%s the user's %s stat by %d%s | ",
+                    effect, stat.getKey().name(), amount, "%"));
         }
         return description.substring(0, description.length()-3);
     }

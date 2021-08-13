@@ -14,7 +14,6 @@ public class InflictStatusBehavior implements IInflictStatusBehavior {
     protected IAttack attack;
     protected StatusID statusID;
     protected int duration;
-//    private boolean selfInflicting;
 
 
     public InflictStatusBehavior(StatusID statusID){

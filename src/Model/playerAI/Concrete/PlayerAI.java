@@ -10,8 +10,6 @@ public class PlayerAI extends Player {
 
     private IStrategy currentStrategy;
 
-    public static int cpuId;
-
 
     public IAnimal getAllyAnimal() {
         return ally;

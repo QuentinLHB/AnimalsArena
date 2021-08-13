@@ -12,9 +12,9 @@ import static ConsoleInterface.DisplayTools.*;
 public class Battle {
 
 
-    static Animal battle(PlayerAI playerA, PlayerAI playerB){
-        var animalA = Main.animalA;
-        var animalB = Main.animalB;
+    public static Animal battle(PlayerAI playerA, PlayerAI playerB){
+        var animalA = MainMenu.animalA;
+        var animalB = MainMenu.animalB;
 
         do {
             turn(playerA, playerB);
@@ -35,10 +35,10 @@ public class Battle {
 
     static void turn(PlayerAI playerA, PlayerAI playerB){
 
-        System.out.println("Tour n°" + Main.turns + "\n");
+        System.out.println("Tour n°" + MainMenu.turns + "\n");
 
-        var animalA = Main.animalA;
-        var animalB = Main.animalB;
+        var animalA = MainMenu.animalA;
+        var animalB = MainMenu.animalB;
 
         if(whichIsFaster() == animalA){
             if(playerA == null) performAction(animalA, animalB);
@@ -77,7 +77,7 @@ public class Battle {
         nextLine();
         delay();
 
-        Main.turns++;
+        MainMenu.turns++;
     }
 
     public static void performAction(Animal animal, Animal target){

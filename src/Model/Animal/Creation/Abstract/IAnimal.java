@@ -6,6 +6,7 @@ import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Creation.Concrete.StatID;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -102,4 +103,7 @@ public interface IAnimal extends Serializable {
      */
     ArrayList<IStatus> getStatuses();
 
+    void setImgUrl(URL resource);
+
+    URL getUrl();
 }

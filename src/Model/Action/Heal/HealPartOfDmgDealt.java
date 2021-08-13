@@ -8,7 +8,7 @@ import View.BufferedText;
 public class HealPartOfDmgDealt implements IHealBehavior{
 
     private IAttack attack;
-    private float partOfHP;
+    private final float partOfHP;
 
     /**
      * Constructor of the behavior healing part of the damage dealt by the attack.

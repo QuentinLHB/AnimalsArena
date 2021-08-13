@@ -1,7 +1,5 @@
 package Model.Action.Attack.Concrete;
 
-import Model.Animal.Creation.Concrete.Animal;
-
 /**
  * Enumerator of the possible attacks.
  */
@@ -59,11 +57,19 @@ public enum AttackEnum {
         this.name = name;
     }
 
+    /**
+     * Returns the attack's name.
+     * @return attack's name
+     */
     @Override
     public String toString() {
         return name;
     }
 
+    /**
+     * Returns the attack's description.
+     * @return attack's description
+     */
     public String getDescription(){
         return AttackFactory.getAttackDescription(this);
     }

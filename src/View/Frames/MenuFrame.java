@@ -4,11 +4,9 @@ import Model.playerAI.Concrete.Player;
 import Model.playerAI.Concrete.PlayerAI;
 import Model.Util.Position;
 import View.Util;
-import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -24,6 +22,10 @@ public class MenuFrame extends JFrame  {
     private JCheckBox cbxTheme;
 
 
+    /**
+     * Constructor of the main menu. : Initiates the main frame.
+     * @param controller Controller.
+     */
     public MenuFrame(c_Menu controller){
         this.controller = controller;
         initComponents();
@@ -31,6 +33,11 @@ public class MenuFrame extends JFrame  {
         Util.initFrame(this, "Animal Arena - Main Menu", 500, 600);
     }
 
+    // ************ INIT *****************
+
+    /**
+     * Initiates the frame's components.
+     */
     private void initComponents(){
         //Window
         JPanel contentPanel = Util.setContentPane(this);
@@ -51,23 +58,15 @@ public class MenuFrame extends JFrame  {
         JPanel southPanel = new JPanel(new GridBagLayout());
         contentPanel.add(southPanel, BorderLayout.SOUTH);
         cbxTheme = new JCheckBox("Dark theme", true);
-        cbxTheme.addActionListener(this::cbxTheme_checkChange);
         var gc = Util.setGridBagConstraints(0, 0, 1, 1);
         gc.anchor = GridBagConstraints.EAST;
         gc.fill = GridBagConstraints.NONE;
         southPanel.add(cbxTheme, gc);
     }
 
-    private void cbxTheme_checkChange(ActionEvent actionEvent) {
-        if(cbxTheme.isSelected()){
-            controller.setTheme("Dark");
-        }
-        else{
-            controller.setTheme("Light");
-        }
-        SwingUtilities.updateComponentTreeUI(this);
-    }
-
+    /**
+     * Initiates the frame's buttons.
+     */
     private void initButtons(){
         // Button PVP
         btnPvp = new JButton("<html>Player vs Player : Each player composes its animal for an intense fight !</html>");
@@ -86,36 +85,75 @@ public class MenuFrame extends JFrame  {
         panButtons.add(btnCustomize);
     }
 
+    /**
+     * Initiates the components' events
+     */
     private void initEvent(){
-        btnPvp.addActionListener(e -> btnPvp_click());
-        btnAIvAI.addActionListener(e -> btnAIvAI_click());
-        btnPve.addActionListener(e -> btnPve_click());
-        btnCustomize.addActionListener(e->btnCustomize_click());
+        btnPvp.addActionListener(this::btnPvp_click);
+        btnAIvAI.addActionListener(this::btnAIvAI_click);
+        btnPve.addActionListener(this::btnPve_click);
+        btnCustomize.addActionListener(this::btnCustomize_click);
+        cbxTheme.addActionListener(this::cbxTheme_checkChange);
 
     }
 
-    private void btnCustomize_click() {
-        new CustomizationMenu(controller, this);
-    }
-
-    private void btnPve_click() {
-        Player p1 = new Player(Position.BOTTOM);
-        PlayerAI p2 = new PlayerAI(Position.TOP);
-        pickAnimalAndStartBattle(p1, p2);
-    }
-
-    private void btnAIvAI_click() {
-        PlayerAI p1 = new PlayerAI(Position.BOTTOM);
-        PlayerAI p2 = new PlayerAI(Position.TOP);
-        pickAnimalAndStartBattle(p1, p2);
-    }
-
-    private void btnPvp_click() {
+    // ************* EVENTS ****************
+    /**
+     * When clicked, initiates two players and opens the creation menu.
+     * @param e Event.
+     */
+    private void btnPvp_click(ActionEvent e) {
         Player p1 = new Player(Position.BOTTOM);
         Player p2 = new Player(Position.TOP);
         pickAnimalAndStartBattle(p1, p2);
     }
 
+    /**
+     * When clicked, initiates a player and an AI and opens the creation menu.
+     * @param e Event.
+     */
+    private void btnPve_click(ActionEvent e) {
+        Player p1 = new Player(Position.BOTTOM);
+        PlayerAI p2 = new PlayerAI(Position.TOP);
+        pickAnimalAndStartBattle(p1, p2);
+    }
+
+    /**
+     * When clicked, initiates two AIs and opens the creation menu.
+     * @param e Event.
+     */
+    private void btnAIvAI_click(ActionEvent e) {
+        PlayerAI p1 = new PlayerAI(Position.BOTTOM);
+        PlayerAI p2 = new PlayerAI(Position.TOP);
+        pickAnimalAndStartBattle(p1, p2);
+    }
+
+    /**
+     * When clicked, opens the customization menu.
+     */
+    private void btnCustomize_click(ActionEvent e) {
+        new CustomizationMenu(controller, this);
+    }
+    /**
+     * When the checkbox is clicked, changes the current theme : Light or dark.
+     * @param e Check change event.
+     */
+    private void cbxTheme_checkChange(ActionEvent e) {
+        if(cbxTheme.isSelected()){
+            controller.setTheme("Dark");
+        }
+        else{
+            controller.setTheme("Light");
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    // ***************** METHODS *****************
+    /**
+     * Launches the battle if the two players and their animals are correctly initialized.
+     * @param p1 First player
+     * @param p2 Second player
+     */
     private void pickAnimalAndStartBattle(Player p1, Player p2){
         controller.initiatePlayers(p1, p2);
         controller.openCreationMenuFrame();

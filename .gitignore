@@ -1,3 +1,4 @@
 # Project exclude paths
 /out/
 /tmp/
+/src/View/TestFrame.java

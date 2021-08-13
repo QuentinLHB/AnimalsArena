@@ -27,7 +27,6 @@ public class c_Menu extends controler_Base{
     CreationMenuFrame frmCreationMenu;
     CustomizationMenu frmCustomizationMenu;
 
-//    JFrame currentFrame;
     public c_Menu(){
         setTheme("Dark");
         frmMainMenu = new MenuFrame(this);
@@ -58,7 +57,7 @@ public class c_Menu extends controler_Base{
      */
     public Animal newAnimal(Player player, String nickname, AnimalKind animalKind, ElementType... elementType) {
         Animal animal;
-        if(nickname.equals("") || nickname == null) animal = AnimalFactory.CreateAnimal(animalKind, elementType);
+        if(nickname.equals("")) animal = AnimalFactory.CreateAnimal(animalKind, elementType);
         else  animal = AnimalFactory.CreateAnimal(animalKind, nickname, elementType);
 
         addAnimaltoPlayers(player, animal);
@@ -138,7 +137,7 @@ public class c_Menu extends controler_Base{
      * @return True if an animal is found.
      */
     public boolean isAnimalInitialized(Player player) {
-        return !(player.getAlly() == null);
+        return (player.getAlly() != null);
     }
 
     /**

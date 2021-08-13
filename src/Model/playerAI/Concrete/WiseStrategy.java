@@ -10,19 +10,16 @@ import Model.playerAI.Abstract.IStrategy;
 import java.util.*;
 
 /**
- * Choose an attack based on a score calculated by taking into account :
- * - Damages dealt on the foe
- * - Status applied if any (fix score)
- * - Stat alterations
+ * Choose an attack based on a score calculated by taking into account :<br>
+ * - Damages dealt on the foe<br>
+ * - Status applied if any (fix score)<br>
+ * - Stat alterations<br>
  *
  * Doesn't use the same attack two times in a row.
  */
 public class WiseStrategy implements IStrategy {
     private final PlayerAI player;
-//    private ;
     private ArrayList<ScoredAttack> scoredAttacks = new ArrayList<>();
-
-//    private IAttack lastAttack;
 
     public WiseStrategy(PlayerAI player){
         this.player = player;
@@ -38,53 +35,12 @@ public class WiseStrategy implements IStrategy {
         }
     }
 
-    private void refreshAttackList(){
-        ArrayList<IAttack> attacks = player.getAllyAnimal().getAttacks();
-
-        if(attacks.size() < scoredAttacks.size()){
-            ArrayList<ScoredAttack> attacksToRemove = new ArrayList<>();
-            for (int i = 0; i < scoredAttacks.size(); i++) {
-                boolean found = false;
-                ScoredAttack scoredAttack = scoredAttacks.get(i);
-                for (IAttack attack : attacks) {
-                    if(scoredAttack.getAttack().equals(attack)) {
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found){
-                    attacksToRemove.add(scoredAttack);
-                }
-            }
-            for(ScoredAttack attackToRemove : attacksToRemove){
-                scoredAttacks.remove(attackToRemove);
-            }
-        }
-
-        if(attacks.size() > scoredAttacks.size()){
-            for (IAttack attack : attacks) {
-                boolean found = false;
-                for (ScoredAttack scoredAttack : scoredAttacks) {
-                    if(attack.equals(scoredAttack.getAttack())) {
-                        found = true;
-                        break;
-                }
-            }
-                if(!found){
-                    scoredAttacks.add(new ScoredAttack(attack, 0, 100));
-                }
-            }
-        }
-
-    }
-
     /**
      * Choose an attack based on a score system for every attack available.
      * @return The chosen attack.
      */
     @Override
     public IAttack chooseAttack() {
-//        refreshAttackList();
         refreshScore();
 
         IAttack chosenAttack = scoredAttacks.get(0).getAttack();
@@ -110,7 +66,7 @@ public class WiseStrategy implements IStrategy {
             int score = calculateScore(attack, player.getFoesAnimal());
             scoredAttack.setScore(score);
         }
-        Collections.sort(scoredAttacks, Collections.reverseOrder());
+        scoredAttacks.sort(Collections.reverseOrder());
     }
 
 

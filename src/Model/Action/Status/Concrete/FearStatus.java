@@ -10,15 +10,8 @@ import View.BufferedText;
  */
 public class FearStatus extends Status_Base implements IStatus {
 
-    /**
-     * Effect applied to the attack stat of the frightened foe. Default is 0.5.
-     */
-    public float onAttackEffect;
+
     public static final float DEFAULT_ATTACKEFFECT  = 0.5f;
-    /**
-     * Effect applied to the defense stat of the frightened foe. Default is 0.5.
-     */
-    public float onDefenseEffect;
     public static final float DEFAULT_DEFENSEEFFECT  = 0.5f;
     private static final int DEFAULT_DURATION = 3;
 
@@ -34,8 +27,6 @@ public class FearStatus extends Status_Base implements IStatus {
         super(animal, duration);
         super.duration = duration;
         super.turnsLeft = duration;
-        this.onAttackEffect = onAttackEffect;
-        this.onDefenseEffect = onDefenseEffect;
         super.printEffect("frightened");
         animal.alterStat(StatID.ATTACK, onAttackEffect);
         animal.alterStat(StatID.DEFENSE, onDefenseEffect);

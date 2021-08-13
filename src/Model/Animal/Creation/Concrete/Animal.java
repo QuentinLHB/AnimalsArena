@@ -15,15 +15,15 @@ import View.BufferedText;
 import View.Util;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.net.URL;
+import java.util.*;
 
 public class Animal implements IAnimal {
 
 
     private final int id;
+    private URL imgUrl;
+
     public int getId() {
         return id;
     }
@@ -169,14 +169,14 @@ public class Animal implements IAnimal {
     public void canAct(boolean allow) {
         canAct = allow;
     }
-    private Map<StatID, Float> stats = new HashMap<>();
+    private Map<StatID, Float> stats = new EnumMap<>(StatID.class);
     /**
      * Return a clone of the stats values.
      * @return clone of the stats values.
      */
     @Override
     public  Map<StatID, Float> getStats(){
-        Map<StatID, Float> clonedStats = new HashMap<>();
+        var clonedStats = new EnumMap<StatID, Float>(StatID.class);
         for (var i = 0; i < StatID.values().length; i++) {
             clonedStats.put(StatID.values()[i], this.stats.get(StatID.values()[i]));
         }
@@ -188,7 +188,7 @@ public class Animal implements IAnimal {
         return stats.get(statID) * statAlterations.get(statID);
     }
 
-    private Map<StatID, Float> statAlterations = new HashMap<>();
+    private Map<StatID, Float> statAlterations = new EnumMap<>(StatID.class);
 
     @Override
     public Float getStatAlteration(StatID statID) {
@@ -201,6 +201,16 @@ public class Animal implements IAnimal {
     private ArrayList<IStatus> statuses = new ArrayList<>();
     public ArrayList<IStatus> getStatuses() {
         return statuses;
+    }
+
+    @Override
+    public void setImgUrl(URL imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    @Override
+    public URL getUrl() {
+        return imgUrl;
     }
 
     //Other infos

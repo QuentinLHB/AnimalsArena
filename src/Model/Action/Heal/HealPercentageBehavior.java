@@ -8,7 +8,7 @@ import View.BufferedText;
 public class HealPercentageBehavior implements IHealBehavior{
 
     private IAttack attack;
-    private float amount;
+    private final float amount;
 
     public HealPercentageBehavior(float amount){
         this.amount = amount;

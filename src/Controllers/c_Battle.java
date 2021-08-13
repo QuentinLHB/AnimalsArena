@@ -3,6 +3,7 @@ package Controllers;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Abstract.IAnimal;
+import Model.Animal.Creation.Concrete.AnimalFactory;
 import Model.Animal.Creation.Concrete.StatID;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
@@ -11,6 +12,7 @@ import View.Frames.BattleFrame;
 import View.BufferedText;
 
 import javax.swing.*;
+import java.net.URL;
 
 public class c_Battle extends controler_Base {
 
@@ -36,6 +38,7 @@ public class c_Battle extends controler_Base {
         return null;
     }
 
+    @Override
     public Player getPlayer(Position position) {
         for (Player player: players) {
             if(player.getPosition().equals(position)) return player;
@@ -125,18 +128,26 @@ public class c_Battle extends controler_Base {
     }
 
     public String getStatus(IAnimal animal) {
-        String statuses = "";
+        StringBuilder statuses = new StringBuilder();
 
         for (IStatus status :
                 animal.getStatuses()) {
-            statuses += status.getStatusID().initials() + " ";
+            statuses.append(status.getStatusID().initials() + " ");
         }
-        return statuses;
+        return statuses.toString();
     }
 
     public void endGame() {
         menuControler.reopenMainMenu();
         battleFrame.dispose();
 
+    }
+
+    public URL getUrl(Position position) {
+        var url = getPlayer(position).getAlly().getUrl();
+        if(url == null) {
+            url = getClass().getResource("/resources/images/missingno.png");
+        }
+        return url;
     }
 }

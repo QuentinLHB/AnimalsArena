@@ -8,7 +8,7 @@ import Model.Animal.Creation.Concrete.StatID;
 public class SimpleDoDamageBehavior implements IDoDamageBehavior {
 
     private IAttack attack;
-    private int damageBase;
+    private final int damageBase;
 
     public SimpleDoDamageBehavior(int damageBase){
         this.damageBase = damageBase;

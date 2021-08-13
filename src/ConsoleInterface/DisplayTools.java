@@ -5,10 +5,7 @@ import Model.Action.Attack.Concrete.AttackFactory;
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Creation.Concrete.*;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DisplayTools {
 
@@ -45,8 +42,8 @@ public class DisplayTools {
         System.out.println("---------------");
     }
 
-    static void printAllAttacks() {
-        ArrayList<IAttack> allAttacks = AttackFactory.getAllAttacks();
+    public static void printAllAttacks() {
+        List<IAttack> allAttacks = AttackFactory.getAllAttacks();
         for (int i = 1; i < allAttacks.size(); i++) {
             IAttack attack = allAttacks.get(i);
             System.out.printf("%d: %s [%s]%n", i, attack.getAttackName(), attack.getDescription());
@@ -74,7 +71,7 @@ public class DisplayTools {
         }
     }
 
-    static void printAllAnimalKind(){
+    public static void printAllAnimalKind(){
         for (AnimalKind animalKind:AnimalKind.values()){
             var infos = String.format("** %s **%n", animalKind.name());
             infos += String.format("Descripton : %s%n", animalKind.getDescription());
@@ -86,7 +83,7 @@ public class DisplayTools {
         }
     }
 
-    static void printAllElementalTypes(){
+    public static void printAllElementalTypes(){
         for(ElementType elementType: ElementType.values()){
             var infos = String.format("** %s **%n", elementType.name());
             infos += String.format("Health variation : %d%s%n", Math.round(elementType.getHealthVariation()*100), "%");
@@ -103,7 +100,7 @@ public class DisplayTools {
      * @param max Max value
      * @return User input
      */
-    static int getIntInputFromUser(int min, int max){
+    public static int getIntInputFromUser(int min, int max){
         boolean isInt;
         int value = -1;
         var scanner = new Scanner(System.in);
@@ -123,19 +120,19 @@ public class DisplayTools {
     }
 
     static Animal whichIsFaster(){
-        return getSpeed(Main.animalA) >= getSpeed(Main.animalB) ? Main.animalA : Main.animalB;
+        return getSpeed(MainMenu.animalA) >= getSpeed(MainMenu.animalB) ? MainMenu.animalA : MainMenu.animalB;
 
     }
     static float getSpeed(Animal animal){
         return (animal.getStats().get(StatID.SPEED));
     }
 
-    static void clearConsole(){
+    public static void clearConsole(){
         System.out.flush();
         System.out.print("\033[H\033[2J");
     }
 
-    static void pressKeyToGoBack(){
+    public static void pressKeyToGoBack(){
         System.out.println("press any key to go back...");
         new Scanner(System.in).nextLine();
     }

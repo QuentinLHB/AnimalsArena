@@ -8,6 +8,7 @@ import View.Util;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class CreationMenuFrame extends JDialog {
     /**
@@ -30,6 +31,9 @@ public class CreationMenuFrame extends JDialog {
      */
     private JLabel lblTitle;
 
+    /**
+     * Button opening a list of customized animals. Only enabled when there are animals to display.
+     */
     private JButton btnPickCustomized;
 
 
@@ -68,29 +72,32 @@ public class CreationMenuFrame extends JDialog {
     }
 
     /**
-     * Initializes the buttons
+     * Initializes buttons and events.
      */
     private void initButtons(JPanel panButtons) {
 
         JButton btnExistingPick = new JButton("<html>Select a standard animal</html>");
         panButtons.add(btnExistingPick);
-        btnExistingPick.addActionListener(e-> btnPickExistingAnimal_click());
+        btnExistingPick.addActionListener(this::btnPickExistingAnimal_click);
 
         JButton btnRandomPick = new JButton("<html>Generate a random animal</html>");
         panButtons.add(btnRandomPick);
-        btnRandomPick.addActionListener(e-> btnRandomPick_click());
+        btnRandomPick.addActionListener(this::btnRandomPick_click);
 
         JButton btnCustomize = new JButton("<html>Customize your own animal and stats</html>");
         panButtons.add(btnCustomize);
-        btnCustomize.addActionListener(e-> btnCustomize_click());
+        btnCustomize.addActionListener(this:: btnCustomize_click);
 
         btnPickCustomized = new JButton("<html>Choose one of the customized animals</html>");
         panButtons.add(btnPickCustomized);
-        btnPickCustomized.addActionListener(e -> btnPickCustomized_click());
+        btnPickCustomized.addActionListener(this::btnPickCustomized_click);
         tryEnablePickCustomButton();
     }
 
-    private void btnPickCustomized_click() {
+    /**
+     * Opens a customized animals selection frame.
+     */
+    private void btnPickCustomized_click(ActionEvent e) {
         controler.openPickCustomizedFrame(this, currentPlayer);
         endPickOption();
     }
@@ -98,7 +105,7 @@ public class CreationMenuFrame extends JDialog {
     /**
      * When the button is clicked, opens a frame allowing to choose an existing animal, type, etc.
      */
-    private void btnPickExistingAnimal_click(){
+    private void btnPickExistingAnimal_click(ActionEvent e){
         new NewAnimalFrame(controler, this, currentPlayer);
         endPickOption();
     }
@@ -106,7 +113,7 @@ public class CreationMenuFrame extends JDialog {
     /**
      * When the button is clicked, randomly picks an existing animal and type(s).
      */
-    private void btnRandomPick_click(){
+    private void btnRandomPick_click(ActionEvent e){
         IAnimal animal = controler.createRandomAnimal(currentPlayer, controler.getFoe(currentPlayer));
         Util.printCreationConfirmation(animal);
         endPickOption();
@@ -115,7 +122,7 @@ public class CreationMenuFrame extends JDialog {
     /**
      * When the button is clicked, opens a frame allowing to customize an animal (stats, attacks...)
      */
-    private void btnCustomize_click(){
+    private void btnCustomize_click(ActionEvent e){
         controler.openCustomizationFrame(currentPlayer);
 
         endPickOption();
@@ -151,6 +158,9 @@ public class CreationMenuFrame extends JDialog {
         }
     }
 
+    /**
+     * If there are custom animals to display, enable the according button.
+     */
     private void tryEnablePickCustomButton() {
         btnPickCustomized.setEnabled(!Serialization.isSaveEmpty());
     }

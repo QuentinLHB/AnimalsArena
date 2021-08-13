@@ -1,29 +1,23 @@
 package ConsoleInterface;
-import Model.Animal.Creation.Concrete.*;
-import Controllers.c_Menu;
-import Model.playerAI.Concrete.PlayerAI;
+
+import Model.Animal.Creation.Concrete.Animal;
 import Model.Util.Position;
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import Model.playerAI.Concrete.PlayerAI;
 
-import javax.swing.*;
-
-import static ConsoleInterface.AnimalCreation.*;
-import static ConsoleInterface.Battle.*;
+import static ConsoleInterface.AnimalCreation.chooseMethodCreationMenu;
+import static ConsoleInterface.AnimalCreation.createCustomAnimal;
+import static ConsoleInterface.Battle.battle;
 import static ConsoleInterface.DisplayTools.*;
+import static ConsoleInterface.DisplayTools.clearConsole;
 
-public class Main {
+public class MainMenu {
+
     static int turns = 1;
 
     static Animal animalA;
     static Animal animalB;
 
-    public static void main(String[] args) {
-        c_Menu controler = new c_Menu();
-    }
-
-    public static void mainMenu(){
+    public static void startMainMenu(){
 
         var menuDisplay = """
                         Welcome in Animals Arena, where you can experience RPG-like fights. Please select the mode you'd like :                                
@@ -151,6 +145,4 @@ public class Main {
 
         battle(null, null);
     }
-
 }
-

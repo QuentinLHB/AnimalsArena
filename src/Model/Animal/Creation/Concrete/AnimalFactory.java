@@ -25,7 +25,7 @@ public class AnimalFactory {
         var defenseVariation = 1f;
         var speedVariation = 1f;
 
-        var name = "";
+        var name = new StringBuilder();
 
         elementTypes = removeDuplicate(elementTypes);
 
@@ -37,12 +37,12 @@ public class AnimalFactory {
             defenseVariation *= elementType.getDefenseVariation();
             speedVariation *= elementType.getSpeedVariation();
 
-            name += elementType.name() + " ";
+            name.append(elementType.name()).append(" ");
         }
-        name += animalKind.name();
+        name.append(animalKind.name());
 
         var animal = new Animal(
-                name,
+                name.toString(),
                 Math.round(animalKind.getMaxHealth()* maxHealthVariation) ,
                 animalKind.getAttack()* attackVariation,
                 animalKind.getDefense()* defenseVariation,
@@ -60,6 +60,7 @@ public class AnimalFactory {
             if(elementType == null) break;
             addAttacks(animal, animalKind, elementType);
         }
+        animal.setImgUrl(animalKind.getURL());
 
         return animal;
     }
@@ -70,7 +71,7 @@ public class AnimalFactory {
      * @return New array without any duplicate.
      */
     private static ElementType[] removeDuplicate(ElementType[] elementTypes) {
-        ArrayList<ElementType> alreadyExistingTypes = new ArrayList();
+        ArrayList<ElementType> alreadyExistingTypes = new ArrayList<>();
         boolean exists;
         for (ElementType elementType : elementTypes){
             exists = false;
@@ -204,6 +205,7 @@ public class AnimalFactory {
 
             case UNDEAD:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.DEATH_BITE, elementType);
+                break;
 
             default:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.BITE, elementType);
@@ -241,6 +243,7 @@ public class AnimalFactory {
             case ELETRIC:
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.THUNDER, elementType);
                 AttackFactory.addAttackToAnimal(animal, AttackEnum.FRY, elementType);
+                break;
 
             default:
                 break;

@@ -102,17 +102,17 @@ public class Attack implements IAttack {
      */
     @Override
     public String getDescription() {
-        String description = "";
-        description += doDamage.getDescription();
+        StringBuilder description = new StringBuilder();
+        description.append(doDamage.getDescription());
 
-        if(!description.equals("")) description += " | ";
+        if(!description.isEmpty()) description.append(" | ");
 
-        description +=  String.format("accuracy: %d", (int)(accuracy*100));
+        description.append(String.format("accuracy: %d", (int)(accuracy*100)));
 
         for(IActionBehavior behavior : behaviors){
-            description += " | " + behavior.getDescription() ;
+            description.append(" | ").append(behavior.getDescription());
         }
-        return description;
+        return description.toString();
     }
 
     @Override

@@ -16,7 +16,6 @@ public class RandomStrategy implements IStrategy {
 
     @Override
     public IAttack chooseAttack() {
-        IAttack chosenAttack;
         ArrayList<IAttack> attacks = player.getAllyAnimal().getAttacks();
         int rngIndex = RNG.GenerateNumber(0, attacks.size()-1);
         return attacks.get(rngIndex);

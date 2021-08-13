@@ -15,7 +15,7 @@ public enum StatusID {
     private final String initials;
     /**
      * All lower case.
-     * @return
+     * @return Status name in lower case.
      */
     public String lowerCaseName(){
         return name().toLowerCase(Locale.ROOT);
@@ -31,6 +31,10 @@ public enum StatusID {
         return lowerCaseName().replaceFirst(lowerCaseFirstLetter, lowerCaseFirstLetter.toUpperCase(Locale.ROOT));
     }
 
+    /**
+     *
+     * @return a few letters describing the status, such as [PSN] (Poison)
+     */
     public String initials(){
         return initials;
     }

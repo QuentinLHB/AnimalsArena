@@ -6,6 +6,9 @@ import View.Util;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Frame showing the log information : All text that have been displayed before.
+ */
 public class LogFrame extends JDialog {
 
     public LogFrame(JFrame owner){

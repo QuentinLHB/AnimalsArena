@@ -15,12 +15,12 @@ public class AlterFoesStatsBehavior extends AlterAllyStatsBehavior {
 
     @Override
     public void execute(IAnimal target) {
-        String effectToDisplay = "";
-        for(StatID stat: statsToAlter.keySet()){
-            target.alterStat(stat, statsToAlter.get(stat));
-            effectToDisplay += effectDisplay(target, stat);
+        StringBuilder effectToDisplay = new StringBuilder();
+        for(Map.Entry<StatID, Float> stat: statsToAlter.entrySet()){
+            target.alterStat(stat.getKey(), stat.getValue());
+            effectToDisplay.append(effectDisplay(target, stat.getKey()));
         }
-        BufferedText.addBufferedText(effectToDisplay);
+        BufferedText.addBufferedText(effectToDisplay.toString());
     }
 
     @Override

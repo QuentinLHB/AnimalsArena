@@ -17,8 +17,9 @@ public class SleepStatus extends Status_Base implements IStatus {
         super(animal, DEFAULT_DURATION);
         super.turnsLeft = duration;
         super.duration = duration;
+        printEffect(String.format("%s falls asleep.", animal));
         disableAct();
-        printStatusApplication();
+
     }
 
     @Override
@@ -58,10 +59,6 @@ public class SleepStatus extends Status_Base implements IStatus {
 
     @Override
     protected void printEffect(String effect) {
-        BufferedText.addBufferedText(String.format("%s falls asleep.", animal));
-    }
-
-    private void printStatusApplication(){
-
+        BufferedText.addBufferedText(effect);
     }
 }

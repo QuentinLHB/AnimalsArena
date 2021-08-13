@@ -7,7 +7,6 @@ import Model.Action.Defend.SimpleDefendBehavior;
 import Model.Action.DoDamage.DoNoDamageBehavior;
 import Model.Action.DoDamage.DoRandomDamage;
 import Model.Action.DoDamage.SimpleDoDamageBehavior;
-import Model.Action.Heal.HealFixAmountBehavior;
 import Model.Action.Heal.HealPartOfDmgDealt;
 import Model.Action.Heal.HealPercentageBehavior;
 import Model.Action.InflictStatus.InflictStatusBehavior;
@@ -73,21 +72,20 @@ public class AttackFactory {
             case TSUNAMI -> attack = new Attack(animal, attackName, 1f, new SimpleDoDamageBehavior(15));
 
             case RAGE -> {
-                Map<StatID, Float> stats = new HashMap<>();
+                var stats = new EnumMap<StatID, Float>(StatID.class);
                 stats.put(StatID.ATTACK, 1.25f);
                 stats.put(StatID.DEFENSE, 0.9f);
                 attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
-            case FURY -> {
-                attack = new Attack(animal, attackName, 0.7f, new SimpleDoDamageBehavior(30),
+            case FURY -> attack = new Attack(animal, attackName, 0.7f, new SimpleDoDamageBehavior(30),
                         new SelfInflictStatusBehavior(StatusID.PARALYSIS, 3));
-            }
+
 
             case HEADBUTT -> attack = new Attack(animal, attackName, 1f, new DoRandomDamage(1, 30));
 
             case PURR -> {
-                Map<StatID, Float> stats = new HashMap<>();
+                var stats = new EnumMap<StatID, Float>(StatID.class);
                 stats.put(StatID.ATTACK, 0.9f);
                 stats.put(StatID.DEFENSE, 0.9f);
                 attack = new Attack(animal, attackName,1f, new DoNoDamageBehavior(),
@@ -98,7 +96,7 @@ public class AttackFactory {
                     new InflictStatusBehavior(StatusID.FEAR, 2));
 
             case GIFT_OF_LIFE -> {
-                Map<StatID, Float> stats = new HashMap<>();
+                var stats = new EnumMap<StatID, Float>(StatID.class);
                 stats.put(StatID.MAX_HEALTH, 1.25f);
                 attack = new Attack(animal, attackName, 0.8f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
@@ -111,14 +109,14 @@ public class AttackFactory {
                     new InflictStatusBehavior(StatusID.PARALYSIS, 3));
 
             case BONFIRE -> {
-                Map<StatID, Float> stats = new HashMap<>();
+                var stats = new EnumMap<StatID, Float>(StatID.class);
                 stats.put(StatID.ATTACK, 1.2f);
                 attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
             }
 
             case ICESHIELD -> {
-                Map<StatID, Float> stats = new HashMap<>();
+                var stats = new EnumMap<StatID, Float>(StatID.class);
                 stats.put(StatID.DEFENSE, 1.2f);
                 attack = new Attack(animal, attackName, 1f, new DoNoDamageBehavior(),
                         new AlterAllyStatsBehavior(stats));
@@ -145,7 +143,7 @@ public class AttackFactory {
     /**
      * @return List of all the attacks that can be created by the factory.
      */
-    public static ArrayList<IAttack> getAllAttacks(){
+    public static List<IAttack> getAllAttacks(){
         Animal fakeAnimal = new Animal(0, 0, 0, 0);
         for (AttackEnum attack:AttackEnum.values()) {
             addAttackToAnimal(fakeAnimal, attack);

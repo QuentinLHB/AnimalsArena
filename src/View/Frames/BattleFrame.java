@@ -14,37 +14,41 @@ import View.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 
 public class BattleFrame extends JFrame {
     /**
      * Controler of the battle frame.
      */
-    c_Battle controller;
+    private final transient c_Battle controller;
 
     /**
      * Current player
      */
-    Player currentPlayer;
+    private transient Player currentPlayer;
 
     /**
      * Panel containing the components of the player playing on top the screen.
      */
-    HashMap<animalComponents, JComponent> topPanel = new HashMap<>();
+    private final EnumMap<animalComponents, JComponent> topPanel = new EnumMap<>(animalComponents.class);
     /**
      * List of the attack buttons of the player playing on top of the screen, if it's not an AI.
      */
-    ArrayList<JButtonAttack> topAttacks = new ArrayList<>();
+    private final ArrayList<JButtonAttack> topAttacks = new ArrayList<>();
 
     /**
      * Panel containing the components of the player playing on bottom the screen.
      */
-    HashMap<animalComponents, JComponent> bottomPanel = new HashMap<>();
+    private final EnumMap<animalComponents, JComponent> bottomPanel = new EnumMap<>(animalComponents.class);
     /**
      * List of the attack buttons of the player playing on bottom of the screen, if it's not an AI.
      */
-    ArrayList<JButtonAttack> bottomAttacks = new ArrayList<>();
+    private final ArrayList<JButtonAttack> bottomAttacks = new ArrayList<>();
 
     /**
      * Current turn, starting at 1 at the beginning of the battle.
@@ -185,17 +189,22 @@ public class BattleFrame extends JFrame {
             // Attack Buttons
         initAttackButtons(pnlBottom, controller.getPlayer(Position.BOTTOM), 1, 0);
 
-            // Empty label (for future .png)
-        pnlBottom.add(new JLabel(""), Util.setGridBagConstraints(0, 0, 0.3, 1)); //empty label to split the grid
+            // Img label
+        ImageIcon img = new ImageIcon(controller.getUrl(Position.BOTTOM));
+        gc = Util.setGridBagConstraints(0, 0, 0.5, 0.5);
+        gc.gridheight = 4;
+        gc.anchor = GridBagConstraints.SOUTH;
+        gc.fill = GridBagConstraints.NONE;
+        pnlBottom.add(new JLabel(img), gc); //empty label to split the grid
 
             // Event log Panel
         JPanel pnlLog = new JPanel();
         pnlLog.setLayout(new GridBagLayout());
         pnlLog.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        var gcLog = Util.setGridBagConstraints(0, 6, 0.3, 1);
-        gcLog.gridwidth = 3;
-        gcLog.ipady = 20;
-        pnlBottom.add(pnlLog, gcLog);
+        gc = Util.setGridBagConstraints(0, 6, 0.3, 1);
+        gc.gridwidth = 3;
+        gc.ipady = 20;
+        pnlBottom.add(pnlLog, gc);
 
                 // Battle events label
         lblFooter = new JLabel();
@@ -205,10 +214,10 @@ public class BattleFrame extends JFrame {
         JButton btnEventLog;
         btnEventLog = new JButton("i");
         btnEventLog.setSize(40, 50);
-//        btnEventLog.setPreferredSize(new Dimension(3, 7));
         btnEventLog.addActionListener(e-> btnEventLog_click());
         gc = Util.setGridBagConstraints(1, 0, 0.05, 0.5);
         gc.anchor = GridBagConstraints.CENTER;
+        gc.fill = GridBagConstraints.NONE;
         pnlLog.add(btnEventLog, gc);
 
 
@@ -221,8 +230,13 @@ public class BattleFrame extends JFrame {
             // Attack buttons
         initAttackButtons(pnlTop, controller.getPlayer(Position.TOP), 2, 1);
 
-            // Empty label : image of the animal goes here
-        pnlTop.add(new JLabel(""), Util.setGridBagConstraints(3, 1, 0.5, 0.5));
+            // Img label
+
+        ImageIcon imgTop = new ImageIcon(controller.getUrl(Position.TOP));
+        gc = Util.setGridBagConstraints(3, 1, 0.5, 0.5);
+        gc.gridheight = 4;
+        gc.anchor = GridBagConstraints.SOUTH;
+        pnlTop.add(new JLabel(imgTop), gc);
 
     }
 
@@ -235,7 +249,7 @@ public class BattleFrame extends JFrame {
      */
     private void initPlayerPanel(JPanel panel, Player player, int columnInfo, int startAtRow) {
         IAnimal animal = player.getAlly();
-        HashMap<animalComponents, JComponent> components = getPanelComponents(player.getPosition());
+        EnumMap<animalComponents, JComponent> components = getPanelComponents(player.getPosition());
 
         // Name
         JLabel lblName = new JLabel(animal.getName());
@@ -279,7 +293,6 @@ public class BattleFrame extends JFrame {
         JPanel attackPanel = new JPanel();
         attackPanel.setLayout(new GridLayout(animal.getAttacks().size(), 1));
         GridBagConstraints gc = Util.setGridBagConstraints(column, row, 0.35, 1);
-//        gc.gridheight = getPanelComponents(player.getPosition()).size();
         gc.gridheight = 5;
 
         panel.add(attackPanel, gc);
@@ -343,7 +356,7 @@ public class BattleFrame extends JFrame {
      *     Valid positions : {@link Model.Util.Position#BOTTOM} or {@link Model.Util.Position#BOTTOM}
      * @return a dictionnary, keys being the {@link BattleFrame.animalComponents} enum, values being the components.
      */
-    private HashMap<animalComponents, JComponent> getPanelComponents(Position position) {
+    private EnumMap<animalComponents, JComponent> getPanelComponents(Position position) {
         return position.equals(Position.BOTTOM) ? bottomPanel : topPanel;
     }
 
@@ -366,7 +379,6 @@ public class BattleFrame extends JFrame {
             footerText = controller.getTextToDisplay();
             textSoFar = "<html>";
             timer.start();
-//            displayThread.run();
         }
         else turnHandler();
     }

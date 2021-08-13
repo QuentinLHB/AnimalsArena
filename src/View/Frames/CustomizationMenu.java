@@ -16,9 +16,7 @@ import View.Util;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.util.*;
 
 public class CustomizationMenu extends JDialog {
@@ -54,11 +52,23 @@ public class CustomizationMenu extends JDialog {
         init(controller, currentPlayer);
     }
 
+    /**
+     * Creates the frame in a context where there is no animal to initialize and no player to add the animal to.
+     * @param controller Controller
+     * @param owner parent frame.
+     */
     public CustomizationMenu(c_Menu controller, JFrame owner){
         super(owner, true);
         init(controller, null);
     }
 
+    /**
+     * Creates the frame in a context where there is an animal to display and a player to add the animal to.
+     * @param controller Controller
+     * @param owner Parent frame
+     * @param animal Animal to display in the frame
+     * @param currentPlayer Player whom the animal must be added to.
+     */
     public CustomizationMenu(c_Menu controller, JDialog owner, Animal animal, Player currentPlayer){
         super(owner, true);
         animalToLoad = animal;
@@ -66,41 +76,20 @@ public class CustomizationMenu extends JDialog {
         init(controller, currentPlayer);
     }
 
-    private void init(c_Menu controler, Player currentPlayer){
-        this.controller = controler;
+    /**
+     * Initializes the frame.
+     * @param controller Controller
+     * @param currentPlayer Current player
+     */
+    private void init(c_Menu controller, Player currentPlayer){
+        this.controller = controller;
         this.currentPlayer = currentPlayer;
         initComponents();
-        controler.setCustomizationFrame(this);
+        controller.setCustomizationFrame(this);
         loadAnimal();
         Util.initFrame(this, "Customization", 650, 700);
     }
-
-    private void loadAnimal() {
-        if(animalToLoad == null) return;
-
-        txtName.setText(animalToLoad.getName());
-
-        cbxBalanced.setSelected(false);
-        for(Map.Entry<StatID, JSlider> statSlider : sliders.entrySet()){
-            JSlider slider = statSlider.getValue();
-            StatID statID = statSlider.getKey();
-            int stat = statID.equals(StatID.MAX_HEALTH) ?
-                    Math.round(animalToLoad.getStat(statID)) : // Max health is on base 100
-                    Math.round(animalToLoad.getStat(statID)*100); // Other stats on base 1
-            slider.setValue(stat);
-        }
-
-        listModel.clear(); // Removes pre-loaded Defend
-        for(IAttack attack : animalToLoad.getAttacks()){
-            listModel.addElement(attack.getAttackEnum());
-        }
-
-        cboAtkBhv.setSelectedItem(animalToLoad.getAttackBehavior().getAttackBhvEnum());
-        cboDefBhv.setSelectedItem(animalToLoad.getDefendBehavior().getDefendBhvEnum());
-        cboDieBhv.setSelectedItem(animalToLoad.getDieBehavior().getDieBhvEnum());
-
-    }
-
+    
     /**
      * Initializes the frame's components.
      */
@@ -220,24 +209,6 @@ public class CustomizationMenu extends JDialog {
         }
     }
 
-    private void btnRandomStats_click(ActionEvent e) {
-        for (JSlider slider :
-                sliders.values()) {
-            slider.setValue(RNG.GenerateNumber(MIN_SLIDERVALUE, MAX_SLIDERVALUE));
-        }
-    }
-
-    private void btnResetStats_click(ActionEvent e) {
-        /* Changing the sliders' values triggers the event :
-        * if the box is checked, values are not reseted to 100.
-        * Hence the uncheck of the box during the method. Not ideal, but hey, don't judge me.
-         */
-        boolean isCbxChecked = cbxBalanced.isSelected();
-        if(isCbxChecked) cbxBalanced.setSelected(false); //
-        for (JSlider slider : sliders.values()) { slider.setValue(100);}
-        if(isCbxChecked) cbxBalanced.setSelected(true);
-    }
-
     /**
      * Initializes the components ued to create the attacks.
      * @param pnlAttacks Panel in which to display the components
@@ -250,6 +221,19 @@ public class CustomizationMenu extends JDialog {
         // List containing the chosen attacks
         listModel.addElement(AttackEnum.DEFEND);
         lstChosenAttacks = new JList<>(listModel);
+        lstChosenAttacks.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) { }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyChar() == 127)
+                    btnRemoveAtk_click(null);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
         lstChosenAttacks.setSize(20, 100);
         lstChosenAttacks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstChosenAttacks.setVisibleRowCount(5);
@@ -296,6 +280,32 @@ public class CustomizationMenu extends JDialog {
 
         cboDieBhv = new JComboBox<>(DieBehaviorEnum.values());
         pnlBehaviors.add(cboDieBhv, Util.setGridBagConstraints(0, i, 1, 1));
+    }
+
+    /**
+     * Randomizes the stats.
+     * @param e Click event.
+     */
+    private void btnRandomStats_click(ActionEvent e) {
+        for (JSlider slider :
+                sliders.values()) {
+            slider.setValue(RNG.GenerateNumber(MIN_SLIDERVALUE, MAX_SLIDERVALUE));
+        }
+    }
+
+    /**
+     * Resets every stat slider to their initial value.
+     * @param e
+     */
+    private void btnResetStats_click(ActionEvent e) {
+        /* Changing the sliders' values triggers the event :
+        * if the box is checked, values are not reseted to 100.
+        * Hence the uncheck of the box during the method. Not ideal, but hey, don't judge me.
+         */
+        boolean isCbxChecked = cbxBalanced.isSelected();
+        if(isCbxChecked) cbxBalanced.setSelected(false); //
+        for (JSlider slider : sliders.values()) { slider.setValue(100);}
+        if(isCbxChecked) cbxBalanced.setSelected(true);
     }
 
     /**
@@ -381,11 +391,40 @@ public class CustomizationMenu extends JDialog {
     }
 
     /**
+     * If there is an animal to display, initializes the components with its data (name, stats, etc.)
+     */
+    private void loadAnimal() {
+        if(animalToLoad == null) return;
+
+        txtName.setText(animalToLoad.getName());
+
+        cbxBalanced.setSelected(false);
+        for(Map.Entry<StatID, JSlider> statSlider : sliders.entrySet()){
+            JSlider slider = statSlider.getValue();
+            StatID statID = statSlider.getKey();
+            int stat = statID.equals(StatID.MAX_HEALTH) ?
+                    Math.round(animalToLoad.getStat(statID)) : // Max health is on base 100
+                    Math.round(animalToLoad.getStat(statID)*100); // Other stats on base 1
+            slider.setValue(stat);
+        }
+
+        listModel.clear(); // Removes pre-loaded Defend
+        for(IAttack attack : animalToLoad.getAttacks()){
+            listModel.addElement(attack.getAttackEnum());
+        }
+
+        cboAtkBhv.setSelectedItem(animalToLoad.getAttackBehavior().getAttackBhvEnum());
+        cboDefBhv.setSelectedItem(animalToLoad.getDefendBehavior().getDefendBhvEnum());
+        cboDieBhv.setSelectedItem(animalToLoad.getDieBehavior().getDieBhvEnum());
+
+    }
+    
+    /**
      * Verifies that all the information is filled :
      * <br>Nickname MUST be filled
      * <br> stats can stay on their default value but a confirmation is asked if so.
      * <br> Confirmation is asked if less than 5 attacks are added.
-     * @return
+     * @return True if everything is correctly filled or if the user confirmed that is ok to them.
      */
     private boolean checkIfFormFilled() {
         if(txtName.getText().equals(DEFAULT_NICKNAME)){
