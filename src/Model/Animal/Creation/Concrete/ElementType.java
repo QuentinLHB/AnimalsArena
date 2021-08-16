@@ -1,5 +1,7 @@
 package Model.Animal.Creation.Concrete;
 
+import java.util.Locale;
+
 public enum ElementType {
     NORMAL(1, 1, 1, 1),
     FIRE(0.85f, 1.1f, 0.9f, 1.2f),
@@ -37,4 +39,8 @@ public enum ElementType {
         return speedVariation;
     }
 
+    @Override
+    public String toString() {
+        return name().charAt(0) + name().substring(1).toLowerCase(Locale.ROOT);
+    }
 }

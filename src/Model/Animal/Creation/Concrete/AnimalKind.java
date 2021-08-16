@@ -3,16 +3,16 @@ package Model.Animal.Creation.Concrete;
 import java.net.URL;
 
 public enum AnimalKind{
-    DOG(100, 1, 1, 1, "Average stats", "dog.png"),
-    CAT(90, 1.05f, 0.95f, 1.1f, "Average stats", "cat.png"),
-    SNAKE(70, 1.3f,0.8f, 1.2f, "Low health and defense, high attack", "snake.png"),
-    UNICORN(130, 0.75f, 1.15f, 0.8f,"Low attack, high defense and health", "unicorn.png"),
-    HEDGEHOG(100, 1.05f, 1.15f, 0.8f, "Defend well, sends back half damage in defense mode", "hedgehog.png"),
-    CLAM(85, 0.8f, 1.5f, 0.7f, "Takes no damage when defending, but low health and attack.", "clam.png")
-
+    DOG(100, 1, 1, 1, "An average stat animal.", "dog.png"),
+    CAT(90, 1.05f, 0.95f, 1.1f, "A slightly offensive animal.", "cat.png"),
+    SNAKE(75, 1.3f,0.7f, 1.2f, "A fast and offense-oriented animal.", "snake.png"),
+    UNICORN(130, 0.75f, 1.15f, 0.8f,"A health and defense-oriented animal.", "unicorn.png"),
+    HEDGEHOG(100, 1.05f, 1.15f, 0.8f, "Defends well and sends back half of the received damage when defending.", "hedgehog.png"),
+    CLAM(85, 0.8f, 1.5f, 0.7f, "A defense-oriented animal : High defense, takes no damage when defending, but low stats otherwise.", "clam.png"),
+    BEAVER(100, 1.2f, 0.7f, 0.9f, "", "beaver.png" )
     ;
 
-    private AnimalKind(final int maxHealth, final float attackStat, final float defenseStat, final float speedStat, String description, String url){
+    AnimalKind(final int maxHealth, final float attackStat, final float defenseStat, final float speedStat, String description, String url){
         this.maxHealth = maxHealth;
         this.attackStat = attackStat;
         this.defenseStat = defenseStat;

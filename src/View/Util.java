@@ -31,18 +31,17 @@ public class Util {
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+
     }
 
     public static void initFrame(JDialog frame, String title, int width, int height){
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-
+        frame.setVisible(true);
     }
 
     public static void closeFrame(Window frame) {
@@ -90,5 +89,13 @@ public class Util {
 
     public static void printCreationConfirmation(IAnimal animal) {
         JOptionPane.showMessageDialog(null, String.format("New animal created : %s", animal.getName()));
+    }
+
+    public static void waitOneSec(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException interruptedException) {
+            interruptedException.printStackTrace();
+        }
     }
 }

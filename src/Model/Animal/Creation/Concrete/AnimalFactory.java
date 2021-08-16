@@ -147,6 +147,11 @@ public class AnimalFactory {
                 addElementalGenericAttack(animal, elementType);
                 break;
 
+            case BEAVER:
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.DEATH_BITE);
+                AttackFactory.addAttackToAnimal(animal, AttackEnum.FIRE_BITE);
+                addElementalGenericAttack(animal, elementType);
+
             default:
                 break;
         }

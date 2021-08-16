@@ -19,6 +19,7 @@ public class MenuFrame extends JFrame  {
     private JButton btnPve;
     private JButton btnAIvAI;
     private JButton btnCustomize;
+    JButton btnInfo;
     private JCheckBox cbxTheme;
 
 
@@ -50,7 +51,7 @@ public class MenuFrame extends JFrame  {
         contentPanel.add(lblWelcome, BorderLayout.NORTH);
 
         // Choice buttons
-        panButtons = new JPanel(new GridLayout(4,1, 10, 10));
+        panButtons = new JPanel(new GridLayout(5,1, 10, 10));
         initButtons();
         contentPanel.add(panButtons, BorderLayout.CENTER);
 
@@ -83,6 +84,10 @@ public class MenuFrame extends JFrame  {
         // Button Customize
         btnCustomize = new JButton("<html>Create a fully customized animal.</html>");
         panButtons.add(btnCustomize);
+
+        // Button info
+        btnInfo = new JButton("<html> Consult animals and attacks' info");
+        panButtons.add(btnInfo);
     }
 
     /**
@@ -93,9 +98,12 @@ public class MenuFrame extends JFrame  {
         btnAIvAI.addActionListener(this::btnAIvAI_click);
         btnPve.addActionListener(this::btnPve_click);
         btnCustomize.addActionListener(this::btnCustomize_click);
+        btnInfo.addActionListener(this::btnInfo_click);
         cbxTheme.addActionListener(this::cbxTheme_checkChange);
 
     }
+
+
 
     // ************* EVENTS ****************
     /**
@@ -134,6 +142,11 @@ public class MenuFrame extends JFrame  {
     private void btnCustomize_click(ActionEvent e) {
         new CustomizationMenu(controller, this);
     }
+
+    private void btnInfo_click(ActionEvent actionEvent) {
+        controller.openInfoFrame(this);
+    }
+
     /**
      * When the checkbox is clicked, changes the current theme : Light or dark.
      * @param e Check change event.

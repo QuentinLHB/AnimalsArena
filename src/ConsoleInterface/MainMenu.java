@@ -86,7 +86,8 @@ public class MainMenu {
                                 the foe's action mode (Attack/Defense)
                             Ex: AttackingAnimal (1.1Atk, 0.9 Atk Variation) performs Bite (15 DMG)
                             The foe (1.3 Def) is in Defense Mode :
-                            DmgBase*Atk*AtkVar*(1+(1-Defense))*DefenseMode = 15*1.1*0.9*0.7*0.5 = 5. Roundings along the way may produce a 1dmg difference.""";
+                            DmgBase * Atk * AtkVar * (1+(1-Defense)) * DefenseMode = 15*1.1*0.9*0.7*0.5 = 5. 
+                            Roundings along the way may produce a 1dmg difference.""";
                     System.out.println(explaination);
                     pressKeyToGoBack();
                 }

@@ -9,15 +9,13 @@ import Model.Animal.Creation.Concrete.*;
 import Model.Util.Position;
 import Model.Util.Serialization;
 import Model.playerAI.Concrete.Player;
-import View.Frames.CreationMenuFrame;
-import View.Frames.CustomizationMenu;
-import View.Frames.MenuFrame;
-import View.Frames.PickCustomizedFrame;
+import View.Frames.*;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class c_Menu extends controler_Base{
@@ -185,6 +183,10 @@ public class c_Menu extends controler_Base{
         new PickCustomizedFrame(this, owner, player);
     }
 
+    public void openInfoFrame(JFrame frame){
+        new InfoFrame(this, frame);
+    }
+
     public Animal[] getSavedAnimals() {
         ArrayList<Animal> savedAnimals = Serialization.loadAnimals();
         Animal[] arrayAnimals = new Animal[savedAnimals.size()];
@@ -215,5 +217,11 @@ public class c_Menu extends controler_Base{
 
     public void deleteAnimal(Animal animalToDelete) {
         Serialization.removeAnimalFromSave(animalToDelete);
+    }
+
+    public URL getUrl(AnimalKind animalKind) {
+        URL url = animalKind.getURL();
+        if(url == null ) url = getClass().getResource("/resources/images/missingno.png");
+        return url;
     }
 }

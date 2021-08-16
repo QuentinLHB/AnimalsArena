@@ -6,20 +6,13 @@ import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.Animal;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
-import View.BufferedText;
-import View.ButtonColors;
-import View.JButtonAttack;
-import View.Util;
+import View.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 
 public class BattleFrame extends JFrame {
     /**
@@ -68,52 +61,10 @@ public class BattleFrame extends JFrame {
     /**
      * Label displaying all the information needed during a turn.
      */
-    private JLabel lblFooter;
+    public JLabel lblFooter;
 
-    /**
-     * Used for iteration of the {@link #timer timer}.
-     */
-    int i = 0;
+    private DisplayTimer display;
 
-    /**
-     * Text to display in the footer label.
-     */
-    String footerText;
-    /**
-     * Member used in the {@link #timer timer} member to display the text letter by letter.
-     * Represents the text that has been displayed so far in the execution of the timer.
-     */
-    String textSoFar;
-    /**
-     * Timer displaying a text letter by letter, and then pauses after going to the next subturn.
-     */
-    Timer timer = new Timer(20, new ActionListener(){
-        @Override
-        public void actionPerformed(ActionEvent e){
-
-            char[] character = footerText.toCharArray();
-            int arrayNumber = character.length;
-
-            String s = String.valueOf(character[i]);
-            textSoFar += s;
-            if(s.equals(".") && i < character.length -3){ // 2nd instruction is meant to avoid having a carriage return on the last period.
-                textSoFar += "<br>";
-            }
-            lblFooter.setText(textSoFar + "</html>");
-            i++;
-            if(i == arrayNumber){
-                i = 0;
-              try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-              lblFooter.setText("");
-                timer.stop();
-                resume();
-            }
-        }
-    });
 
     /**
      * Enumerator of the type of components displayed in a player's label. <br>
@@ -136,11 +87,13 @@ public class BattleFrame extends JFrame {
      */
     public BattleFrame(c_Battle controller){
         this.controller = controller;
+        display = new DisplayTimer(20, new TimerActionListener(), this);
         Util.initFrame(this, "Battle scene", 600, 600);
         setOnClose();
         setLayout(new BorderLayout(30, 30));
         initComponents();
         newTurn();
+
 
     }
 
@@ -374,13 +327,10 @@ public class BattleFrame extends JFrame {
      * Updates the footer label with new events. Displays it letter by letter.
      */
     private void updateFooterDisplay() {
-        if(controller.hasTextToDisplay()){
+        if(controller.hasTextToDisplay()) {
             pause();
-            footerText = controller.getTextToDisplay();
-            textSoFar = "<html>";
-            timer.start();
+            display.setFooterText(controller.getTextToDisplay());
         }
-        else turnHandler();
     }
 
     /**
@@ -394,7 +344,7 @@ public class BattleFrame extends JFrame {
     /**
      * Resumes the program after a pause.
      */
-    private void resume(){
+    public void resume(){
         turnHandler();
     }
 
@@ -402,6 +352,7 @@ public class BattleFrame extends JFrame {
      * Handles the turns and hence, the components to enable.
      */
     private void turnHandler(){
+//        updateFooterDisplay();
         if(controller.isGameFinished()) {
             endGame(controller.getWinner());
             return;
@@ -413,6 +364,14 @@ public class BattleFrame extends JFrame {
             subturn = 0;
             turn++;
             controller.turnEnding();
+            // Not ideal code bellow : Can't find a way to use the same timer, see github issue for detail.
+            if(BufferedText.hasChanged()){
+                pause();
+                lblFooter.setText(Util.toHtml(BufferedText.getBufferedText()));
+                Util.waitOneSec();
+                lblFooter.setText("");
+            }
+//            updateFooterDisplay();
             updateAnimalsState();
             newTurn();
         }
@@ -446,7 +405,9 @@ public class BattleFrame extends JFrame {
             }
         }
         else{
-            turnHandler();
+            // Show can't act here
+            updateFooterDisplay();
+//            turnHandler();
         }
     }
 
@@ -494,5 +455,7 @@ public class BattleFrame extends JFrame {
         ((JLabel)topPanel.get(animalComponents.STATUS)).setText(controller.getStatus(controller.getAnimal(Position.TOP)));
         ((JLabel)bottomPanel.get(animalComponents.STATUS)).setText(controller.getStatus(controller.getAnimal(Position.BOTTOM)));
     }
+
+
 }
 

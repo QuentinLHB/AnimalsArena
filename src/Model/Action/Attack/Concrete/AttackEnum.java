@@ -1,5 +1,9 @@
 package Model.Action.Attack.Concrete;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * Enumerator of the possible attacks.
  */
@@ -72,5 +76,11 @@ public enum AttackEnum {
      */
     public String getDescription(){
         return AttackFactory.getAttackDescription(this);
+    }
+
+    public static AttackEnum[] getSortedAttacks(){
+        var attacks = values().clone();
+        Arrays.sort(attacks, Comparator.comparing(o -> o.name));
+        return attacks;
     }
 }

@@ -33,7 +33,7 @@ public class PoisonStatus extends Status_Base implements IStatus {
     @Override
     public void consumeEffect() {
         if(turnsLeft > 0){
-            BufferedText.addBufferedText(String.format("The poison hurt %s.", animal.getName()));
+            BufferedText.addBufferedText(String.format("The poison hurt %s.%n", animal.getName()));
             animal.hurt(Math.round(animal.getMaxHealth() * FRACTION_OF_MAX_HEALTH));
             turnsLeft--;
         }
@@ -45,7 +45,7 @@ public class PoisonStatus extends Status_Base implements IStatus {
     @Override
     public void disappear() {
         super.disappear(this);
-        BufferedText.addBufferedText(String.format("%s is no longer poisoned.", animal));
+        BufferedText.addBufferedText(String.format("%s is no longer poisoned.%n", animal));
     }
 
     @Override
