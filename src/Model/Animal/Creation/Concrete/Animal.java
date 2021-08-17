@@ -22,7 +22,7 @@ public class Animal implements IAnimal {
 
 
     private final int id;
-    private URL imgUrl;
+    private AnimalKind animalKind;
 
     public int getId() {
         return id;
@@ -141,7 +141,7 @@ public class Animal implements IAnimal {
         return amount;
     }
 
-    public int getMaxHealth() {
+    private int getMaxHealth() {
         return Math.round(stats.get(StatID.MAX_HEALTH)*statAlterations.get(StatID.MAX_HEALTH));
     }
 
@@ -204,13 +204,13 @@ public class Animal implements IAnimal {
     }
 
     @Override
-    public void setImgUrl(URL imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setAnimalKind(AnimalKind animalKind) {
+        this.animalKind = animalKind;
     }
 
     @Override
-    public URL getUrl() {
-        return imgUrl;
+    public AnimalKind getAnimalKind() {
+        return animalKind;
     }
 
     //Other infos

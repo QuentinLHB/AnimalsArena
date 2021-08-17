@@ -6,10 +6,11 @@ import Model.Action.DoDamage.SimpleDoDamageBehavior;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Behaviors.DefendBehavior.Abstract.IDefendBehavior;
+import View.BufferedText;
 
 public class MirrorDefenseBehavior extends Defend_Base implements IDefendBehavior {
 
-    private static final String MIROR_MOVE_NAME = "Mirror Defense";
+//    private static final String MIROR_MOVE_NAME = "Mirror Defense";
     private final int fractionOfDamageMirrored;
 
     /**
@@ -30,12 +31,20 @@ public class MirrorDefenseBehavior extends Defend_Base implements IDefendBehavio
      */
     @Override
     public void defend(IAttack attack, int damage) {
-
+        int healthBeforeAttack = animal.getHealth();
         super.defend(attack, damage);
-        if(animal.getActMode().equals(ActMode.DEFENSE) && !attack.getAttackName().equals(MIROR_MOVE_NAME)) {
-            animal.attack(attack.getAttackOwner(),
-                    new Attack(animal, null, 1f,
-                            new SimpleDoDamageBehavior(attack.getDamageBase()/ fractionOfDamageMirrored)));
+        var dmg = healthBeforeAttack-animal.getHealth();
+        if(animal.getActMode().equals(ActMode.DEFENSE) && dmg > 0) {
+//            animal.attack(attack.getAttackOwner(),
+//                    new Attack(animal, null, 1f,
+//                            new SimpleDoDamageBehavior(attack.getDamageBase()/ fractionOfDamageMirrored)));
+
+
+            attack.getAttackOwner().hurt(dmg/fractionOfDamageMirrored);
+            BufferedText.addBufferedText(String.format("%d damages were sent back to %s due to %s's ability.%n",
+                    dmg,
+                    attack.getAttackOwner(),
+                    animal));
         }
     }
 

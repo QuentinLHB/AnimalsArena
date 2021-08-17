@@ -31,7 +31,7 @@ public class MenuFrame extends JFrame  {
         this.controller = controller;
         initComponents();
         initEvent();
-        Util.initFrame(this, "Animal Arena - Main Menu", 500, 600);
+        Util.initFrame(this, "Animals Arena - Main Menu", 500, 600);
     }
 
     // ************ INIT *****************
@@ -44,7 +44,7 @@ public class MenuFrame extends JFrame  {
         JPanel contentPanel = Util.setContentPane(this);
 
         // Label Welcome
-        JLabel lblWelcome = new JLabel("<html>Welcome in Animals Arena, where you can experience RPG-like fights. <br>Please select the mode you'd like :</html>",
+        JLabel lblWelcome = new JLabel("<html>Welcome in the Arena !</html>",
                 SwingConstants.CENTER);
         lblWelcome.setBorder(new EmptyBorder(0,0,20,0));
 
@@ -74,11 +74,11 @@ public class MenuFrame extends JFrame  {
         panButtons.add(btnPvp);
 
         // Button PVE
-        btnPve = new JButton("<html>Player vs AI : Compose your animal and fight against a computer !</html>");
+        btnPve = new JButton("<html>Player vs CPU : Compose your animal and fight against a computer !</html>");
         panButtons.add(btnPve);
 
         // Button AIvAI
-        btnAIvAI = new JButton("<html>AI vs AI : Spectate a fight between two AI !</html>");
+        btnAIvAI = new JButton("<html>CPU vs CPU : Spectate a fight between two AIs !</html>");
         panButtons.add(btnAIvAI);
 
         // Button Customize
@@ -86,7 +86,7 @@ public class MenuFrame extends JFrame  {
         panButtons.add(btnCustomize);
 
         // Button info
-        btnInfo = new JButton("<html> Consult animals and attacks' info");
+        btnInfo = new JButton("<html> Consult animals and attacks' info.</html>");
         panButtons.add(btnInfo);
     }
 
@@ -102,8 +102,6 @@ public class MenuFrame extends JFrame  {
         cbxTheme.addActionListener(this::cbxTheme_checkChange);
 
     }
-
-
 
     // ************* EVENTS ****************
     /**

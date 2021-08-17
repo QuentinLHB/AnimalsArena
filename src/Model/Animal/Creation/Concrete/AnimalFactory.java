@@ -60,7 +60,8 @@ public class AnimalFactory {
             if(elementType == null) break;
             addAttacks(animal, animalKind, elementType);
         }
-        animal.setImgUrl(animalKind.getURL());
+
+        animal.setAnimalKind(animalKind);
 
         return animal;
     }

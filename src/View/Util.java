@@ -57,7 +57,10 @@ public class Util {
     }
 
     public static String toBold(String text){
+
         return "<b>" + text + "</b>";
+
+
     }
 
     public static String toUnderlined(String text){

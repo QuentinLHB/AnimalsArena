@@ -20,7 +20,7 @@ public class SelfInflictStatusBehavior extends InflictStatusBehavior {
 
     @Override
     public String getDescription() {
-        return String.format("Apply %s to the user.", getStatusName());
+        return String.format("Applies %s to the user.", getStatusName());
     }
 
     @Override

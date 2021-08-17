@@ -3,16 +3,19 @@ package Model.Action.Status.Concrete;
 import java.util.Locale;
 
 public enum StatusID {
-    POISON("[PSN]"),
-    PARALYSIS("[PAR]"),
-    SLEEP("[SLP]"),
-    FEAR("[FEAR]");
+    POISON("[PSN]", "Hurts the animal at the end of the turn."),
+    PARALYSIS("[PAR]", "Disables two random attacks."),
+    SLEEP("[SLP]", "Prevents the animal from performing any attack."),
+    FEAR("[FEAR]", "Reduces attack and defense stats by half.");
 
-    StatusID(String initials){
+    StatusID(String initials, String desc){
         this.initials = initials;
+        this.desc = desc;
     }
 
     private final String initials;
+    private final String desc;
+
     /**
      * All lower case.
      * @return Status name in lower case.
@@ -37,5 +40,9 @@ public enum StatusID {
      */
     public String initials(){
         return initials;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }

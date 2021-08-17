@@ -114,7 +114,7 @@ public class CreationMenuFrame extends JDialog {
      * When the button is clicked, randomly picks an existing animal and type(s).
      */
     private void btnRandomPick_click(ActionEvent e){
-        IAnimal animal = controler.createRandomAnimal(currentPlayer, controler.getFoe(currentPlayer));
+        IAnimal animal = controler.createRandomAnimal(currentPlayer);
         Util.printCreationConfirmation(animal);
         endPickOption();
     }

@@ -4,8 +4,10 @@ import Controllers.c_Battle;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Animal.Creation.Abstract.IAnimal;
 import Model.Animal.Creation.Concrete.Animal;
+import Model.Animal.Creation.Concrete.StatID;
 import Model.playerAI.Concrete.Player;
 import Model.Util.Position;
+import Model.playerAI.Concrete.PlayerAI;
 import View.*;
 
 import javax.swing.*;
@@ -72,7 +74,8 @@ public class BattleFrame extends JFrame {
      */
     public enum animalComponents{
         NAME,
-        HP,
+        HPBAR,
+//        HPTEXT,
         STATUS,
         INFO,
         ATTACK;
@@ -205,7 +208,7 @@ public class BattleFrame extends JFrame {
         EnumMap<animalComponents, JComponent> components = getPanelComponents(player.getPosition());
 
         // Name
-        JLabel lblName = new JLabel(animal.getName());
+        JLabel lblName = new JLabel(Util.toHtml(Util.toBold(animal.getName())));
         panel.add(lblName, Util.setGridBagConstraints(columnInfo,startAtRow, 0.25, 1));
         components.put(animalComponents.NAME, lblName);
 
@@ -214,10 +217,15 @@ public class BattleFrame extends JFrame {
         panel.add(lblStatus, Util.setGridBagConstraints(columnInfo, startAtRow+1, 0.25, 1));
         components.put(animalComponents.STATUS, lblStatus);
 
-        // HP
-        JLabel lblHP = new JLabel(controller.getHP(animal));
-        panel.add(lblHP, Util.setGridBagConstraints(columnInfo, startAtRow+2, 0.25, 1));
-        components.put(animalComponents.HP, lblHP);
+        // HP bar
+        int max = Math.round(animal.getStat(StatID.MAX_HEALTH));
+        JProgressBar hpBar = new JProgressBar(0, max);
+        hpBar.setStringPainted(true);
+        hpBar.setForeground(new Color(23, 175, 0));
+        hpBar.setString(controller.getHP(animal));
+        hpBar.setValue(max);
+        panel.add(hpBar, Util.setGridBagConstraints(columnInfo, startAtRow+2, 0.25, 1));
+        components.put(animalComponents.HPBAR, hpBar);
 
         //Info
         JButton btnInfo = new JButton("Info");
@@ -400,8 +408,8 @@ public class BattleFrame extends JFrame {
 
         if(controller.canPlayerAct(currentPlayer)){
             enablePanel(currentPlayer);
-            if(currentPlayer.isBot()){
-                btnAttack_click(currentPlayer, controller.chooseAIMove(currentPlayer));
+            if(controller.isBot(currentPlayer)){
+                btnAttack_click(currentPlayer, controller.chooseAIMove((PlayerAI)currentPlayer));
             }
         }
         else{
@@ -449,8 +457,13 @@ public class BattleFrame extends JFrame {
      * Updates the display of HP and statuses.
      */
     private void updateAnimalsState(){
-        ((JLabel)topPanel.get(animalComponents.HP)).setText(controller.getHP(controller.getAnimal(Position.TOP)));
-        ((JLabel)bottomPanel.get(animalComponents.HP)).setText(controller.getHP(controller.getAnimal(Position.BOTTOM)));
+        var  topHpBar = ((JProgressBar)topPanel.get(animalComponents.HPBAR));
+        topHpBar.setString(controller.getHP(controller.getAnimal(Position.TOP)));
+        topHpBar.setValue(controller.getAnimal(Position.TOP).getHealth());
+
+        var botHpBar = ((JProgressBar)bottomPanel.get(animalComponents.HPBAR));
+        botHpBar.setString(controller.getHP(controller.getAnimal(Position.BOTTOM)));
+        botHpBar.setValue(controller.getAnimal(Position.BOTTOM).getHealth());
 
         ((JLabel)topPanel.get(animalComponents.STATUS)).setText(controller.getStatus(controller.getAnimal(Position.TOP)));
         ((JLabel)bottomPanel.get(animalComponents.STATUS)).setText(controller.getStatus(controller.getAnimal(Position.BOTTOM)));

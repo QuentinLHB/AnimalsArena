@@ -188,7 +188,7 @@ public class CustomizationMenu extends JDialog {
         for(StatID statID: StatID.values()){
             if(statID.equals(StatID.ACCURACY)) continue;
             // Stat display
-            JLabel lblStat = new JLabel(String.format("%s :", statID.name().toLowerCase(Locale.ROOT)));
+            JLabel lblStat = new JLabel(String.format("%s :", statID.toString()));
             gc = Util.setGridBagConstraints(0, row, 0.1, 1);
             gc.gridheight = 2;
             panel.add(lblStat, gc);
@@ -234,27 +234,39 @@ public class CustomizationMenu extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        lstChosenAttacks.setSize(20, 100);
         lstChosenAttacks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstChosenAttacks.setVisibleRowCount(5);
-        lstChosenAttacks.setVisible(true);
-        var gc = Util.setGridBagConstraints(0, 1, 1, 1);
+        var gc = Util.setGridBagConstraints(0, 1, 0.7, 1);
+        gc.ipady = 0;
         pnlAttacks.add(lstChosenAttacks, gc);
 
+        //info Button
+        gc = Util.setGridBagConstraints(1, 0, 0.05, 1);
+        gc.insets = new Insets(0, 0, 2, 2);
+        JButton btnInfo = new JButton("i");
+        btnInfo.addActionListener(this::btnInfo_click);
+        pnlAttacks.add(btnInfo, gc);
+        gc.gridx++;
+
         // Validation Button
+        gc.weightx = 0.25;
         JButton btnAddAttack = new JButton("Add");
         btnAddAttack.addActionListener(this::btnAddAtk_click);
         ButtonColors.setValidationBtnColor(btnAddAttack);
-        pnlAttacks.add(btnAddAttack, Util.setGridBagConstraints(1, 0, 0.3, 1));
+        pnlAttacks.add(btnAddAttack, gc);
 
         // Delete Button
+        gc.gridy = gc.gridx = 1;
+        gc.weightx = 0.3;
+        gc.gridwidth = 2;
         JButton btnRemove = new JButton("X");
         ButtonColors.setDeleteBtnColor(btnRemove);
-        gc = Util.setGridBagConstraints(1, 1,  0.1, 1);
         btnRemove.addActionListener(this::btnRemoveAtk_click);
         pnlAttacks.add(btnRemove, gc);
 
     }
+
+
 
     /**
      * Initializes the components used to determine the animal's behavior
@@ -287,6 +299,7 @@ public class CustomizationMenu extends JDialog {
      * @param e Click event.
      */
     private void btnRandomStats_click(ActionEvent e) {
+        cbxBalanced.setSelected(false);
         for (JSlider slider :
                 sliders.values()) {
             slider.setValue(RNG.GenerateNumber(MIN_SLIDERVALUE, MAX_SLIDERVALUE));
@@ -352,8 +365,14 @@ public class CustomizationMenu extends JDialog {
             cboAttacks.requestFocus();
         }
         else{
-            JOptionPane.showMessageDialog(null, "The animal already reached its maximal capacity.");
+            JOptionPane.showMessageDialog(this, "The animal already reached its maximal capacity.");
         }
+    }
+
+    private void btnInfo_click(ActionEvent actionEvent) {
+        AttackEnum attack = (AttackEnum) cboAttacks.getSelectedItem();
+        if(attack == null) return;
+        controller.openAndFillInfoFrame(this, attack);
     }
 
     /**
@@ -411,6 +430,7 @@ public class CustomizationMenu extends JDialog {
         listModel.clear(); // Removes pre-loaded Defend
         for(IAttack attack : animalToLoad.getAttacks()){
             listModel.addElement(attack.getAttackEnum());
+            cboAttacks.removeItem(attack.getAttackEnum());
         }
 
         cboAtkBhv.setSelectedItem(animalToLoad.getAttackBehavior().getAttackBhvEnum());

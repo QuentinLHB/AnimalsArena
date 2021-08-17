@@ -29,7 +29,8 @@ public class Attack implements IAttack {
     private IActionBehavior[] behaviors;
     private ElementType type;
 
-    public Attack(IAnimal attackOwner, AttackEnum attackEnum, float accuracy, IDoDamageBehavior doDamage, IActionBehavior... behaviors) {
+    public Attack(IAnimal attackOwner, AttackEnum attackEnum, float accuracy,
+                  IDoDamageBehavior doDamage, IActionBehavior... behaviors) {
         this.attackOwner = attackOwner;
         this.attackEnum = attackEnum;
         this.accuracy = accuracy;

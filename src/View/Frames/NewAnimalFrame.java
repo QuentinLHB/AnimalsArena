@@ -8,7 +8,9 @@ import Model.playerAI.Concrete.Player;
 import View.Util;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class NewAnimalFrame extends JDialog {
@@ -39,37 +41,55 @@ public class NewAnimalFrame extends JDialog {
         JPanel contentPanel = Util.setContentPane(this);
 
         // Title label
-        JLabel lblTitle = new JLabel("<html> You will now create your own Elemental Model.Animal ! </html>");
+        JLabel lblTitle = new JLabel("<html>Choose your animal kind and types. </html>");
         contentPanel.add(lblTitle, BorderLayout.NORTH);
         components.add(lblTitle);
 
         // Question grid
-        JPanel grdQuestion;
-        grdQuestion = new JPanel();
+        JPanel grdQuestion = new JPanel();
+        grdQuestion.setBorder(BorderFactory.createEmptyBorder(5, 5, 15, 15));
         grdQuestion.setLayout(new GridBagLayout());
 
-        // Model.Animal Kind
-        grdQuestion.add(new JLabel("<html>Model.Animal (*) : </html>"), setGridBagConstraint(0,0));
+        // GridBag Constraints
+        var gcLabel = setGridBagConstraint(0, 0);
+        var gcField = setGridBagConstraint(1, 0);
+        var gcInfo = setGridBagConstraint(2, 0);
+        gcInfo.weightx=0.1;
+
+        // Animal Kind
+        grdQuestion.add(new JLabel("<html>Animal:</html>"), gcLabel);
         cboAnimalKind = new JComboBox<>(AnimalKind.values());
-        grdQuestion.add(cboAnimalKind, setGridBagConstraint(1, 0));
+        grdQuestion.add(cboAnimalKind, gcField);
         components.add(cboAnimalKind);
+        JButton btnAnimalInfo = new JButton("i");
+        grdQuestion.add(btnAnimalInfo, gcInfo);
+        btnAnimalInfo.addActionListener(this::btnAnimalInfo_click);
 
         // Elemental Type
-        grdQuestion.add(new JLabel("<html>Elemental Type 1 (*): </html>"), setGridBagConstraint(0, 1));
+        incrementGridBagConstraintsRow(gcLabel, gcField, gcInfo);
+        grdQuestion.add(new JLabel("<html>Elemental Type 1: </html>"), gcLabel);
         cboType1 = new JComboBox<>(ElementType.values());
-        grdQuestion.add(cboType1, setGridBagConstraint(1, 1));
+        grdQuestion.add(cboType1, gcField);
         components.add(cboType1);
+        JButton btnTypeInfo = new JButton("i");
+        grdQuestion.add(btnTypeInfo, gcInfo);
+        btnTypeInfo.addActionListener(e-> btnTypeInfo_click(e, cboType1));
 
         // Element Type 2
-        grdQuestion.add(new JLabel("<html>Elemental Type 2 (opt.): </html>"), setGridBagConstraint(0, 2));
+        incrementGridBagConstraintsRow(gcLabel, gcField, gcInfo);
+        grdQuestion.add(new JLabel("<html>Elemental Type 2: </html>"), gcLabel);
         cboType2 = new JComboBox<>(ElementType.values());
-        grdQuestion.add(cboType2, setGridBagConstraint(1, 2));
+        grdQuestion.add(cboType2, gcField);
         components.add(cboType2);
+        JButton btnType1Info = new JButton("i");
+        grdQuestion.add(btnType1Info, gcInfo);
+        btnType1Info.addActionListener(e-> btnTypeInfo_click(e, cboType2));
 
         //Nickname
-        grdQuestion.add(new JLabel("<html>Nickname (opt.): </html>"), setGridBagConstraint(0, 3));
+        incrementGridBagConstraintsRow(gcLabel, gcField, gcInfo);
+        grdQuestion.add(new JLabel("<html>Nickname (opt.): </html>"), gcLabel);
         txtNickname = new JTextField();
-        grdQuestion.add(txtNickname, setGridBagConstraint(1, 3));
+        grdQuestion.add(txtNickname, gcField);
         components.add(txtNickname);
 
         // OK Button
@@ -82,27 +102,43 @@ public class NewAnimalFrame extends JDialog {
         contentPanel.add(grdQuestion);
     }
 
+    private void btnTypeInfo_click(ActionEvent e, JComboBox cboType) {
+        controller.openAndFillInfoFrame(this, (ElementType) cboType.getSelectedItem());
+    }
+
+    private void btnAnimalInfo_click(ActionEvent e) {
+        controller.openAndFillInfoFrame(this, (AnimalKind) cboAnimalKind.getSelectedItem());
+    }
+
     /**
      * Creates a GridBagConstraint with common property :
      * Fill = BOTH
      * ipady : 5 ; ipadx : 30
      * anchor : WEST
-     * @param gridx position in the columns (1 : column 1).
-     * @param gridy position in the rows (1 : row 1).
+     * @param column position in the columns (1 : column 1).
+     * @param row position in the rows (1 : row 1).
      * @return GridBagConstraint.
      */
-    private GridBagConstraints setGridBagConstraint(int gridx, int gridy) {
+    private GridBagConstraints setGridBagConstraint(int column, int row) {
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.BOTH;
         gc.insets = new Insets(5, 5, 5, 5);
         gc.ipady = 5;
-        gc.ipadx = 30;
+        gc.ipadx = 15;
 
         gc.anchor = GridBagConstraints.WEST;
-        gc.gridx = gridx;
-        gc.gridy = gridy;
+        gc.gridx = column;
+        gc.gridy = row;
+        gc.weightx = 0.45;
+
 
         return gc;
+    }
+
+    private void incrementGridBagConstraintsRow(GridBagConstraints... constraints){
+        for(GridBagConstraints gc : constraints){
+            gc.gridy++;
+        }
     }
 
     private void initEvents(){

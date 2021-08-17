@@ -15,7 +15,7 @@ public class DisplayTools {
                 animal.getStatuses()) {
             statuses += String.format(" [%s] ", status.getStatusName().toUpperCase(Locale.ROOT));
         }
-        System.out.printf("%s %s : %d / %d%n", animal.getName(), statuses, animal.getHealth(),Math.round(animal.getMaxHealth()));
+        System.out.printf("%s %s : %d / %d%n", animal.getName(), statuses, animal.getHealth(),Math.round(animal.getStat(StatID.MAX_HEALTH)));
     }
 
     static void printStats(Animal animal, Animal target) {

@@ -3,6 +3,7 @@ package Model.Animal.Creation.Abstract;
 import Model.Action.Attack.Abstract.IAttack;
 import Model.Action.Status.Abstract.IStatus;
 import Model.Animal.Behaviors.PeformAttackBehavior.Abstract.ActMode;
+import Model.Animal.Creation.Concrete.AnimalKind;
 import Model.Animal.Creation.Concrete.StatID;
 
 import java.io.Serializable;
@@ -88,14 +89,9 @@ public interface IAnimal extends Serializable {
      */
     Float getStat(StatID statID);
     void alterStat(StatID statID, float amount);
-//    Map<StatID, Float> getStatAlterations();
+
     Float getStatAlteration(StatID statID);
 
-    /**
-     * Get the max health stat of the animal.
-     * @return
-     */
-    int getMaxHealth();
 
     /**
      * Get the statuses inflicted to the IAnimal.
@@ -103,7 +99,7 @@ public interface IAnimal extends Serializable {
      */
     ArrayList<IStatus> getStatuses();
 
-    void setImgUrl(URL resource);
+    void setAnimalKind(AnimalKind resource);
 
-    URL getUrl();
+    AnimalKind getAnimalKind();
 }

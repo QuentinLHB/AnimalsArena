@@ -1,5 +1,6 @@
 package Controllers;
 
+import Model.Action.Attack.Concrete.AttackEnum;
 import Model.Action.Attack.Concrete.AttackFactory;
 import Model.Animal.Behaviors.BehaviorFactory;
 import Model.Animal.Behaviors.DefendBehavior.Concrete.DefendBehaviorEnum;
@@ -29,10 +30,107 @@ public class c_Menu extends controler_Base{
         setTheme("Dark");
         frmMainMenu = new MenuFrame(this);
     }
+
+    // ************ WINDOW HANDLER ***************
+
+    /**
+     * Hides the main menu.
+     */
+    public void hideMainMenu(){
+        frmMainMenu.setVisible(false);
+    }
+
+    /**
+     * Shows the main menu.
+     */
+    public void reopenMainMenu(){
+        if(!frmMainMenu.isVisible()){
+            frmMainMenu.setVisible(true);
+        }
+
+    }
+
+    /**
+     * Opens the battle frame.
+     */
+    public void openBattleFrame() {
+        hideMainMenu();
+        new c_Battle(this);
+    }
+
+    /**
+     * Open the animal creation menu.
+     */
+    public void openCreationMenuFrame() {
+        frmCreationMenu = new CreationMenuFrame(this, frmMainMenu, getPlayer(Position.BOTTOM), getPlayer(Position.TOP));
+    }
+
+    /**
+     * Open the animal customization frame.
+     * @param currentPlayer Current player.
+     */
+    public void openCustomizationFrame(Player currentPlayer) {
+        new CustomizationMenu(this, frmCreationMenu, currentPlayer);
+    }
+
+    /**
+     * Sets the customization frame, used to create the animal directly from the frame's objects.<br>
+     * Implemented that way to avoid passing too many arguments to create the animal.
+     * @param frame Customization Frame.
+     */
+    public void setCustomizationFrame(CustomizationMenu frame){
+        this.frmCustomizationMenu = frame;
+    }
+
+    /**
+     * Opens the frame showing the existing customized animals.
+     * @param owner Parent {@link JDialog JDialog frame}
+     * @param player Current player.
+     */
+    public void openPickCustomizedFrame(JDialog owner, Player player) {
+        new PickCustomizedFrame(this, owner, player);
+    }
+
+    /**
+     * Opens the Information Frame, showing details about the game.
+     * @param frame
+     */
+    public void openInfoFrame(JFrame frame){
+        new InfoFrame(this, frame);
+    }
+
+    public void openAndFillInfoFrame(JDialog owner, AttackEnum attack) {
+        new InfoFrame(this, owner, attack);
+
+    }
+
+    public void openAndFillInfoFrame(JDialog owner, ElementType type) {
+        new InfoFrame(this, owner, type);
+    }
+
+    public void openAndFillInfoFrame(JDialog owner, AnimalKind animalKind) {
+        new InfoFrame(this, owner, animalKind);
+    }
+
+
+
+
+    /**
+     * Opens the customization frame and loads an animal in it.
+     * @param owner Parent {@link JDialog JDialog frame}
+     * @param animal Animal to load in the frame.
+     * @param currentPlayer Current player.
+     */
+    public void openEditCustomAnimalFrame(JDialog owner, Animal animal, Player currentPlayer) {
+        new CustomizationMenu(this, owner, animal, currentPlayer);
+    }
+
+    // ****************** INIT / CREATION **************
+
     /**
      * Adds or changes the players.
-     * @param p1
-     * @param p2
+     * @param p1 Player 1
+     * @param p2 Player 2
      */
     public void initiatePlayers(Player p1, Player p2){
         if(players.size() >= 2){
@@ -58,7 +156,7 @@ public class c_Menu extends controler_Base{
         if(nickname.equals("")) animal = AnimalFactory.CreateAnimal(animalKind, elementType);
         else  animal = AnimalFactory.CreateAnimal(animalKind, nickname, elementType);
 
-        addAnimaltoPlayers(player, animal);
+        addAnimalToPlayers(player, animal);
         return animal;
     }
 
@@ -73,9 +171,14 @@ public class c_Menu extends controler_Base{
             Serialization.removeAnimalFromSave(oldAnimal);
         Animal animal = createCustomAnimal();
         if(player != null)
-            addAnimaltoPlayers(player, animal);
+            addAnimalToPlayers(player, animal);
         return animal;
     }
+
+    /**
+     * Creates an animal using the frame's objects.
+     * @return
+     */
     private Animal createCustomAnimal(){
         Animal animal;
         try{
@@ -112,20 +215,28 @@ public class c_Menu extends controler_Base{
      * @param animal
      */
     public void newAnimal(Player player,Animal animal){
-        addAnimaltoPlayers(player, animal);
+        addAnimalToPlayers(player, animal);
     }
 
-    private void addAnimaltoPlayers(Player player, Animal animal){
+    /**
+     * Adds an animal to a player and to the opponent (a player registering both ally and foe animals).
+     * @param player Player
+     * @param animal Player's animal.
+     */
+    private void addAnimalToPlayers(Player player, Animal animal){
         player.setAlly(animal);
         getFoe(player).setFoe(animal);
     }
 
-
-
-    public Animal createRandomAnimal(Player player, Player foe){
+    /**
+     * Adds a random animal to the player (and its opponent).
+     * @param player Player
+     * @return The created animal.
+     */
+    public Animal createRandomAnimal(Player player){
         Animal animal = AnimalFactory.CreateRandomAnimal();
         player.setAlly(animal);
-        foe.setFoe(animal);
+        getFoe(player).setFoe(animal);
         return animal;
     }
 
@@ -149,44 +260,12 @@ public class c_Menu extends controler_Base{
         return true;
     }
 
+    // ************** OTHER ***********
 
-    public void closeMainMenu(){
-        frmMainMenu.setVisible(false);
-    }
-
-    public void reopenMainMenu(){
-        if(!frmMainMenu.isVisible()){
-            frmMainMenu.setVisible(true);
-        }
-
-    }
-
-    public void openBattleFrame() {
-        closeMainMenu();
-        new c_Battle(this);
-    }
-
-
-    public void openCreationMenuFrame() {
-        frmCreationMenu = new CreationMenuFrame(this, frmMainMenu, getPlayer(Position.BOTTOM), getPlayer(Position.TOP));
-    }
-
-    public void openCustomizationFrame(Player currentPlayer) {
-        new CustomizationMenu(this, frmCreationMenu, currentPlayer);
-    }
-
-    public void setCustomizationFrame(CustomizationMenu frame){
-        this.frmCustomizationMenu = frame;
-    }
-
-    public void openPickCustomizedFrame(JDialog owner, Player player) {
-        new PickCustomizedFrame(this, owner, player);
-    }
-
-    public void openInfoFrame(JFrame frame){
-        new InfoFrame(this, frame);
-    }
-
+    /**
+     * Returns a list of saved animals.
+     * @return
+     */
     public Animal[] getSavedAnimals() {
         ArrayList<Animal> savedAnimals = Serialization.loadAnimals();
         Animal[] arrayAnimals = new Animal[savedAnimals.size()];
@@ -194,10 +273,18 @@ public class c_Menu extends controler_Base{
         return arrayAnimals;
     }
 
-    public void openEditCustomAnimalFrame(JDialog owner, Animal animal, Player currentPlayer) {
-        new CustomizationMenu(this, owner, animal, currentPlayer);
+    /**
+     * Deletes a custom animal from the save file.
+     * @param animalToDelete Animal to delete.
+     */
+    public void deleteAnimal(Animal animalToDelete) {
+        Serialization.removeAnimalFromSave(animalToDelete);
     }
 
+    /**
+     * Sets the application's theme (look and feel)
+     * @param theme "Dark" or "Light".
+     */
     public void setTheme(String theme) {
         controler_Base.theme = theme;
         LookAndFeel laf;
@@ -215,13 +302,16 @@ public class c_Menu extends controler_Base{
 
     }
 
-    public void deleteAnimal(Animal animalToDelete) {
-        Serialization.removeAnimalFromSave(animalToDelete);
-    }
-
+    /**
+     * Gets the URL of the facing animal sprite.
+     * @param animalKind Animal whose URL must be retrieved.
+     * @return The animal's sprite URL. if it's not found, returns the "Missingno" placeholder.
+     */
     public URL getUrl(AnimalKind animalKind) {
         URL url = animalKind.getURL();
         if(url == null ) url = getClass().getResource("/resources/images/missingno.png");
         return url;
     }
+
+
 }

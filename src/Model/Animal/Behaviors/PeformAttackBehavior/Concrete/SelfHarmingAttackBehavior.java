@@ -23,8 +23,8 @@ public class SelfHarmingAttackBehavior extends SimpleAttackBehavior implements I
         super.attack(target, attack, attackStat);
         if(attack.getDamageBase() > 0){
             attackingAnimal.alterStat(StatID.MAX_HEALTH, 0.95f);
-            if(attackingAnimal.getHealth() > attackingAnimal.getMaxHealth()){
-                attackingAnimal.setHealth(attackingAnimal.getMaxHealth());
+            if(attackingAnimal.getHealth() > attackingAnimal.getStat(StatID.MAX_HEALTH)){
+                attackingAnimal.setHealth(attackingAnimal.getStat(StatID.MAX_HEALTH));
             }
             BufferedText.addBufferedText(String.format("%s's max HP was lowered.%n", attackingAnimal));
         }

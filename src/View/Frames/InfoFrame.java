@@ -2,6 +2,7 @@ package View.Frames;
 
 import Controllers.c_Menu;
 import Model.Action.Attack.Concrete.AttackEnum;
+import Model.Action.Status.Concrete.StatusID;
 import Model.Animal.Creation.Concrete.Animal;
 import Model.Animal.Creation.Concrete.AnimalKind;
 import Model.Animal.Creation.Concrete.ElementType;
@@ -15,15 +16,18 @@ import java.awt.event.ItemEvent;
 public class InfoFrame extends JDialog {
 
     private c_Menu controller;
-    JComboBox<Info> cboInfo;
-
     JPanel pnlInfoDisplay;
+    JComboBox<Info> cboInfo;
+    JComboBox<AnimalKind> cboAnimals;
+    JComboBox<ElementType> cboType;
+    JComboBox<AttackEnum> cboAttack;
 
     public enum Info {
         GENERAL("General info"),
         ANIMALS("Animals' stats"),
         TYPES("Types' stats"),
-        ATTACKS("Attacks' stats");
+        ATTACKS("Attacks' stats"),
+        STATUSES("Statuses effects");
 
         Info(String desc){
             this.desc = desc;
@@ -40,17 +44,43 @@ public class InfoFrame extends JDialog {
     public InfoFrame(c_Menu controller, JFrame owner){
         super(owner, true);
         init(controller);
+        launchFrame();
     }
     public InfoFrame(c_Menu controller, JDialog owner){
         super(owner, true);
         init(controller);
+        launchFrame();
 
+    }
+
+    public InfoFrame(c_Menu controller, JDialog owner, AttackEnum attack){
+        super(owner, true);
+        init(controller);
+        loadAttack(attack);
+        launchFrame();
+    }
+
+    public InfoFrame(c_Menu controller, JDialog owner, AnimalKind animalKind){
+        super(owner, true);
+        init(controller);
+        loadAnimal(animalKind);
+        launchFrame();
+    }
+
+    public InfoFrame(c_Menu controller, JDialog owner, ElementType type){
+        super(owner, true);
+        init(controller);
+        loadType(type);
+        launchFrame();
     }
 
     private void init(c_Menu controller){
         this.controller = controller;
         initComponents();
-        Util.initFrame(this, "Info", 500, 400);
+    }
+
+    private void launchFrame(){
+        Util.initFrame(this, "Info", 500, 370);
     }
 
     private void initComponents() {
@@ -95,8 +125,37 @@ public class InfoFrame extends JDialog {
                 case ANIMALS -> showAnimalsInfo();
                 case TYPES -> showTypeInfo();
                 case ATTACKS -> showAttacksInfo();
+                case STATUSES -> showStatusesInfo();
                 default -> showGeneralInfo();
             }
+        }
+    }
+
+    private void showStatusesInfo() {
+        JComboBox<StatusID> cboStatuses = new JComboBox<>(StatusID.values());
+        pnlInfoDisplay.add(cboStatuses, Util.setGridBagConstraints(0, 0, 1, 1));
+
+        JLabel lblDescription = new JLabel();
+        pnlInfoDisplay.add(lblDescription, Util.setGridBagConstraints(0, 1, 1, 1));
+
+        JLabel lblGeneralnfo = new JLabel("The status' duration depends on the attack.");
+        pnlInfoDisplay.add(lblGeneralnfo, Util.setGridBagConstraints(0, 2, 1, 1));
+
+        cboStatuses.addItemListener(e -> cboStatuses_itemChanged(e, lblDescription) );
+        initCombo(cboStatuses);
+    }
+
+    private void cboStatuses_itemChanged(ItemEvent e, JLabel lblDescription) {
+        if(e.getStateChange() == ItemEvent.SELECTED){
+            JComboBox<StatusID> cbo = (JComboBox<StatusID>)e.getSource();
+            StatusID chosenStatus = (StatusID)cbo.getSelectedItem();
+            if(chosenStatus == null) return;
+            String desc = String.format("%s %s %n %s",
+                    Util.toBold(chosenStatus.toString()),
+                    chosenStatus.initials(),
+                    chosenStatus.getDesc());
+
+            lblDescription.setText(Util.toHtml(desc));
         }
     }
 
@@ -125,8 +184,6 @@ public class InfoFrame extends JDialog {
     }
 
     private void showAttacksInfo() {
-
-        JComboBox<AttackEnum> cboAttack;
         cboAttack = new JComboBox<>(AttackEnum.getSortedAttacks());
         var gc = Util.setGridBagConstraints(0, 0, 1, 1);
         gc.insets = new Insets(0, 10, 0, 10);
@@ -140,8 +197,7 @@ public class InfoFrame extends JDialog {
 
     private void cboAttack_itemChanged(ItemEvent e, JLabel lblDescription) {
         if(e.getStateChange() == ItemEvent.SELECTED){
-            JComboBox<AttackEnum> cbo = (JComboBox<AttackEnum>)e.getSource();
-            AttackEnum chosenAttack = (AttackEnum)cbo.getSelectedItem();
+            AttackEnum chosenAttack = (AttackEnum)cboAttack.getSelectedItem();
             if(chosenAttack == null) return;
             lblDescription.setText(Util.toHtml(
                     String.format("%s: <br>%s",
@@ -152,7 +208,8 @@ public class InfoFrame extends JDialog {
     }
 
     private void showAnimalsInfo() {
-        JComboBox<AnimalKind> cboAnimals = new JComboBox<>(AnimalKind.values());
+
+        cboAnimals = new JComboBox<>(AnimalKind.values());
         var gc = Util.setGridBagConstraints(0, 0, 1, 1);
         gc.insets = new Insets(0, 0, 0, 0);
         gc.ipady = 0;
@@ -178,8 +235,7 @@ public class InfoFrame extends JDialog {
 
     private void cboAnimals_itemChanged(ItemEvent e, JLabel lblIcon, JLabel lblDesc, JLabel lblStats) {
         if(e.getStateChange() == ItemEvent.SELECTED){
-            JComboBox<AnimalKind> cbo = (JComboBox<AnimalKind>)e.getSource();
-            AnimalKind animalKind = (AnimalKind) cbo.getSelectedItem();
+            AnimalKind animalKind = (AnimalKind) cboAnimals.getSelectedItem();
             if(animalKind == null) return;
 
             // Animal image
@@ -202,8 +258,7 @@ public class InfoFrame extends JDialog {
     }
 
     private void showTypeInfo() {
-
-        JComboBox<ElementType> cboType = new JComboBox<>(ElementType.values());
+        cboType = new JComboBox<>(ElementType.values());
         pnlInfoDisplay.add(cboType, Util.setGridBagConstraints(0, 0, 1, 1));
         JLabel lblTypeDisplay = new JLabel();
         pnlInfoDisplay.add(lblTypeDisplay, Util.setGridBagConstraints(0, 1, 1, 1));
@@ -220,10 +275,8 @@ public class InfoFrame extends JDialog {
     }
 
     private void cboType_itemChanged(ItemEvent e, JLabel lblTypeDisplay) {
-
         if(e.getStateChange() == ItemEvent.SELECTED){
-            JComboBox<ElementType> cbo = (JComboBox<ElementType>)e.getSource();
-            ElementType type = (ElementType) cbo.getSelectedItem();
+            ElementType type = (ElementType) cboType.getSelectedItem();
             if(type == null) return;
             String display = String.format("%s: <br>Health : %d <br>Attack: %d <br>Defense: %d<br>Speed: %d<br><br>",
                     Util.toBold(type.toString()),
@@ -241,5 +294,20 @@ public class InfoFrame extends JDialog {
     private void initCombo(JComboBox cboAnimals) {
         cboAnimals.setSelectedItem(null);
         cboAnimals.setSelectedIndex(0);
+    }
+
+    public void loadAttack(AttackEnum attack){
+        cboInfo.setSelectedItem(Info.ATTACKS);
+        cboAttack.setSelectedItem(attack);
+    }
+
+    public void loadAnimal(AnimalKind animal){
+        cboInfo.setSelectedItem(Info.ANIMALS);
+        cboAnimals.setSelectedItem(animal);
+    }
+
+    public void loadType(ElementType type){
+        cboInfo.setSelectedItem(Info.TYPES);
+        cboType.setSelectedItem(type);
     }
 }
