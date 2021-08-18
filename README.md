@@ -1,5 +1,4 @@
 # AnimalsArena
-
 *Fançais (English bellow):*
 
 Animals Arena est un jeu où deux animaux élémentaires **combattent au tour par tour** à la façon d'un RPG. 
