@@ -1,14 +1,19 @@
 # AnimalsArena
+*Fançais (English bellow):*
 
-FR (EN below)
-Jeu réalisé en Java, disponible en version Console et GUI (SWING) (WIP)
-Il simule des combats d'animaux élémentaires (Fire Dog, Poison Unicorn...), en PvP ou PvE (contre une IA). Le joueur choisit son animal, son élément, et selon ces deux facteurs, un animal possédant diverses statistiques et attaques est créé. Ils s'affrontent ensuite dans un combat au tour par tour à la façon d'un RPG.
-Il est également possible de créer ses propres animaux, en définissant leurs statistiques et leurs attaques.
+Animals Arena est un jeu où deux animaux élémentaires **combattent au tour par tour** à la façon d'un RPG. 
+Les joueurs composent leurs animaux, soit avec des espèces et types existants, soit en les **customisant** complètement.
+Chaque espèce animale et chaque type conditionne des statistiques et attaques différentes, permettant des combats et stratégies diverses et variées.
+Le jeu peut être joué entre deux joueurs, avec une **intelligence artificielle**, ou en tant que spectateurs de deux IA.
+Les animaux customisés sont sauvegardés localement pour être réutilisés facilement.
 
-EN
-A test program intended for testing design patterns. 
-The program simulates battles opposing elementary animals (Fire Dog, Poison Unicorn...), both in a PvP and a PvE setup. The player first chooses its animal and element, upon which is build an animal possessing diverse stats, attacks and behaviors. They then fight in an RPG-like fight.
+Développé en Java sous Java SWING.
 
-Includes :
-* Strategy Pattern
-* Factory Pattern
+
+*Egnlish:*
+
+Animals Arena is a game opposing two elemental animals in a **turn-based RPG-like battle**.
+Both players create their animal, either by using existing animals and types, or by **customizing** them entierly.
+Each animal kind and elemental type influences the overall stats and attacks of the created animal, allowing diverses fights and strategies.
+The game can be played either between two players, one player and an **artificial intelligence**, or as a spectator of a two-AI fight.
+Customized animals are saved locally to be easily reused.
